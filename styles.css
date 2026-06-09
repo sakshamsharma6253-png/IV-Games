@@ -11,7 +11,7 @@
   --glow:0 8px 30px rgba(38,246,176,0.08);
 }
 html,body{
-  height:100%;
+  height:100vh;
   margin:0;
   font-family:Inter,Segoe UI,Arial,sans-serif;
   background:linear-gradient(180deg,#041014, #071018);
@@ -19,9 +19,13 @@ html,body{
 }
 
 .wrap{
-  max-width:1200px;
-  margin:28px auto;
-  padding:20px
+  max-width:1000px; 
+  height: 100vh;
+  margin: 0 auto;
+  padding: 30px 20px 15px 20px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 header{
@@ -48,15 +52,15 @@ header{
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:1fr; /* Sidebar ki khali jagah hatane ke liye isko 1fr kar diya */
   gap:18px;
   margin-top:18px
 }
 
 .catalog{
-  grid-column:span 2;
+  /* Yahan se span 2 hata diya taaki ye poori jagah le */
   background:var(--panel);
-  padding:18px;
+  padding:20px;
   border-radius:12px;
   border:1px solid rgba(255,255,255,0.03)
 }
@@ -69,15 +73,14 @@ header{
 
 .cards{
   display:grid;
-  grid-template-columns:
-  repeat(3,minmax(220px,1fr));
-  gap:14px
+  grid-template-columns: repeat(3, 1fr); /* Hamesha exactly 3 neat dabbe rahenge */
+  gap:18px;
 }
 
 .card{
   background:linear-gradient(180deg,var(--card),#04221a);
   border-radius:12px;
-  padding:14px;
+  padding: 16px; /* Wapas pehle jaisi normal padding */
   display:flex;
   flex-direction:column;
   gap:10px;
@@ -94,18 +97,17 @@ header{
 }
 
 .media{
-  height:110px;
+  height:100px; /* Icon wale dabbe ko wapas pehle jaisa chota aur neat kar diya */
   border-radius:10px;
   display:flex;
   align-items:center;
   justify-content:center;
   background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
-  
 }
 
 .media img.card-photo{
   width:100%;
-  height:110px;
+  height:120px;
   object-fit:cover;
   border-radius:10px;
   display:block
@@ -161,8 +163,7 @@ header{
 }
 
 /* Make the Ludo icon larger without affecting other icons */
-img.icon
-[alt="Ludo"] {
+img.icon[alt="Ludo"] {
   width:96px;
   height:96px
 }
@@ -176,7 +177,7 @@ img.icon
 }
 
 footer{
-  margin-top:18px;
+  margin-top: auto;
   color:var(--muted);
   font-size:13px;
   text-align:center
@@ -191,7 +192,7 @@ footer{
     grid-column:auto
   }
   .cards{
-    grid-template-columns:repeat(2,minmax(180px,1fr));
+    grid-template-columns:repeat(2,1fr);
   }
 }
 
