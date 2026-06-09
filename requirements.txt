@@ -1,0 +1,3 @@
+Flask>=2.0
+# Preferred pygame build for modern Python (3.10+). On Python 3.14 install `pygame-ce`.
+pygame-ce>=2.5.7

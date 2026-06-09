@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Chess — Tutorial</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+      .tutorial {max-width:820px;margin:28px auto;padding:18px;background:var(--panel);border-radius:12px}
+      .steps{display:flex;flex-direction:column;gap:12px}
+      .step{background:linear-gradient(180deg,var(--card),#04221a);padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
+      .actions{display:flex;gap:10px;margin-top:14px}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand"><h1>Chess — Tutorial</h1><p class="note">Basics and how to use the in-game AI.</p></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <a class="btn-ghost" href="/index.html">← Back</a>
+          <a class="btn-primary" href="/chess.html">Play Now</a>
+        </div>
+      </header>
+
+      <main class="tutorial">
+        <h2 style="margin-top:0">Quick Chess Guide</h2>
+        <div class="steps">
+          <div class="step"><strong>Pieces</strong><div class="note">King, Queen, Rook, Bishop, Knight, Pawn — each moves differently.</div></div>
+          <div class="step"><strong>Objective</strong><div class="note">Checkmate the opponent's king (trap it so it cannot escape check).</div></div>
+          <div class="step"><strong>Turns</strong><div class="note">White moves first; players alternate moves.</div></div>
+          <div class="step"><strong>AI</strong><div class="note">Choose Easy for random moves; Hard runs a short minimax to plan ahead.</div></div>
+        </div>
+
+        <h3 style="margin-top:14px">Interactive Tips</h3>
+        <div class="step">
+          <p class="note">Use Undo to step back, and export PGN to review games later.</p>
+        </div>
+
+        <div class="actions">
+          <a class="btn-primary" href="/chess.html">Open Play</a>
+          <a class="btn-ghost" href="/index.html">Back to Catalog</a>
+        </div>
+      </main>
+
+      <footer style="margin-top:18px; text-align:center; color:var(--muted)">IV Games — Chess tutorial</footer>
+    </div>
+  </body>
+</html>

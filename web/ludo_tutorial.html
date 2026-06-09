@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ludo — Tutorial</title>
+    <link rel="stylesheet" href="/#styles.css">
+    <style>
+      /* The Body Background has been set  to black and the text to white. */
+      body {
+        background-color: #121212; /* An extremely dark, blackish background. */
+        color: #ffffff; /* The text color is white so that it is visible in the dark.*/
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      
+      .tutorial {
+        max-width: 820px;
+        margin: 28px auto;
+        padding: 18px;
+        background: #27272a; /* A slightly grayish-black, so that the card stands out. */
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      }
+      
+      .steps { display: flex; flex-direction: column; gap: 12px; }
+      
+      .step {
+        /* This gradient red background will highlight your steps.*/
+        background: linear-gradient(180deg, #3f3f46, #d20a0a);
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.1);
+      }
+      
+      .note { 
+        margin-top: 5px;
+         font-size: 14px; 
+         color: #e4e4e7;
+         }
+      .actions { 
+        display: flex;
+         gap: 10px; 
+         margin-top: 14px; 
+        }
+      
+      /* Basic button design to ensure they look good.*/
+      .btn-primary { 
+        background: #4ade80;
+         color: #121212;
+          padding: 10px 15px;
+           border-radius: 5px;
+            text-decoration: none; 
+            font-weight: bold;
+           }
+      .btn-ghost { 
+        background: transparent;
+         color: #a1a1aa;
+          padding: 10px 15px; 
+          border: 1px solid #a1a1aa; 
+          border-radius: 5px;
+           text-decoration: none;
+           }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header style="max-width: 820px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 20px 0;">
+        <div class="brand">
+            <h1 style="margin: 0;">Ludo Tutorial</h1>
+            <p class="note" style="margin: 0; color: #a1a1aa;">Basics and how to play the game.</p>
+        </div>
+        <div style="display:flex;gap: 20px;align-items:center">
+          <a class="btn-ghost" href="/index.html">← Back</a>
+          <a class="btn-primary" href="/ludo.html"> Play Now</a>
+        </div>
+      </header>
+
+      <main class="tutorial">
+        <h2 style="margin-top:0; border-bottom: 1px solid #3f3f46; padding-bottom: 10px;">Quick Ludo Guide</h2>
+        <div class="steps">
+          <div class="step">
+              <strong>Objective</strong>
+              <div class="note">Be the first player to move all 4 of your tokens from your base to the home.</div>
+          </div>
+          <div class="step">
+              <strong>Starting</strong>
+              <div class="note">You must roll a 6 on the dice to move a token out of your base and onto the starting square.</div>
+          </div>
+          <div class="step">
+              <strong>Movement</strong>
+              <div class="note">Roll the dice and move your active token forward by the exact number shown.</div>
+          </div>
+          <div class="step">
+              <strong>Extra Turn</strong>
+              <div class="note">Rolling a 6 gives you an additional dice roll.</div>
+          </div>
+          <div class="step">
+              <strong>Capturing</strong>
+              <div class="note">If your token lands on an opponent's token, their token is sent back to base, and you get an extra roll.</div>
+          </div>
+        </div>
+
+        <h3 style="margin-top:20px">Interactive Tips</h3>
+        <div class="step" style="background: #3f3f46;">
+          <div class="note">Try clicking on your tokens to move them when it's your turn. Select the Game Mode from the dropdown before rolling the dice!</div>
+        </div>
+
+      </main>
+
+      <footer style="margin-top:18px; text-align:center; color: #a1a1aa; padding-bottom: 20px;">IV Games — ludo_tutorial</footer>
+    </div>
+  </body>
+</html>

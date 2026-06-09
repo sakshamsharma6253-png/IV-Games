@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Mini Sudoku — Tutorial</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+      .tutorial {
+        max-width:820px;
+        margin:28px auto;
+        padding:18px;
+        background:linear-gradient(180deg,var(--card),#8827b170);
+
+        border-radius:12px}
+      .steps{display:flex;flex-direction:column;gap:12px}
+      .step{background:linear-gradient(180deg,var(--card),#04221a);padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
+      .actions{display:flex;gap:10px;margin-top:14px}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="brand"><h1>Mini Sudoku — Tutorial</h1><p class="note">Learn how to play 4×4 Sudoku.</p></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <a class="btn-ghost" href="/index.html">← Back</a>
+          <a class="btn-primary" href="/minisudoku.html">Play Now</a>
+        </div>
+      </header>
+
+      <main class="tutorial">
+        <h2 style="margin-top:0">Quick Walkthrough</h2>
+        <div class="steps">
+          <div class="step"><strong>1 — Goal</strong><div class="note">Fill every row, column and 2×2 box with numbers 1–4 without repeats.</div></div>
+          <div class="step"><strong>2 — Notes</strong><div class="note">Use pencil marks (if available) or trial-and-error for candidates.</div></div>
+          <div class="step"><strong>3 — Strategy</strong><div class="note">Scan for forced numbers, then look for single-candidate cells.</div></div>
+          <div class="step"><strong>4 — Hints</strong><div class="note">Use the "Hint" or "Check" buttons on the Play screen when stuck.</div></div>
+        </div>
+
+        <h3 style="margin-top:14px">Interactive Example</h3>
+        <div class="step">
+          <p class="note">Open the Play screen and try filling a 4×4 grid; use Undo or Reset as needed.</p>
+        </div>
+
+        <div class="actions">
+          <a class="btn-primary" href="/minisudoku.html">Open Play</a>
+          <a class="btn-ghost" href="/index.html">Back to Catalog</a>
+        </div>
+      </main>
+
+      <footer style="margin-top:18px; text-align:center; color:var(--muted)">IV Games — Mini Sudoku tutorial</footer>
+    </div>
+  </body>
+</html>

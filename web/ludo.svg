@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" aria-labelledby="title">
+	<title id="title">Ludo icon</title>
+	<defs>
+		<linearGradient id="lg" x1="0" x2="1">
+			<stop offset="0" stop-color="#26f6b0"/>
+			<stop offset="1" stop-color="#7b5cff"/>
+		</linearGradient>
+	</defs>
+	<rect width="64" height="64" rx="10" fill="#041816"/>
+	<!-- center board shape -->
+	<rect x="10" y="10" width="44" height="44" rx="6" fill="url(#lg)" opacity="0.06"/>
+	<!-- four colored tokens -->
+	<g fill="#fff" stroke="#031815" stroke-width="0.8">
+		<circle cx="18" cy="18" r="6" fill="#e84d4d"/>
+		<circle cx="46" cy="18" r="6" fill="#ffd24a"/>
+		<circle cx="18" cy="46" r="6" fill="#3bd46f"/>
+		<circle cx="46" cy="46" r="6" fill="#5aa3ff"/>
+	</g>
+	<g stroke="rgba(255,255,255,0.06)" stroke-width="2" stroke-linecap="round">
+		<path d="M32 14 L32 50"/>
+		<path d="M14 32 L50 32"/>
+	</g>
+</svg>

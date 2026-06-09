@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Subway Runner - Train Update</title>
+    <style>
+        body { 
+            margin: 0;
+            overflow: hidden;
+            background-color: #87ceeb; /* Sky Blue Background */
+            font-family: Arial, sans-serif;
+        }
+        canvas { 
+            display: block;
+        }
+        #scoreBoard {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 100;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Text clear dikhne ke liye */
+        }
+        #gameOverScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            z-index: 200;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="scoreBoard">Score: <span id="scoreVal">0</span></div>
+    <div id="gameOverScreen" onclick="resetGame()">
+        <h1>Game Over</h1>
+        <p>Click anywhere to Restart</p>
+    </div>
+
+    <script src="three.min.js"></script>
+    <script src="GLTFLoader.js"></script>
+    <script>
+        // --- 1. SCENE SETUP ---
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x87ceeb, 0.015); 
+        scene.background = new THREE.Color(0x87ceeb); 
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.outputEncoding = THREE.sRGBEncoding; 
+        document.body.appendChild(renderer.domElement);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); 
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        dirLight.position.set(5, 10, 7);
+        scene.add(dirLight);
+
+        const roadGeo = new THREE.BoxGeometry(12, 0.1, 500);
+        const roadMat = new THREE.MeshStandardMaterial({ color: 0x5c3a21, roughness: 1.0 }); 
+        const road = new THREE.Mesh(roadGeo, roadMat);
+        road.position.set(0, -0.1, -200); 
+        scene.add(road);
+
+        const lanes = [-3.5, 0, 3.5]; 
+
+        const sleeperGeo = new THREE.BoxGeometry(2.2, 0.1, 0.6);
+        const sleeperMat = new THREE.MeshStandardMaterial({color: 0x8B4513, roughness: 0.9}); 
+        let sleepersArr = [];
+
+        for (let z = 10; z > -400; z -= 3) {
+            lanes.forEach(laneX => {
+                const sleeper = new THREE.Mesh(sleeperGeo, sleeperMat);
+                sleeper.position.set(laneX, 0, z); 
+                scene.add(sleeper);
+                sleepersArr.push(sleeper);
+            });
+        }
+
+        const railGeo = new THREE.BoxGeometry(0.2, 0.15, 500); 
+        const railMat = new THREE.MeshStandardMaterial({ color: 0x3b2818, metalness: 0.0, roughness: 1.0 }); 
+        const railOffsets = [-0.6, 0.6];
+
+        lanes.forEach(laneX => {
+            railOffsets.forEach(offset => {
+                const rail = new THREE.Mesh(railGeo, railMat);
+                rail.position.set(laneX + offset, 0.12, -200); 
+                scene.add(rail);
+            });
+        });
+
+        let currentLane = 1;
+        let score = 0;
+        let isGameOver = false;
+        let obstacles = []; 
+        let baseSpeed = 0.15;
+        let obstacleSpeed = baseSpeed;
+        const maxSpeed = 0.45;
+        let passedObstaclesCount = 0;
+        let frameCount = 0;
+        
+        let mixer;
+        let isJumping = false;
+        let runAction, jumpAction1, jumpAction2, rollAction;
+        let playerAction;
+        let isRolling = false;
+        
+        // JUMP SETTINGS
+        const jumpDuration = 0.8;
+        const jumpHeight = 2.2; 
+        let jumpTimer = 0;     
+        
+        const clock = new THREE.Clock();
+        const player = new THREE.Group(); 
+
+        player.position.set(lanes[currentLane], 0, 0); 
+        scene.add(player);
+
+        const loader = new THREE.GLTFLoader();
+
+        // PLAYER LOADER
+        loader.load('player.glb', function(gltf) {
+            console.log("🔥 Model and Run are load in Game");
+            const model = gltf.scene;
+            model.scale.set(1.5, 1.5, 1.5);
+            model.position.set(0, 0, 0);
+            model.rotation.y = Math.PI;
+
+            player.add(model);
+            mixer = new THREE.AnimationMixer(model);
+
+            runAction = mixer.clipAction(gltf.animations[0]);
+            runAction.play();
+            playerAction = runAction;
+
+            loader.load('jump1.glb', function(jumpGltf1) {
+                jumpAction1 = mixer.clipAction(jumpGltf1.animations[0]);
+                jumpAction1.setLoop(THREE.LoopOnce);
+                jumpAction1.clampWhenFinished = true;
+            });
+
+            loader.load('jump2.glb', function(jumpGltf2) {
+                jumpAction2 = mixer.clipAction(jumpGltf2.animations[0]);
+                jumpAction2.setLoop(THREE.LoopOnce);
+                jumpAction2.clampWhenFinished = true;
+            });
+
+            loader.load('roll.glb', function(rollGltf) {
+                rollAction = mixer.clipAction(rollGltf.animations[0]);
+                rollAction.setLoop(THREE.LoopOnce);
+                rollAction.clampWhenFinished = true;
+            });
+        });
+
+        // OBSTACLES LOADER
+        let customObstacles = [];
+        loader.load('obstacle1.glb', function(gltf) {
+            let obs = gltf.scene;
+            obs.scale.set(2, 2, 2);
+            customObstacles.push({ model: obs, yPos: 0.8, type: 0 }); // Type 0 = Jump over
+            console.log("🚧 Obstacle 1 Load!");
+        });
+
+        loader.load('obstacle2.glb', function(gltf) {
+            let obs = gltf.scene;
+            obs.scale.set(2, 2, 2);
+            customObstacles.push({ model: obs, yPos: 0.5, type: 2 }); // Type 2 = Roll under
+            console.log("🚧 Obstacle 2 Load!");
+        });
+
+        loader.load('obstacle3.glb', function(gltf) {
+            let obs = gltf.scene;
+            obs.scale.set(4, 4, 4);
+            customObstacles.push({ model: obs, yPos: 2, type: 2 }); // Type 2 = Roll under
+            console.log("🚧 Obstacle 3 Load!");
+        });
+
+        // 🚂 TRAIN LOADER
+        let trainModel = null;
+        loader.load('train.glb', function(gltf) {
+            trainModel = gltf.scene;
+            trainModel.scale.set(1.0, 1.0, 1.5); 
+            console.log("🚂 Train Model Load!");
+        });
+
+        function switchAnimation(newAction, duration = 0.2) {
+            if (!newAction || playerAction === newAction) return;
+
+            newAction.reset();
+            newAction.setEffectiveTimeScale(1);
+            newAction.setEffectiveWeight(1);
+
+            newAction.crossFadeFrom(playerAction, duration, true);
+            newAction.play();
+
+            playerAction = newAction;
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentLane > 0) {
+                currentLane--;
+            } else if (e.key === 'ArrowRight' && currentLane < 2) {
+                currentLane++;
+            }
+
+            if ((e.key === 'ArrowUp' || e.key === ' ') && !isJumping && !isRolling) {
+                isJumping = true;     
+                jumpTimer = 0; 
+                
+                let SelectedJump = Math.random() < 0.5 ? jumpAction1 : jumpAction2;
+                if (SelectedJump) SelectedJump.timeScale = 1.5; 
+                switchAnimation(SelectedJump, 0.1);
+            }
+
+            if (e.key === 'ArrowDown' && !isJumping && !isRolling) {
+                isRolling = true;
+            
+                switchAnimation(rollAction);
+
+                setTimeout(() => {
+                    isRolling = false;
+                    if(!isGameOver && !isJumping) switchAnimation(runAction);
+                }, 800);
+            }
+        });
+
+        function spawnObstacle() {
+            if (customObstacles.length === 0) return; 
+
+            let lane = Math.floor(Math.random() * 3);
+            
+            let isTrainSpawn = Math.random() < 0.20 && trainModel; 
+
+            if (isTrainSpawn) {
+                const trainGroup = trainModel.clone();
+                trainGroup.passed = false;
+                trainGroup.type = 1; 
+                trainGroup.isTrain = true;
+                
+                trainGroup.position.set(lanes[lane], 2.5, -150); 
+                
+                scene.add(trainGroup);
+                obstacles.push(trainGroup);
+                return;
+            }
+
+            // Normal Obstacle Spawn
+
+            
+            let randomZugaad = Math.floor(Math.random() * customObstacles.length);
+            let selectedItem = customObstacles[randomZugaad];
+            
+            const obsGroup = selectedItem.model.clone(); 
+            obsGroup.passed = false;
+            obsGroup.type = selectedItem.type; 
+            obsGroup.position.set(lanes[lane], selectedItem.yPos, -100); 
+            
+            scene.add(obsGroup);
+            obstacles.push(obsGroup);
+        }
+
+        // --- 8. MAIN GAME LOOP ---
+        function animate() {
+            if (isGameOver) return;
+
+            requestAnimationFrame(animate);
+
+            const delta = clock.getDelta(); 
+            if (mixer) {
+                mixer.update(delta);
+            }
+            
+            // --- JUMP LOGIC 
+            if (isJumping) {
+                jumpTimer += delta; 
+
+                let progress = jumpTimer / jumpDuration;
+
+                if (progress <= 1.0) {
+                    let sineArc = Math.sin(progress * Math.PI); 
+                    player.position.y = sineArc * jumpHeight;
+                } 
+                else {
+                    player.position.y = 0; 
+                    isJumping = false;
+                    jumpTimer = 0;
+
+                    if(playerAction) playerAction.timeScale = 1.0;
+                    if (!isGameOver && !isRolling) switchAnimation(runAction, 0.2); 
+                }
+            }
+
+            // MOVE SLEEPERS
+            for(let i = 0; i < sleepersArr.length; i++) {
+                let sleeper = sleepersArr[i];
+                sleeper.position.z += obstacleSpeed;
+
+                if(sleeper.position.z > 15) {
+                    sleeper.position.z -= 410;
+                }
+            }
+
+            const targetX = lanes[currentLane];
+            player.position.x += (targetX - player.position.x) * 0.2;
+
+            frameCount++;
+            if(frameCount % 120 === 0) {
+                spawnObstacle();
+            }
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                
+                if (obs.isTrain) {
+                    obs.position.z += (obstacleSpeed + 0.25);
+                } else {
+                    obs.position.z += obstacleSpeed;
+                }
+
+                let diffX = Math.abs(player.position.x - obs.position.x);
+                let diffZ = Math.abs(player.position.z - obs.position.z); 
+
+                let zHitbox = obs.isTrain ? 5.5 : 1.5;
+
+                // COLLISION DETECT SYSTEM
+                if (diffX < 1.2 && diffZ < zHitbox) {
+                    let isHit = false;
+
+                    if (obs.type === 0 && player.position.y < 0.8)  {
+                        isHit = true;   
+                    } else if (obs.type === 1) { 
+                        isHit = true;
+                    } else if (obs.type === 2 && !isRolling) {
+                        isHit = true;
+                    }
+
+                    if (isHit) {
+                        isGameOver = true;
+                        document.getElementById('gameOverScreen').style.display = 'flex';
+                    }
+                }
+                
+                if(!obs.passed && obs.position.z > player.position.z + 1) {
+                    obs.passed = true;
+                    score += 10;
+                    document.getElementById('scoreVal').innerText = score;
+
+                    passedObstaclesCount++;
+
+                    if (passedObstaclesCount % 50 === 0) {
+                        if(obstacleSpeed < maxSpeed) {
+                            obstacleSpeed += 0.02;
+
+                            if (playerAction) {
+                                playerAction.timeScale = obstacleSpeed / baseSpeed;
+                            }
+                        }
+                    }
+                }
+
+                if(obs.position.z > 15) {
+                    scene.remove(obs);
+                    obstacles.splice(i, 1);
+                }
+            } 
+
+            const targetCamX = player.position.x;
+            camera.position.x += (targetCamX - camera.position.x) * 0.15;
+
+            const targetCamY = 2.2 + (player.position.y * 0.3);
+            camera.position.y += (targetCamY - camera.position.y) * 0.1; 
+
+            camera.position.z = 3.5;
+
+            camera.lookAt(player.position.x, 1.2 + (player.position.y * 0.2), -20);
+
+            renderer.render(scene, camera);
+        }
+
+        function resetGame() {
+            for (let obs of obstacles) {
+                scene.remove(obs);
+            }
+            obstacles = [];
+            score = 0;
+            frameCount = 0;
+            currentLane = 1;
+            passedObstaclesCount = 0;
+
+            obstacleSpeed = baseSpeed;
+            if (playerAction) {
+                playerAction.timeScale = 1;
+            }
+
+            document.getElementById('scoreVal').innerText = score;
+            document.getElementById('gameOverScreen').style.display = 'none';
+            isGameOver = false;
+
+            clock.start();
+            animate();
+        }
+
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+        animate();
+    </script>
+</body>
+</html>

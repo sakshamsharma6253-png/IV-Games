@@ -1,0 +1,1973 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Chess — Play</title>
+  <style>
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      transition: background-image 0.4s ease;
+      color: #e6f0ef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* BACKGROUND THEMES */
+    body.bg-home {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('chess.jpg.jpg');
+    }
+    body.bg-wood {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('chess.wood.png');
+    }
+    body.bg-bw {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('home.jpg.jpg');
+    }
+
+    .wrap {
+      width: min(920px, 96%);
+      background: #0d2622;
+      padding: 24px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    
+    /* Buttons and Inputs */
+    .btn {
+      display: inline-block;
+      padding: 10px 16px;
+      background: #18a37b;
+      color: #04221a;
+      border-radius: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .btn:hover { 
+      background: #1ee0a8;
+    }
+
+    .muted { 
+      color: #9fbfb3; 
+    }
+    
+    
+    .setup-section {
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+    }
+
+    .setup-section h3 { 
+      margin-top: 0;
+       margin-bottom: 12px;
+        font-size: 16px; 
+        color: #18a37b;
+    }
+
+    .setup-section label {
+       cursor: pointer;
+        margin-right: 15px; 
+        font-size: 15px;
+    }
+
+    .theme-option {
+       transition: all 0.2s ease;
+    }
+
+    .theme-option:hover { 
+      background: rgba(255,255,255,0.1) !important; 
+      border-color: #18a37b !important; 
+    }
+
+    /* Board CSS */
+    .mini-board {
+       display: flex;
+        justify-content: center; 
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      width: 660px; 
+      max-width: 100vw;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 4px solid #1a3c36;
+      margin: 0 auto; 
+    }
+    .sq {
+       width: 100%; 
+       padding-top: 100%; 
+       position: relative;
+    }
+    
+    /* THEMES */
+    .theme-wood .sq.light { background: #f0d9b5; }
+    .theme-wood .sq.dark { background: #b58863; }
+    .theme-bw .sq.light { background: #FFFFFF; }
+    .theme-bw .sq.dark { background: #000000; } 
+
+    .sq .piece {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 50px; 
+      transition: transform 220ms ease, opacity 220ms ease;
+      cursor: grab;
+      user-select: none;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .sq.sel { 
+      outline: 4px solid rgba(0, 200, 120, 0.8);
+       z-index: 2;
+    }
+
+    .sq.last-move { 
+      box-shadow: inset 0 0 0 4px rgba(255, 255, 0, 0.4);
+    }
+
+    .piece-move {
+       transform: translate(-50%, -50%) scale(1.15);
+    }
+
+    .legal-move-hint { position: relative; }
+
+    .legal-move-hint::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%); 
+      width: 25%; 
+      height: 25%;
+      border-radius: 50%; 
+      background-color: rgba(0,0,0,0.3); 
+      pointer-events: none;
+    }
+    .capture-hint { position: relative; }
+
+    .capture-hint::after {
+      content: '';
+      position: absolute; 
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%); 
+      width: 85%;
+      height: 85%;
+      border-radius: 50%;
+      border: 5px solid rgba(0,0,0,0.3);
+      box-sizing: border-box;
+      pointer-events: none; 
+      background: transparent;
+    }
+
+    .theme-bw .sq.dark.legal-move-hint::after {
+       background-color: rgba(255,255,255,0.6); 
+    }
+
+    .theme-bw .sq.dark.capture-hint::after { 
+      border-color: rgba(255,255,255,0.6);
+    }
+
+    .game-header { 
+      display: flex;
+       justify-content: space-between; 
+       align-items: center; 
+       margin-bottom: 25px;
+        flex-wrap: wrap; 
+        gap: 15px; 
+    }
+
+    /* ========================================================
+       1. IPHONE SE & SMALL PHONES (Up to 380px width)
+       ======================================================== */
+    @media only screen and (max-width: 380px) { 
+      .grid { 
+        width: 330px !important;
+         margin: 0 auto !important;
+         } 
+
+      #boardHeader { 
+        width: 330px !important; 
+        margin: 0 auto !important;
+       }
+      .sq .piece { 
+        font-size: 32px !important;
+       }
+      
+      #controlsBox { 
+        width: 240px !important; 
+        margin-top: 50px !important;
+        margin-bottom: -40px !important;
+        margin-left: 9px !important;
+       }
+      #capturedPiecesBox {
+         width: 330px !important;
+         margin-bottom: -804px !important;
+         margin-top: 450px !important;
+         }
+
+          #timerB:not(.timer-flipped) { margin-top: -10px !important; margin-right: 25px !important; }
+          #timerW:not(.timer-flipped) { margin-bottom: -10px; margin-right: 20px !important; }
+        }
+
+    
+
+    /* ========================================================
+       2. SAMSUNG GALAXY & MEDIUM PHONES (381px to 540px)
+       ======================================================== */
+    @media only screen and (min-width: 381px) and (max-width: 539px) { 
+      .grid { 
+        width: 350px !important;
+        margin: 0 auto !important;
+       } 
+
+       #boardHeader {
+         width: 350px !important; 
+         margin: 0 auto !important; 
+       }
+       
+
+       #timerB:not(.timer-flipped) { margin-top: -10px !important; margin-right: 20px !important; }
+       #timerW:not(.timer-flipped) { margin-bottom: -10px; margin-right: 20px !important; }
+
+
+      
+      
+      .sq .piece { font-size: 34px !important; }
+      .game-header { justify-content: center !important; } 
+
+      #gameInner {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+      }
+
+      #controlsBox {
+        order: 1;
+        width: 230px !important; 
+        margin-top: -100px !important;
+      }
+  
+      #capturedPiecesBox {
+        order: 2;
+        width: 300px !important; 
+        margin-top: 380px !important;
+        margin-bottom: -680px !important;
+        margin-left: -30px !important;
+      }
+    }
+
+    /*======================================================
+    ---Specially for surface duo phones (width: 540px)--
+    =======================================================*/ 
+
+    @media only screen and (width: 540px) {
+      .grid {
+        width: 350px !important;
+        margin: 0 auto !important;
+      }
+
+      .board-header {
+        width: 350px !important;
+        margin: 0 auto !important;
+      }
+
+      .sq .piece {
+        font-size: 33px !important;
+      }
+
+      .game-header {
+        justify-content: center;
+      }
+
+      #gameInner {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+      }
+
+      #controlsBox {
+        order: 2;
+        width: 280px !important;
+        height: 100px !important;
+        margin-top: 370px !important;
+        margin-bottom: -687px !important;
+      }
+
+      #capturedPiecesBox {
+        order: 2;
+        width: 230px !important;
+        margin-top: -140px !important;
+        height: 170px !important;
+      }  
+    }
+
+    /* ========================================================
+       3. IPHONE PRO MAX & SAMSUNG ULTRA (415px to 430px)
+       ======================================================== */
+    @media only screen and (min-width: 415px) and (max-width: 430px) { 
+      .grid { 
+        width: 380px !important; 
+        margin: 0 auto !important; 
+      } 
+      .sq .piece {
+         font-size: 36px !important;
+      }
+
+      .game-header { 
+        justify-content: center !important; 
+      } 
+
+      #gameInner {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+      }
+
+      #controlsBox {
+        order: 1;
+        width: 380px !important; 
+        margin-top: 15px;
+      }
+
+      #capturedPiecesBox {
+        order: 2;
+        width: 380px !important; 
+        margin-top: 15px;
+      }
+    }
+
+    /* ========================================================
+       4. NEST HUB & SMALL TABLETS  like iphone pro pads
+       ======================================================== */
+    @media only screen and (width: 1024px) and (orientation: portrait) { 
+      .grid {
+         width: 600px !important; 
+         margin: 0 auto !important;
+      }
+
+      #boardHeader {
+         width: 600px !important; 
+         margin: 0 auto !important; 
+      }
+
+       #timerB {
+        top: 0px !important;
+        right: -90px !important;
+        border-radius: 1px !important;
+        border: 2px solid #1a3c36 !important;
+        width: 80px !important;
+      }
+      
+      #timerW {
+        bottom: 0px !important;
+        right: -90px !important;
+        border-radius: 1px !important;
+        border: 2px solid #1ee0a8 !important;
+        width: 80px !important;
+      }
+
+      .sq .piece {
+         font-size: 42px !important; 
+      }
+      
+      #gameInner {
+        display: flex !important;
+        flex-direction: column !important; 
+        align-items: center !important;
+      }
+      
+      #controlsBox {
+        width: 250px !important;
+        margin-top: 20px !important;
+        margin-bottom: -82px !important;
+      }
+
+      #capturedPiecesBox {
+        width: 390px !important;
+        margin-top: 700px !important;
+        margin-bottom: -1050px !important;
+        margin-left: -130px !important;
+      }
+    }
+    
+    /*===============================================
+    ---6. ipad specific phones like air,pro,max---
+    =================================================*/
+     @media only screen and (min-width: 768px) and (max-width: 820px) { 
+       .grid {
+         width: 500px !important;
+         margin: 0 auto !important;
+       }
+
+       #boardHeader {
+         width: 500px !important; 
+         margin: 0 auto !important; 
+       }
+
+       #timerB {
+        top: 0px !important;
+        right: -90px !important;
+        border-radius: 1px !important;
+        border: 2px solid #1a3c36 !important;
+        width: 82px !important;
+      }
+      
+      #timerW {
+        bottom: 0px !important;
+        right: -90px !important;
+        border-radius: 1px !important;
+        border: 2px solid #1ee0a8 !important;
+        width: 80px !important;
+      }
+
+      .sq .piece { font-size: 40px !important; }
+      .game-header { justify-content: center !important; } 
+
+      #gameInner {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+      }
+
+      #controlsBox {
+        order: 1;
+        width: 250px !important; 
+        margin-top: -100px !important;
+        margin-left: -70px;
+      }
+
+      #capturedPiecesBox {
+        order: 2;
+        width: 300px !important; 
+        margin-top: 530px !important;
+        margin-bottom: -810px !important;
+        margin-left: -80px !important;
+      }
+    }
+
+    /*=======================================
+     7. Asus phones and surface duo phone----
+     ========================================*/
+     @media only screen and (min-width: 853px) and (max-width: 912px) { 
+      .grid { 
+        width: 550px !important;
+        margin: 0 auto !important;
+       } 
+
+      #boardHeader {
+        width: 550px !important; 
+        margin: 0 auto !important; 
+      }
+
+      #timerB {
+        top: 0px !important;
+        right: -90px !important;
+        border-radius: 1px !important;
+        border: 2px solid #1a3c36 !important;
+        width: 90px !important;
+      }
+      
+      #timerW {
+        bottom: 0px !important;
+        right: -90px !important;
+        border-radius: 1px !important;
+        border: 2px solid #1ee0a8 !important;
+        width: 80px !important;
+      }
+
+      .sq .piece { font-size: 44px !important; }
+      .game-header { justify-content: center !important; } 
+
+      #gameInner {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+      }
+
+      #controlsBox {
+        order: 1;
+        width: 280px !important; 
+        margin-top: -100px !important;
+        margin-bottom: 113px !important;
+        margin-left: -100px;
+      }
+
+      #capturedPiecesBox {
+        order: 2;
+        width: 390px !important; 
+        margin-top: 470px !important;
+        margin-bottom: -870px !important;
+        margin-left: -100px;
+      }
+    }
+
+  @media only screen and (width: 1024px) and (orientation: landscape) { 
+      .grid {
+         width: 500px !important;
+          margin: 0 auto !important; 
+        } 
+      .sq .piece { 
+        font-size: 40px !important; 
+      }
+
+      #boardHeader {
+         width: 500px !important; 
+         margin: 0 auto;
+      }
+
+      #timerB {
+        top: 0px !important;
+        right: 510px !important;
+        border-radius: 1px !important;
+        border: 2px solid #1a3c36 !important;
+        width: 82px !important;
+      }
+      
+      #timerW {
+        bottom: 0px !important;
+        right: 510px !important;
+        border-radius: 1px !important;
+        border: 2px solid #1ee0a8 !important;
+        width: 80px !important;
+      }
+      
+      #gameInner {
+         display: flex !important;
+         flex-direction: row !important;
+         align-items: flex-start !important;
+         justify-content: center !important;
+         gap: 30px; margin-top: 10px; 
+      }
+
+      #gameInner > div:first-child {
+         padding-right: 0 !important; 
+         width: 100%; max-width: 280px; order: 1;
+      }
+
+      #gameInner > div:nth-child(2) {
+        order: 2;
+      }
+      
+      #controlsBox {
+        width: 70% !important;
+        margin-top: -23px !important;
+        margin-left: 110px !important;
+      }
+
+      #capturedPiecesBox {
+        width: 90% !important;
+        margin-top: 142px !important;
+        margin-left: 40px !important;
+      }
+  }
+
+ /* ==================================
+       NEST HUB MAX & ALL LAPTOPS/PCs
+    =============================== */
+    @media only screen and (min-width: 1025px) {
+      #gameInner {
+        display: flex !important;
+        flex-direction: row !important; 
+        align-items: center !important; 
+        justify-content: center !important;
+        flex-wrap: nowrap !important; 
+        gap: 30px !important; 
+        margin-top: 20px !important;
+      }
+
+      #leftPanel {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        gap: 0px !important;
+        width: 100% !important;
+        max-width: 300px !important;
+        order: 1 !important; 
+      }
+
+      #rightPanel {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        width: max-content !important;
+        order: 2 !important; 
+      }
+
+      .grid {
+         width: 550px !important;
+         margin: 0 auto !important;
+      }
+
+      #boardHeader {
+         width: 550px !important;
+         margin: 0 auto 15px auto !important;
+      }
+
+      .sq .piece {
+        font-size: 48px !important;
+      }
+      
+      #controlsBox, #capturedPiecesBox { 
+        width: 100% !important; 
+        margin: 0 !important; 
+      } 
+      
+      #timerB { 
+        top: 10px !important;
+        right: -85px !important;
+        border-radius: 0 6px 6px 0 !important; 
+        border-bottom: 2px solid #1a3c36 !important; 
+        border-left: none !important; width: 80px !important; 
+      }
+      #timerW { bottom: 10px !important; 
+        right: -85px !important; 
+        border-radius: 0 6px 6px 0 !important; 
+        border-top: 2px solid #1a3c36 !important; 
+        border-left: none !important; 
+        width: 80px !important; 
+      }
+    }
+
+    #home-screen {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('chess2.png');
+      background-size: cover;
+      background-position: center;
+      border: 1px solid #18a37b; 
+    }
+
+    #game-screen.wrap { 
+      background: transparent;
+      border: none; 
+      box-shadow: none;
+    }
+
+    #turn {
+      min-height: 22px;
+    }
+
+    #result{
+      min-height: 20px;
+    }
+
+    .premium-btn {
+      background: rgba(30, 215, 96, 0.1) !important;
+      border: 2px solid #1ED760 !important;
+      color: #ffffff !important;
+      padding: 12px 24px;
+      font-size: 16px !important;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3 ease;
+      box-shadow: 0 4px 15px rgba(30, 215, 96, 0.2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      width: 100%;
+    }
+
+    .premium-btn:hover {
+      background: #1ED760 !important;
+      color: #000000 !important;
+      box-shadow: 0 0 20px rgba(30, 215, 96, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .premium-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 10px rgba(30, 215, 96, 0.4);
+    }
+    
+  </style>
+</head>
+<body class="bg-home">
+
+ <div id="exit-container" style="position: absolute; top: 20px; right: 20px; z-index: 10000;">
+    <button onclick="window.close(); window.location.href = 'index.html';" style="background-color: #18a37b; color: #ffffff; padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+        ✖ Exit Chess
+    </button>
+  </div>
+
+  <div id="home-screen" class="wrap" style="text-align: center; max-width: 500px; margin-top: 60px;">
+    <h1 style="margin-top: 0; color: #18a37b;">Chess Master</h1>
+    <p class="muted">Setup your game</p>
+    
+    <div class="setup-section">
+      <h3>Game Mode</h3>
+      <label><input type="radio" name="gameMode" value="twoPlayer"> Two Player</label>
+      <label><input type="radio" name="gameMode" value="ai"> Play vs Computer</label>
+    </div>
+
+    <div id="twoPlayerOptions" class="setup-section" style="display: none;">
+      <h3>Player Setup</h3>
+      <p style="color: #9fbfb3; font-size: 12px; margin-top: -5px; margin-bottom: 15px;">NOTE: Leave blank to use default names</p>
+      
+      <div style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
+        <div>
+          <label style="font-size: 13px; color: #9fbfb3;">Player 1 Name:</label>
+          <input type="text" id="p1Name" placeholder="Player 1" oninput="this.value=this.value.replace(/[^a-zA-Z0-9 ]/g, '')" maxlength="12" style="width: 100%; padding: 8px; margin-top: 4px; border-radius: 6px; border: 1px solid #18a37b; background: rgba(0,0,0,0.4); color: #fff; box-sizing: border-box;">
+        </div>
+        <div>
+          <label style="font-size: 13px; color: #9fbfb3;">Player 1 Token:</label>
+          <select id="p1Color" disabled style="width: 100%; padding: 8px; margin-top: 4px; border-radius: 6px; border: 1px solid #18a37b; background: rgba(0,0,0,0.4); color: #fff; box-sizing: border-box;">
+            <option value="w" id="p1OptW">Select Theme First</option>
+            <option value="b" id="p2OptB" style="display: none;"></option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 13px; color: #9fbfb3;">Player 2 Name:</label>
+          <input type="text" id="p2Name" placeholder="Player 2" oninput="this.value=this.value.replace(/[^a-zA-Z0-9 ]/g, '')" maxlength="12" style="width: 100%; padding: 8px; margin-top: 4px; border-radius: 6px; border: 1px solid #18a37b; background: rgba(0,0,0,0.4); color: #fff; box-sizing: border-box;">
+        </div>
+        <div>
+          <label style="font-size: 13px; color: #9fbfb3;">Player 2 Token (Auto):</label>
+          <input type="text" id="p2ColorDisplay" value="Waiting for Theme..." disabled style="width: 100%; padding: 8px; margin-top: 4px; border-radius: 6px; border: 1px solid #555; background: rgba(0,0,0,0.6); color: #888; box-sizing: border-box;">
+        </div>
+      </div>
+    </div>
+    
+    <div id="aiOptions" class="setup-section" style="display: none;">
+      <h3>Computer Level</h3>
+      <label><input type="radio" name="aiLevel" value="easy" checked> Easy</label>
+      <label><input type="radio" name="aiLevel" value="hard"> Hard</label>
+
+    <div style="margin-top: 15px;">
+      <label style="font-size: 13px; color: #9fbfb3;">Your Color</label>
+      <select id="aiPlayerColor" disabled style="width: 100%; padding: 8px; margin-top: 4px; border-radius: 6px; border: 1px solid #18a37b; background: rgba(0,0,0,0.4); color: #888; box-sizing: border-box; cursor: nor-allowed;">
+        <option value="w" id="aiOptW">Select Theme First</option>
+        <option value="b" id="aiOptB"></option>
+      </select>
+    </div>
+  </div>
+
+    <div class="setup-section">
+      <h3>Board Theme</h3>
+      <button id="openThemeModalBtn" class="btn premium-btn">🎨Select Theme</button>
+    </div>
+
+    <div id="themeErrorMsg" style="color: #ff4c4c; font-weight: bold; font-size: 14px; margin-bottom: 10px; display: none;">
+      Please Select a Theme First!
+    </div>
+
+    <button id="startGameBtn" class="btn premium-btn" style="margin-top: 10px;">🚀Start Game</button>
+  </div>
+
+  <div id="themeModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: #0d2622; padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); width: 280px; text-align: center;">
+      <h3 style="margin-top: 0; color: #18a37b;">Choose Board Theme</h3>
+      
+      <div class="theme-option" data-theme="wood" style="margin-bottom: 15px; cursor: pointer; padding: 10px; border: 2px solid transparent; border-radius: 8px; background: rgba(255,255,255,0.05);">
+        <div style="display: flex; width: 80px; height: 80px; margin: 0 auto; border: 2px solid #1a3c36; border-radius: 4px; overflow: hidden; flex-wrap: wrap;">
+          <div style="width: 50%; height: 50%; background: #f0d9b5;"></div><div style="width: 50%; height: 50%; background: #b58863;"></div>
+          <div style="width: 50%; height: 50%; background: #b58863;"></div><div style="width: 50%; height: 50%; background: #f0d9b5;"></div>
+        </div>
+        <p style="margin: 10px 0 0 0; color: #e6f0ef;">Classic Wood</p>
+      </div>
+
+      <div class="theme-option" data-theme="bw" style="cursor: pointer; padding: 10px; border: 2px solid transparent; border-radius: 8px; background: rgba(255,255,255,0.05);">
+        <div style="display: flex; width: 80px; height: 80px; margin: 0 auto; border: 2px solid #1a3c36; border-radius: 4px; overflow: hidden; flex-wrap: wrap;">
+          <div style="width: 50%; height: 50%; background: #FFFFFF;"></div><div style="width: 50%; height: 50%; background: #000000;"></div>
+          <div style="width: 50%; height: 50%; background: #000000;"></div><div style="width: 50%; height: 50%; background: #FFFFFF;"></div>
+        </div>
+        <p style="margin: 10px 0 0 0; color: #e6f0ef;">Black & White</p>
+      </div>
+      
+      <button id="closeThemeModalBtn" class="btn" style="margin-top: 20px; background: #3a4b48;">Cancel</button>
+    </div>
+  </div>
+
+
+  <div id="game-screen" class="wrap" style="display: none;">
+    <div id="gameInner" style="display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 40px; width: 100%;">
+      
+      <div id="leftPanel" style="display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 350px;">
+        
+        <div id="capturedPiecesBox" style="display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+          <div style="text-align: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px; margin-bottom: 5px;">
+            <h3 style="margin: 0; color: #18a37b; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Captured Pieces</h3>
+          </div>
+          <div>
+            <div id="capWhiteLabel" style="color: #9fbfb3; font-size: 12px; margin-bottom: 4px;">White Captured:</div>
+            <div id="capByWhite" style="min-height: 35px; background: rgba(255,255,255,0.05); border-radius: 6px; padding: 6px; font-size: 28px; line-height: 1.1; display: flex; flex-wrap: nowrap; overflow: hidden;"></div>
+          </div>
+          <div>
+            <div id="capBlackLabel" style="color: #9fbfb3; font-size: 12px; margin-bottom: 4px;">Black Captured:</div>
+            <div id="capByBlack" style="min-height: 35px; background: rgba(255,255,255,0.05); border-radius: 6px; padding: 6px; font-size: 28px; line-height: 1.1; display: flex; flex-wrap: nowrap; overflow: hidden;"></div>
+          </div>
+        </div>
+
+        <div id="controlsBox" style="display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+          <div style="display: flex; gap: 10px;">
+             <button id="undoBtn" class="btn" style="margin: 0; flex: 1; font-size: 14px; padding: 10px;">Undo Move</button>
+             <button id="flipBtn" class="btn" style="margin: 0; flex: 1; font-size: 14px; padding: 10px;">Flip Board</button>
+          </div>
+          <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <div id="turn" style="color: #fff; font-weight: bold; font-size: 15px; margin: 0;">Turn: —</div>
+            <div id="result" style="color: #ffeb3b; font-weight: bold; margin-top: 4px; min-height: 16px; margin-bottom: 0; font-size: 13px;"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="rightPanel" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: max-content;">
+        
+        <div id="boardHeader" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; width: 100%; background: rgba(0,0,0,0.6); padding: 10px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;">
+          <h2 style="margin: 0; font-size: 22px; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); line-height: 1; color: #1ee0a8;">Local Chess</h2>
+          <button id="backToHomeBtn" class="btn" style="background: #3a4b48; color: white; margin:0; padding: 6px 10px; font-size: 13px;">← Back to Home</button>
+        </div>
+        
+        <div id="boardWrapper" style="position: relative; display: inline-block; margin: 0 auto; width: max-content; height: max-content;">
+          <div id="board" aria-label="Chess board"></div>
+          
+          <div id="timerB" class="side-timer" style="position: absolute; top: 10px; right: -85px; background: #333; color: #fff; padding: 8px 5px; border-radius: 0 6px 6px 0; text-align: center; font-weight: bold; border: 2px solid #1a3c36; border-left: none; width: 50px; z-index: 5;">
+            <span id="timerBLabel">Black</span><br><span id="timerBText" style="font-size: 18px;">10:00</span><br>
+            <span id="turnTimerB" style="font-size: 11px; color: #ffeb3b; display: none;">Auto: 60s</span>
+          </div>
+
+          <div id="timerW" class="side-timer" style="position: absolute; bottom: 10px; right: -85px; background: #e6c280; color: #000; padding: 8px 5px; border-radius: 0 6px 6px 0; text-align: center; font-weight: bold; box-shadow: 2px 0 10px rgba(30,224,168,0.5); border: 2px solid #1a3c36; border-left: none; width: 55px; z-index: 5;">
+            <span id="timerWLabel">White</span><br><span id="timerWText" style="font-size: 18px;">10:00</span><br>
+            <span id="turnTimerW" style="font-size: 11px; color: #d32f2f; display: block;">Auto: 60s</span>
+          </div>
+
+          <div id="gameOverOverlay" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); z-index: 10; flex-direction: column; justify-content: center; align-items: center; border-radius: 6px; border: 2px solid #1ee0a8; box-sizing: border-box;">
+            <h2 id="gameOverText" style="color: #fff; font-size: 32px; text-shadow: 2px 2px 5px #000; margin-top: 0; margin-bottom: 20px; text-align: center;">Checkmate!</h2>
+
+            <div style="display: flex; gap: 15px;">
+            <button id="overlayRestartBtn" class="btn" style="font-size: 16px; padding: 10px 20px;">↻ Restart Game</button>
+            <button id="overlayBackBtn" class="btn" style="font-size: 18px; padding: 12px 24px;">🡸 Back to Home</button>
+          </div>
+          <button id="watchAdBtn" class="btn" style="margin-top: 25px; background: #d32f2f; color: white; font-size: 15px; padding: 8px 18px; border-radius: 6px; box-shadow: 0 4px 10px rgba (0,0,0,0.5);">▶ Watch Ad</button>
+        </div>
+        
+      </div>
+    </div>
+
+  </div>
+
+  
+<script>
+    // --- Global Game Settings ---
+    window._isAiMode = false;
+    window._aiDifficulty = 'easy';
+    window._selectedTheme = null;
+    window._p1Name = 'Player 1';
+    window._p2Name = 'Player 2';
+    window._p1Color = 'w';
+    
+    window._capW = []; 
+    window._capB = []; 
+    window._timeW = 600;
+    window._timeB = 600;
+    window._turnDuration = 0;
+    window._timerInterval = null;
+
+    function formatTime(secs) {
+      let m = Math.floor(secs / 60);
+      let s = secs % 60;
+      return m + ":" + (s < 10 ? "0" : "") + s;
+    }
+
+   function updateTimerDisplay() {
+      let wDisplay = document.getElementById('timerWText'); 
+      let bDisplay = document.getElementById('timerBText'); 
+      if(wDisplay) wDisplay.textContent = formatTime(window._timeW);
+      if(bDisplay) bDisplay.textContent = formatTime(window._timeB);
+
+      let wBox = document.getElementById('timerW');
+      let bBox = document.getElementById('timerB');
+
+      let wTurn = document.getElementById('turnTimerW');
+      let bTurn = document.getElementById('turnTimerB');
+      let timeLeft = 60 - window._turnDuration;
+
+      if(wBox && bBox) {
+        if(window._turn === 'w') { 
+          wBox.style.boxShadow = '0 0 10px #1ee0a8';
+          bBox.style.boxShadow = 'none';
+
+          if(wTurn) { wTurn.style.display = 'block'; wTurn.textContent = 'Auto : ' + timeLeft + 's'; }
+          if(bTurn) bTurn.style.display = 'none';
+        } else {
+          bBox.style.boxShadow = '0 0 10px #1ee0a8';
+          wBox.style.boxShadow = 'none';
+
+          if(bTurn) { bTurn.style.display = 'block'; bTurn.textContent = 'Auto : ' + timeLeft + 's'; }
+          if(wTurn) bTurn.style.display = 'none';
+        }
+      }
+    }
+
+   function timerTick() {
+      if(window._gameOver) return;
+
+      if(window._turn === 'w') {
+        window._timeW--;
+        if(window._timeW <= 0) { handleTimeOut('b'); return; }
+      } else {
+        window._timeB--;
+        if(window._timeB <= 0) { handleTimeOut('w'); return; } 
+      }
+
+      window._turnDuration++;
+      if(window._turnDuration >= 60) {
+        forceAutoMove(window._turn);
+        return;
+      }
+      updateTimerDisplay();
+    }
+
+    function handleTimeOut(winnerColor) {
+      window._gameOver = true;
+      if(window._timerInterval) clearInterval(window._timerInterval);
+
+      const overlay = document.getElementById('gameOverOverlay');
+      const overlayText = document.getElementById('gameOverText');
+      const winnerName = (window._p1Color === winnerColor) ? window._p1Name : window._p2Name;
+
+      const winMsg = 'Time Out - ' + winnerName + ' wins!';
+      document.getElementById('result').textContent = winMsg; 
+      overlayText.textContent = winMsg; 
+      overlayText.style.color = (winnerColor === 'b' ? '#ff4c4c' : '#ffffff');
+      overlay.style.display = 'flex';
+    }
+
+   function forceAutoMove(color) {
+      window._turnDuration = 0;
+      const moves = allLegalMoves(window._boardState, color);
+      if(moves.length === 0) return;
+
+      let chosen = moves[Math.floor(Math.random() * moves.length)];
+      const capturedPiece = window._boardState[chosen.to[0]][chosen.to[1]];
+
+      window._moveHistory.push({board: cloneBoard(window._boardState), turn: window._turn, capW: [...window._capW], capB: [...window._capB]});
+      if(chosen.promo) chosen.promoPiece ='q';
+
+      if(capturedPiece) {
+        if(getColorOfPiece(capturedPiece) === 'b') window._capW.push(capturedPiece); 
+        else window._capB.push(capturedPiece);
+      }
+
+      window._boardState = applyMove(window._boardState, chosen);
+      redrawBoard();
+      renderCapturedPieces();
+      highlightLastMove(chosen.from, chosen.to); 
+      animatePiece(chosen.to); 
+
+      window._turn = color === 'w' ? 'b' : 'w';
+      updateStatus();
+      updateTimerDisplay();
+      checkGameOver();
+
+      const aiColor = (window._p1Color === 'w') ? 'b' : 'w';
+      if(window._isAiMode && window._turn === aiColor && !window._gameOver) {
+        setTimeout(() => makeAIMove(), 3000);
+      }
+    }
+
+    // --- Home Screen Logic ---
+    document.querySelectorAll('input[name="gameMode"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        if (e.target.value === 'ai') {
+          document.getElementById('aiOptions').style.display = 'block';
+          document.getElementById('twoPlayerOptions').style.display = 'none';
+        } else {
+          document.getElementById('aiOptions').style.display = 'none';
+          document.getElementById('twoPlayerOptions').style.display = 'block';
+        }
+      });
+    });
+
+    document.getElementById('p1Color').addEventListener('change', (e) => {
+      let wText = (window._selectedTheme === 'wood') ? 'Light Wood' : 'White';
+      let bText = (window._selectedTheme === 'wood') ? 'Dark Wood' : 'Black';
+
+      if (e.target.value === 'w') {
+        document.getElementById('p2ColorDisplay').value = bText;
+      } else {
+        document.getElementById('p2ColorDisplay').value = wText;
+      }      
+    });
+
+    const themeModal = document.getElementById('themeModal');
+    
+    document.getElementById('openThemeModalBtn').addEventListener('click', () => {
+      themeModal.style.display = 'flex';
+    });
+
+    document.getElementById('closeThemeModalBtn').addEventListener('click', () => {
+      themeModal.style.display = 'none';
+    });
+
+    document.querySelectorAll('.theme-option').forEach(option => {
+      option.addEventListener('click', function() {
+        window._selectedTheme = this.getAttribute('data-theme');
+        const themeName = this.querySelector('p').textContent;
+        document.getElementById('openThemeModalBtn').textContent = 'Theme: ' + themeName;
+        themeModal.style.display = 'none';
+        document.getElementById('themeErrorMsg').style.display = 'none';
+    
+        let wText = (window._selectedTheme === 'wood') ? 'Light Wood' : 'White';
+        let bText = (window._selectedTheme === 'wood') ? 'Dark Wood' : 'Black';
+
+        const p1Select = document.getElementById('p1Color');
+        if(p1Select) {
+         p1Select.disabled = false;
+         p1Select.style.cursor = 'pointer';
+         p1Select.style.color = '#fff';
+
+         p1Select.innerHTML = '<option value="w">' + wText + '</option><option value="b">' + bText + '</option>';
+
+
+         if(document.getElementById('p2ColorDisplay')) {
+            document.getElementById('p2ColorDisplay').value = (p1Select.value === 'w') ? bText : wText;
+        }
+      }
+    
+      const aiSelect = document.getElementById('aiPlayerColor');
+      if (aiSelect) {
+         aiSelect.disabled = false;
+         aiSelect.style.cursor = 'pointer';
+         aiSelect.style.color = '#fff';
+
+         aiSelect.innerHTML = '<option value = "w">' + wText + '</option><option value = "b">' + bText + '</option>'; 
+      }
+    });
+  }); 
+  
+    
+    document.getElementById('startGameBtn').addEventListener('click', () => {
+      const errorMsg = document.getElementById('themeErrorMsg');
+
+      const modeSelected = document.querySelector('input[name="gameMode"]:checked');
+      if(!modeSelected) {
+        errorMsg.textContent = "Please Select Game Mode First!";
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      if(window._selectedTheme === null) {
+        errorMsg.textContent = "Please Select a Theme First";
+        errorMsg.style.display = "block";
+        return;
+      }
+      errorMsg.style.display = 'none';
+
+      const selectedTheme = window._selectedTheme;
+
+      document.body.classList.remove('bg-home', 'bg-game', 'bg-wood', 'bg-bw');
+      if (selectedTheme === 'wood') {
+        document.body.classList.add('bg-wood');
+      } else {
+        document.body.classList.add('bg-bw');
+      }
+      
+      const boardEl = document.getElementById('board');
+      boardEl.classList.remove('theme-wood', 'theme-bw');
+      boardEl.classList.add(selectedTheme === 'wood' ? 'theme-wood' : 'theme-bw');
+
+      window._isAiMode = document.querySelector('input[name="gameMode"]:checked').value === 'ai';
+      window._aiDifficulty = document.querySelector('input[name="aiLevel"]:checked').value;
+
+      if (window._isAiMode) {
+        window._p1Name = 'You';
+        window._p2Name = 'Computer';
+        window._p1Color = document.getElementById('aiPlayerColor').value;
+      } else {
+        window._p1Name = document.getElementById('p1Name').value || 'Player 1';
+        window._p2Name = document.getElementById('p2Name').value || 'Player 2';
+        window._p1Color = document.getElementById('p1Color').value;
+      }
+
+      document.getElementById('home-screen').style.display = 'none';
+      document.getElementById('game-screen').style.display = 'block';
+      document.getElementById('exit-container').style.display = 'none';
+
+      if(selectedTheme === 'wood') {
+        document.getElementById('capWhiteLabel').textContent = 'Light Wood Captured:';
+        document.getElementById('capBlackLabel').textContent = 'Dark Wood Captured:';
+        document.getElementById('timerWLabel').textContent = 'Light Wood';
+        document.getElementById('timerBLabel').textContent = 'Dark Wood';
+      } else {
+        document.getElementById('capWhiteLabel').textContent = 'Black Captured:';
+        document.getElementById('capBlackLabel').textContent = 'White Captured:';
+        document.getElementById('timerWLabel').textContent = 'White:';
+        document.getElementById('timerBLabel').textContent = 'Black:';
+      }
+
+      startNewGame();
+    });
+
+    document.getElementById('backToHomeBtn').addEventListener('click', () => {
+      document.body.classList.remove('bg-wood', 'bg-bw');
+      document.body.classList.add('bg-home');
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('home-screen').style.display = 'block';
+      document.getElementById('exit-container').style.display = 'flex';
+    });
+
+    document.getElementById('overlayBackBtn').addEventListener('click' , () => {
+      document.body.classList.remove('bg-wood', 'bg-bw');
+      document.body.classList.add('bg-home');
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('home-screen').style.display = 'block';
+    });
+
+    document.getElementById('overlayRestartBtn').addEventListener('click', () => {
+      startNewGame();
+    });
+
+    // --- Chess Logic ---
+   const startFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
+    const files = ['a','b','c','d','e','f','g','h'];
+
+    function parseFEN(fen){
+      const rows = fen.split('/');
+      const board = [];
+      for(let r=0;r<8;r++){
+        const row = [];
+        const part = rows[r];
+        for(const ch of part){
+          if(/[1-8]/.test(ch)){
+            const n = parseInt(ch,10);
+            for(let i=0;i<n;i++) row.push('');
+          }else row.push(ch);
+        }
+        board.push(row);
+      }
+      return board;
+    }
+
+    function pieceToUnicode(p){
+      if(!p) return '';
+      const map = {p:'♟',r:'♜',n:'♞',b:'♝',q:'♛',k:'♚'};
+      const lower = p.toLowerCase();
+      const ch = map[lower]||'';
+      return p === lower ? ch : ch.replace(/./, c=>({'♟':'♙','♜':'♖','♞':'♘','♝':'♗','♛':'♕','♚':'♔'}[c]));
+    }
+
+    function getColorOfPiece(p){ if(!p) return null; return p.toUpperCase()===p ? 'w' : 'b'; }
+
+    function colorPiece(span, piece) {
+      if (piece) {
+        const color = getColorOfPiece(piece);
+        
+        if (window._selectedTheme === 'wood') {
+          if (color === 'w') {
+            span.style.color = '#e6c280'; 
+            span.style.textShadow = '-1px -1px 0 #3b2413, 1px -1px 0 #3b2413, -1px 1px 0 #3b2413, 1px 1px 0 #3b2413, 0px 4px 4px rgba(0,0,0,0.6)'; 
+          } else {
+            span.style.color = '#4a2a18';
+            span.style.textShadow = '-1px -1px 0 #e6c280, 1px -1px 0 #e6c280, -1px 1px 0 #e6c280, 1px 1px 0 #e6c280, 0px 4px 4px rgba(0,0,0,0.8)'; 
+          }
+        } 
+        else {
+          const outline = `-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000`; 
+          if (color === 'w') {
+            span.style.color = '#fff';
+            span.style.textShadow = outline + ', 0px 4px 4px rgba(0,0,0,0.5)';
+          } else {
+            span.style.color = '#000';
+            span.style.textShadow = outline.replace(/#000/g, '#fff');
+          }
+        }
+      }
+    }
+
+    function renderCapturedPieces() {
+      const getHTML = (arr) => {
+        const vals = {q:9, r:5, b:3, n:3, p:1, Q:9, R:5, B:3, N:3, P:1};
+        let sorted = [...arr].sort((a,b) => vals[b] - vals[a]);
+        
+        return sorted.map(p => {
+          const color = p === p.toUpperCase() ? 'w' : 'b';
+          const uni = pieceToUnicode(p);
+          
+          let cHex, shadow;
+          
+          if (window._selectedTheme === 'wood') {
+             if (color === 'w') {
+                cHex = '#e6c280'; 
+                shadow = '-1px -1px 0 #3b2413, 1px -1px 0 #3b2413, -1px 1px 0 #3b2413, 1px 1px 0 #3b2413, 0px 2px 2px rgba(0,0,0,0.6)';
+             } else {
+                cHex = '#4a2a18'; 
+                shadow = '-1px -1px 0 #e6c280, 1px -1px 0 #e6c280, -1px 1px 0 #e6c280, 1px 1px 0 #e6c280, 0px 2px 2px rgba(0,0,0,0.8)';
+             }
+          } 
+          else {
+             cHex = color === 'w' ? '#fff' : '#000';
+             shadow = color === 'w' 
+                ? '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0px 2px 2px rgba(0,0,0,0.5)'
+                : '-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff';
+          }
+
+          return `<span style="color:${cHex}; text-shadow:${shadow}; margin-right: -12px;">${uni}</span>`;
+        }).join('');
+      };
+      
+      document.getElementById('capByWhite').innerHTML = getHTML(window._capW || []);
+      document.getElementById('capByBlack').innerHTML = getHTML(window._capB || []);
+    }
+
+    function buildBoardFromState(state){ 
+      window._boardState = state; 
+      const boardEl = document.getElementById('board'); 
+      const themeClass = boardEl.className.includes('theme-bw') ? 'theme-bw' : 'theme-wood';
+      boardEl.innerHTML = ''; 
+      boardEl.className = 'mini-board ' + themeClass;
+      
+      const tbl = document.createElement('div'); 
+      tbl.className = 'grid'; 
+      for(let r=0;r<8;r++) {
+        for(let c=0;c<8;c++){ 
+          const sq = document.createElement('div'); 
+          sq.className = 'sq ' + (((r+c)%2) ? 'dark' : 'light'); 
+          sq.dataset.r = r; sq.dataset.c = c; 
+          const span = document.createElement('div'); 
+          span.className = 'piece'; 
+          span.textContent = pieceToUnicode(state[r][c]); 
+          colorPiece(span, state[r][c]); 
+          sq.appendChild(span); 
+          tbl.appendChild(sq);
+        }
+      }
+      boardEl.appendChild(tbl); 
+      attachSquareHandlers(); 
+    }
+
+    function clearMoveHints() {
+       document.querySelectorAll('#board .sq.legal-move-hint, #board .sq.capture-hint').forEach(el=>{ el.classList.remove('legal-move-hint','capture-hint');
+        }); 
+      }
+
+    function clearHighlights() { 
+      document.querySelectorAll('#board .sq.sel').forEach(el=>el.classList.remove('sel')); 
+      clearMoveHints();
+     }
+    
+    function redrawBoard() {
+      document.querySelectorAll('#board .sq').forEach(sq=>{
+        const r = parseInt(sq.dataset.r,10), c = parseInt(sq.dataset.c,10);
+        const span = sq.querySelector('.piece');
+        const piece = window._boardState[r][c];
+        span.textContent = pieceToUnicode(piece);
+        colorPiece(span, piece);
+      });
+    }
+
+    function updateStatus(){
+      let currentPlayerName = "";
+
+      let lightName = (window._selectedTheme === 'wood') ? 'Light Wood' : 'White';
+      let darkName = (window._selectedTheme === 'wood') ? 'Dark Wood' : 'Black';
+
+      if (window._turn === 'w') {
+        currentPlayerName = (window._p1Color === 'w') ? window._p1Name : window._p2Name;
+        document.getElementById('turn').textContent = 'Turn: ' + currentPlayerName + ' (' + lightName + ')';
+      } else {
+        currentPlayerName = (window._p1Color === 'b') ? window._p1Name : window._p2Name;
+        document.getElementById('turn').textContent = 'Turn: ' + currentPlayerName + ' (' + darkName + ')';
+      }
+      document.getElementById('result').textContent = '';
+    }
+
+    function highlightLastMove(from,to) {
+      document.querySelectorAll('#board .sq').forEach(s=>s.classList.remove('last-move'));
+      const f = document.querySelector('#board .sq[data-r="'+from[0]+'"][data-c="'+from[1]+'"]');
+      const t = document.querySelector('#board .sq[data-r="'+to[0]+'"][data-c="'+to[1]+'"]');
+      if(f) f.classList.add('last-move'); if(t) t.classList.add('last-move');
+    }
+
+    function showLegalMoves(r,c) { 
+      clearMoveHints(); 
+      const p = window._boardState[r][c];
+      if(!p) return;
+
+      const pieceColor = getColorOfPiece(p);
+      const moves = allLegalMoves(window._boardState, pieceColor); 
+
+      const relevant = moves.filter(m=>m.from[0]===r && m.from[1]===c); 
+      for(const m of relevant){ 
+        const tr=m.to[0], tc=m.to[1]; 
+        const target = document.querySelector('#board .sq[data-r="'+tr+'"][data-c="'+tc+'"]'); 
+        if(!target) continue; 
+        if(m.capture) target.classList.add('capture-hint'); else target.classList.add('legal-move-hint'); 
+      } 
+    }
+
+    function animatePiece(to) {
+      const sq = document.querySelector('#board .sq[data-r="'+to[0]+'"][data-c="'+to[1]+'"]');
+      if(!sq) return; const pc = sq.querySelector('.piece');
+       if(!pc) return;
+        pc.classList.add('piece-move'); 
+        setTimeout(()=>pc.classList.remove('piece-move'),300);
+    }
+
+    function cloneBoard(b) {
+       return b.map(r=>r.slice());
+    }
+
+    function inBounds(r,c) { 
+      return r>=0 && r<8 && c>=0 && c<8;
+    }
+
+   function generateMovesForPiece(board,r,c) {
+      const p = board[r][c]; if(!p) return [];
+      const color = getColorOfPiece(p);
+      const moves = [];
+      const opp = color==='w' ? 'b' : 'w';
+      const add = (tr,tc)=> {
+         if(!inBounds(tr,tc)) return;
+          const target = board[tr][tc];
+           if(!target || getColorOfPiece(target)===opp) moves.push({from:[r,c],to:[tr,tc],piece:p,capture:!!target});
+      };
+
+      const type = p.toLowerCase();
+      
+      if(type==='p') {
+        const dir = color==='w' ? -1 : 1;
+        const nr = r+dir;
+        if(inBounds(nr,c) && !board[nr][c]) {
+          moves.push({from:[r,c],to:[nr,c],piece:p,capture:false,promo:(nr===0||nr===7)});
+
+          const startRow = color==='w' ? 6 : 1;
+          const nnr = r + (dir * 2);
+          if(r === startRow && !board[nnr][c]) {
+            moves.push({from:[r,c],to:[nnr,c],piece:p,capture:false});
+          }
+        }
+
+        for(const dc of [-1,1]){
+            const nc=c+dc;
+            if(inBounds(nr,nc) && board[nr][nc] && getColorOfPiece(board[nr][nc])===opp) moves.push({from:[r,c],to:[nr,nc],piece:p,capture:true,promo:(nr===0||nr===7)});
+        }
+        return moves;
+      }
+      
+      if(type==='n') {
+         const offs=[[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]];
+          for(const [dr,dc] of offs) add(r+dr,c+dc);
+           return moves;
+      }
+
+      if(type==='k'){
+         for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++) if(dr||dc) add(r+dr,c+dc);
+          return moves; 
+      }
+      
+      const slide = (dirs)=> {
+         for(const [dr,dc] of dirs) {
+           let tr=r+dr, tc=c+dc; 
+           while(inBounds(tr,tc)) {
+             if(!board[tr][tc]) moves.push({from:[r,c],to:[tr,tc],piece:p,capture:false});
+             else { 
+                 if(getColorOfPiece(board[tr][tc])===opp) moves.push({from:[r,c],to:[tr,tc],piece:p,capture:true});
+                 break;
+             } 
+             tr+=dr; 
+             tc+=dc;
+           } 
+         }
+      };
+
+      if(type==='b') slide([[-1,-1],[-1,1],[1,-1],[1,1]]);
+      if(type==='r') slide([[-1,0],[1,0],[0,-1],[0,1]]);
+      if(type==='q') slide([[-1,-1],[-1,1],[1,-1],[1,1],[-1,0],[1,0],[0,-1],[0,1]]);
+      
+      return moves;
+    }
+
+    function squareAttacked(board,r,c,byColor) {
+      if(byColor==='w') { 
+        const pr = r+1;
+         for(const dc of [-1,1]) if(inBounds(pr,c+dc) && board[pr][c+dc]==='P') return true;
+      } else { const pr = r-1;
+         for(const dc of [-1,1]) if(inBounds(pr,c+dc) && board[pr][c+dc]==='p') return true;
+      }
+      const kn = [[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]];
+      for(const [dr,dc] of kn){ const rr=r+dr, cc=c+dc;
+         if(inBounds(rr,cc)){ const q=board[rr][cc];
+           if(q && getColorOfPiece(q)===byColor && q.toLowerCase()==='n') return true; 
+          } 
+        }
+      const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+      for(const [dr,dc] of dirs) { 
+        let rr=r+dr, cc=c+dc;
+         while(inBounds(rr,cc)) {
+           const q=board[rr][cc];
+            if(q){ if(getColorOfPiece(q)===byColor && (q.toLowerCase()==='r' || q.toLowerCase()==='q')) return true;
+             break; 
+            } rr+=dr; 
+            cc+=dc; 
+          } 
+        }
+      const diag = [[1,1],[1,-1],[-1,1],[-1,-1]];
+      for(const [dr,dc] of diag){
+         let rr=r+dr, cc=c+dc;
+          while(inBounds(rr,cc)){ 
+            const q=board[rr][cc];
+             if(q){ if(getColorOfPiece(q)===byColor && (q.toLowerCase()==='b' || q.toLowerCase()==='q')) return true;
+              break;
+             } rr+=dr;
+              cc+=dc; 
+            } 
+          }
+      for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){ 
+        if(dr===0 && dc===0) continue;
+         const rr=r+dr, cc=c+dc; 
+         if(inBounds(rr,cc)){ 
+          const q=board[rr][cc];
+           if(q && getColorOfPiece(q)===byColor && q.toLowerCase()==='k') return true;
+         }
+      }
+      return false;
+    }
+
+    function findKing(board,color){ 
+      const target = color==='w'?'K':'k';
+       for(let r=0;r<8;r++) for(let c=0;c<8;c++) if(board[r][c]===target) return [r,c];
+        return null;
+    }
+
+    function isKingInCheck(board,color){
+       const opp = color==='w'?'b':'w';
+        const kp = findKing(board,color);
+         if(!kp) return false; 
+         return squareAttacked(board,kp[0],kp[1],opp);
+    }
+
+    function allLegalMoves(board,color){
+      const moves = [];
+      for(let r=0;r<8;r++) for(let c=0;c<8;c++){ 
+        const p=board[r][c]; if(p && getColorOfPiece(p)===color) moves.push(...generateMovesForPiece(board,r,c));
+      }
+      const legal = [];
+      for(const m of moves){ 
+        const nb = applyMove(board,m); if(!isKingInCheck(nb,color)) legal.push(m);
+      }
+      return legal;
+    }
+
+    function checkGameOver(){
+      const opp = window._turn;
+      const moves = allLegalMoves(window._boardState, opp);
+      const overlay = document.getElementById('gameOverOverlay');
+      const overlayText = document.getElementById('gameOverText');
+
+      if(moves.length===0){
+        if(isKingInCheck(window._boardState, opp)) {
+          const winnerColor = (opp === 'w') ? 'b' : 'w';
+          const winnerName = (window._p1Color === winnerColor) ? window._p1Name : window._p2Name;        
+          
+          const winMsg = 'Checkmate - ' + winnerName + ' wins!';
+          document.getElementById('result').textContent = winMsg;
+          overlayText.textContent = winMsg; 
+          overlayText.style.color = (opp === 'w' ? '#ff4c4c' : '#ffffff');
+        }else {
+          document.getElementById('result').textContent = 'Stalemate — Draw';
+          overlayText.textContent = 'Stalemate - Draw';
+          overlayText.style.color = '#ffeb3b';
+        }
+        window._gameOver = true;
+        overlay.style.display = 'flex';
+      } else {
+        if(isKingInCheck(window._boardState, opp)) document.getElementById('result').textContent = 'Check!';
+        else document.getElementById('result').textContent = '';
+      }
+    }
+
+    function applyMove(board,move){ 
+      const b=cloneBoard(board); 
+      const [fr,fc]=move.from; 
+      const [tr,tc]=move.to;
+      let piece=b[fr][fc]; b[fr][fc]=''; 
+      if(move.promo){ piece = move.promoPiece || (piece.toUpperCase()===piece ? 'Q' : 'q'); }
+      b[tr][tc]=piece;
+      return b; 
+    }
+
+    function minimax(board,depth,maximizingColor,alpha,beta) {
+      if(depth===0) return {score: evaluateMaterial(board)};
+      const moves = allLegalMoves(board, maximizingColor);
+      if(moves.length===0) return {score: evaluateMaterial(board)};
+      let bestMove=null;
+      if(maximizingColor==='w'){
+        let maxEval = -Infinity;
+        for(const m of moves){ 
+          const nb=applyMove(board,m);
+           const res = minimax(nb,depth-1,'b',alpha,beta);
+            if(res.score>maxEval){ 
+              maxEval=res.score;
+               bestMove=m;
+               } 
+            alpha = Math.max(alpha,res.score); 
+            if(beta<=alpha) break;
+           }
+        return {score:maxEval,move:bestMove};
+      }else{
+        let minEval = Infinity;
+        for(const m of moves){ 
+          const nb=applyMove(board,m); 
+          const res = minimax(nb,depth-1,'w',alpha,beta);
+           if(res.score<minEval){ minEval=res.score; bestMove=m; } 
+           beta = Math.min(beta,res.score);
+            if(beta<=alpha) break; 
+          }
+        return {score:minEval,move:bestMove};
+      }
+    }
+
+    const PIECE_VALUES = {
+      p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000
+    };
+
+    const PAWN_PST = [
+      [  0,  0,  0,  0,  0,  0,  0,  0],
+      [ 50, 50, 50, 50, 50, 50, 50, 50],
+      [ 10, 10, 20, 30, 30, 20, 10, 10],
+      [  5,  5, 10, 25, 25, 10,  5,  5],
+      [  0,  0,  0, 20, 20,  0,  0,  0],
+      [  5, -5,-10,  0,  0,-10, -5,  5],
+      [  5, 10, 10,-20,-20, 10, 10,  5],
+      [  0,  0,  0,  0,  0,  0,  0,  0]
+    ];
+
+    const KNIGHT_PST = [
+      [-50,-40,-30,-30,-30,-30,-40,-50],
+      [-40,-20,  0,  0,  0,  0,-20,-40],
+      [-30,  0, 10, 15, 15, 10,  0,-30],
+      [-30,  5, 15, 20, 20, 15,  5,-30],
+      [-30,  0, 15, 20, 20, 15,  5,-30],
+      [-30,  5, 10, 15, 15, 10,  5,-30],
+      [-40,-20,  0,  5,  5,  0,-20,-40],
+      [-50,-40,-30,-30,-30,-30,-40,-50]
+    ];
+
+    const BISHOP_PST = [
+      [-20,-10,-10,-10,-10,-10,-10,-20],
+      [-10,  0,  0, 10, 10,  0,  0,-10],
+      [-10,  0,  0,  5,  5,  0,  0,-10],
+      [-10,  5,  5, 10, 10,  5,  5,-10],
+      [-10,  0, 10, 10, 10, 10,  0,-10],
+      [-10, 10, 10, 10, 10, 10, 10,-10],
+      [-10,  5,  0,  0,  0,  0,  5,-10],
+      [-20,-10,-10,-10,-10,-10,-10,-20]
+    ];
+
+    const ROOK_PST = [
+      [  0,  0,  0,  0,  0,  0,  0,  0],
+      [  5, 10, 10, 10, 10, 10, 10,  5],
+      [ -5,  0,  0,  0,  0,  0,  0, -5],
+      [ -5,  0,  0,  0,  0,  0,  0, -5],
+      [ -5,  0,  0,  0,  0,  0,  0, -5],
+      [ -5,  0,  0,  0,  0,  0,  0, -5],
+      [ -5,  0,  0,  0,  0,  0,  0, -5],
+      [  0,  0,  0,  5,  5,  0,  0,  0],
+    ];
+
+    const QUEEN_PST = [
+      [-20,-10,-10, -5, -5,-10,-10,-20],
+      [-10,  0,  0,  0,  0,  0,  0,-10],
+      [-10,  0,  5,  5,  5,  5,  0,-10],
+      [ -5,  0,  5,  5,  5,  5,  0, -5],
+      [  0,  0,  5,  5,  5,  5,  0, -5],
+      [-10,  5,  5,  5,  5,  5,  0,-10],
+      [-10,  0,  5,  0,  0,  0,  0,-10],
+      [-20,-10,-10, -5, -5,-10,-10,-20]
+    ];
+
+    const KING_PST = [
+      [-30,-40,-40,-50,-50,-40,-40,-30],
+      [-30,-40,-40,-50,-50,-40,-40,-30],
+      [-30,-40,-40,-40,-50,-40,-40,-30],
+      [-30,-40,-40,-40,-50,-40,-40,-30],
+      [-20,-30,-30,-40,-40,-30,-30,-20],
+      [-10,-20,-20,-20,-20,-20,-20,-10],
+      [ 20, 20,  0,  0,  0,  0, 20, 20],
+      [ 20, 30, 10,  0,  0, 10, 30, 20],
+    ];
+
+    function getPieceValueAndPosition (piece, r, c) {
+      if(!piece) return 0;
+
+      const type = piece.toLowerCase();
+      let value = PIECE_VALUES[type] || 0;  
+      let posValue = 0;
+      
+      let tableRow = (piece === type) ? r : (7 - r);
+
+      switch (type) {
+      case 'p': posValue = PAWN_PST[tableRow][c]; break;
+      case 'n': posValue = KNIGHT_PST[tableRow][c]; break;
+      case 'b': posValue = BISHOP_PST[tableRow][c]; break;
+      case 'r': posValue = ROOK_PST[tableRow][c]; break;
+      case 'q': posValue = QUEEN_PST[tableRow][c]; break;
+      case 'k': posValue = KING_PST[tableRow][c]; break;
+      }
+
+      return value + posValue;
+    }
+
+    function evaluateMaterial (board) {
+      let score = 0;
+
+      for(let r = 0; r < 8; r++) {
+          for(let c = 0; c < 8; c++) {
+              const p = board[r][c];
+              if (p) {
+                 const pieceValue = getPieceValueAndPosition (p, r, c);
+                 score += (p.toUpperCase() === p) ? pieceValue : -pieceValue
+              }
+          } 
+      } 
+      return score;
+  }
+  
+   function makeAIMove() {
+    if (window._gameOver) return;
+    const aiColor = (window._p1Color === 'w') ? 'b' : 'w';
+    const moves = allLegalMoves(window._boardState, aiColor);
+
+    if(moves.length === 0) {
+      document.getElementById('result').textContent = 'No moves for AI';
+      return;
+    }
+
+    let chosen = null;
+    if(window._aiDifficulty === 'easy') {
+      chosen = moves[Math.floor(Math.random() * moves.length)];
+    } else {
+      const depth = 3;
+      let bestScore = (aiColor === 'w') ? -Infinity : Infinity;
+  
+      const nextColor = (aiColor === 'w') ? 'b' : 'w'; 
+
+      for(const m of moves) {
+        const nb = applyMove(window._boardState, m);
+        const res = minimax(nb, depth - 1, nextColor,  -Infinity, Infinity);
+        let score = res.score;
+
+        const boardStr = JSON.stringify(nb);
+        let isRepetition = false;
+
+        for (let i = Math.max(0, window._moveHistory.length - 6); i < window._moveHistory.length; i++) {
+          if(JSON.stringify(window._moveHistory[i].board) === boardStr) {
+            isRepetition = true;
+            break;
+          }
+        }
+        if (isRepetition) {
+          score += (aiColor === 'w') ? -5000: 5000;
+        }
+        
+        if(aiColor === 'w') {
+          if (score > bestScore) { bestScore = score; chosen = m; }
+        } else {
+          if (score < bestScore) { bestScore = score; chosen = m; }
+        }
+      }
+      if(!chosen) chosen = moves[Math.floor(Math.random() * moves.length)];
+    }
+
+    if(chosen) {
+      const capturedPiece = window._boardState[chosen.to[0]][chosen.to[1]];
+      window._moveHistory.push({board: cloneBoard(window._boardState), turn: window._turn, capW: [...window._capW],capB: [...window._capB]});
+      if(chosen.promo) chosen.promoPiece = 'q';
+
+      if(capturedPiece){
+        if(getColorOfPiece(capturedPiece) === 'b') window._capW.push(capturedPiece);
+        else window._capB.push(capturedPiece);
+      }
+
+      window._boardState = applyMove(window._boardState, chosen);
+      redrawBoard();
+      renderCapturedPieces();
+      highlightLastMove(chosen.from, chosen.to);
+      animatePiece(chosen.to);
+
+      window._turn = window._p1Color;
+      window._turnDuration = 0;
+      updateStatus();
+      updateTimerDisplay();
+      checkGameOver();
+    }
+  }
+    
+    function startNewGame(){ 
+      window._state = parseFEN(startFEN); 
+      window._moveHistory = []; 
+      window._gameOver = false;
+      window._turn = 'w'; 
+      window._selected = null; 
+      window._capW = []; 
+      window._capB = [];
+      renderCapturedPieces();
+
+      buildBoardFromState(window._state); 
+      document.getElementById('result').textContent=''; 
+      document.getElementById('gameOverOverlay').style.display = 'none';
+      updateStatus(); 
+
+      window._timeW = 600;
+      window._timeB = 600;
+      window._turnDuration = 0;
+      updateTimerDisplay();
+      if(window._timerInterval) clearInterval(window._timerInterval);
+      window._timerInterval = setInterval(timerTick, 1000);
+
+      const g =document.querySelector('#board .grid');
+        g.style.transform = '';
+        document.querySelectorAll('.piece').forEach(p => p.style.transform = 'translate(-50%, -50%) rotate(0deg)');
+
+      if(window._isAiMode && window._p1Color === 'b') {
+        setTimeout(() => makeAIMove(), 1000);
+      }
+    }
+
+    function askPromotion(color, cb){
+      const overlay = document.createElement('div'); 
+       overlay.style.position='fixed'; 
+       overlay.style.left=0;
+       overlay.style.top=0; 
+       overlay.style.right=0;
+       overlay.style.bottom=0; 
+       overlay.style.display='flex';
+       overlay.style.alignItems='center'; 
+       overlay.style.justifyContent='center'; 
+       overlay.style.background='rgba(0,0,0,0.7)';
+       overlay.style.zIndex='1000';
+    
+     const box = document.createElement('div');
+       box.style.background='#0d2622'; 
+       box.style.padding='20px'; 
+       box.style.borderRadius='8px';
+       box.style.textAlign='center';
+       box.innerHTML='<div style="margin-bottom:15px; font-size:18px;">Promote Pawn to:</div>';
+     const choices = ['♛','♜','♝','♞'];
+
+      choices.forEach(ch=>{ 
+        const b=document.createElement('button');
+         b.textContent=ch;
+          b.className='btn'; 
+          b.style.fontSize='20px';
+        b.onclick=()=>{ 
+          document.body.removeChild(overlay); cb(ch); 
+        }; 
+        box.appendChild(b); 
+      });
+      overlay.appendChild(box); document.body.appendChild(overlay);
+    }
+
+    function performPlayerMove(fr,fc,tr,tc) {
+      if(window._gameOver) return false;
+
+      const aiColor = window._p1Color === 'w' ? 'b' : 'w';
+      if(window._isAiMode && window._turn === aiColor) return false;
+
+      const legal = allLegalMoves(window._boardState, window._turn);
+      const hit = legal.find(m=>m.from[0]===fr && m.from[1]===fc && m.to[0]===tr && m.to[1]===tc);
+      if(!hit) return false;
+      
+      const capturedPiece = window._boardState[tr][tc]; 
+
+      if(hit.promo){ 
+        return new Promise(res=>{
+          askPromotion(getColorOfPiece(window._boardState[fr][fc]), (choice)=>{
+            hit.promoPiece = choice; 
+            
+            window._moveHistory.push({board: cloneBoard(window._boardState), turn: window._turn, capW: [...window._capW], capB: [...window._capB]}); 
+            if(capturedPiece){
+              if(getColorOfPiece(capturedPiece) === 'b') window._capW.push(capturedPiece);
+              else window._capB.push(capturedPiece);
+            }
+
+            window._boardState = applyMove(window._boardState, hit); 
+            redrawBoard(); 
+            renderCapturedPieces(); 
+            window._turn = window._turn==='w'?'b':'w'; updateStatus(); checkGameOver(); res(true);
+          });
+        });
+      }
+      
+      window._moveHistory.push({board: cloneBoard(window._boardState), turn: window._turn, capW: [...window._capW], capB: [...window._capB]});
+      
+      if(capturedPiece){
+        if(getColorOfPiece(capturedPiece) === 'b') window._capW.push(capturedPiece);
+        else window._capB.push(capturedPiece);
+      }
+
+      window._boardState = applyMove(window._boardState, hit);
+      redrawBoard();
+      renderCapturedPieces(); 
+
+      highlightLastMove([fr,fc],[tr,tc]); animatePiece([tr,tc]);
+      window._turn = window._turn==='w'?'b':'w';
+      window._turnDuration = 0;
+      updateStatus();
+      updateTimerDisplay();
+      checkGameOver();
+      return true;
+    }
+
+    function handleInteractionEnd(res) {
+      const aiColor = (window._p1Color === 'w') ? 'b' : 'w';
+      if(res && typeof res.then === 'function'){ 
+        res.then(ok=>{ 
+          if(ok){ 
+            window._selected=null; clearHighlights(); clearMoveHints(); 
+            if(window._isAiMode && window._turn=== aiColor) setTimeout(()=> makeAIMove(), 3000); 
+          } 
+        }); 
+      } else if(res){ 
+        window._selected=null; clearHighlights(); clearMoveHints(); 
+        if(window._isAiMode && window._turn=== aiColor) setTimeout(()=> makeAIMove(), 3000); 
+      }
+    }
+  
+   function attachSquareHandlers(){
+      document.querySelectorAll('#board .sq').forEach(sq=>{
+        sq.ondragover = (e)=>{ e.preventDefault(); };
+        
+        sq.ondrop = (e)=>{ 
+          e.preventDefault(); 
+          const data = e.dataTransfer.getData('text/plain'); if(!data) return; 
+          const [sr,sc] = data.split(',').map(x=>parseInt(x,10)); 
+          const tr=parseInt(sq.dataset.r,10), tc=parseInt(sq.dataset.c,10); 
+          const res = performPlayerMove(sr,sc,tr,tc); 
+          handleInteractionEnd(res);
+        };
+
+        sq.onclick = ()=>{
+          const r=parseInt(sq.dataset.r,10), c=parseInt(sq.dataset.c,10);
+          const p = window._boardState[r][c];
+
+          if(window._selected){ 
+            const [sr,sc]=window._selected; 
+            const res = performPlayerMove(sr,sc,r,c);
+            if(res) { handleInteractionEnd(res); } 
+            else {
+              if(p){ 
+                 if(window._isAiMode && getColorOfPiece(p) !== window._p1Color) {
+                    window._selected = null; clearHighlights(); clearMoveHints(); return; 
+                 }
+                 
+                 window._selected=[r,c];
+                 clearHighlights(); 
+                 sq.classList.add('sel');
+                 showLegalMoves(r,c);
+              }
+              else { 
+                window._selected=null; clearHighlights(); clearMoveHints(); 
+              }
+            }
+          } else {
+            if(p){
+               if(window._isAiMode && getColorOfPiece(p) !== window._p1Color) {
+                   clearHighlights(); clearMoveHints(); return; 
+               }
+               
+               window._selected=[r,c];
+                clearHighlights(); 
+                sq.classList.add('sel'); 
+                showLegalMoves(r,c);
+            }
+            else { clearHighlights(); clearMoveHints(); }
+          }
+        };
+      });
+      
+      document.querySelectorAll('#board .sq .piece').forEach(piece=> {
+        piece.draggable = true;
+        piece.ondragstart = (e)=> { 
+          const sq = piece.parentElement;
+          const r = parseInt(sq.dataset.r, 10);
+          const c = parseInt(sq.dataset.c, 10);
+          const p = window._boardState[r][c];
+
+          if(window._isAiMode && getColorOfPiece(p) !== window._p1Color) { 
+              e.preventDefault(); 
+              return; 
+          }
+
+          e.dataTransfer.setData('text/plain', r + ',' + c); 
+        };
+      });
+    }
+
+    // --- Buttons Actions ---
+    document.getElementById('undoBtn').addEventListener('click', ()=>{
+      if(window._moveHistory && window._moveHistory.length > 0){
+        if(window._isAiMode && window._moveHistory.length >= 2 && window._turn === window._p1Color) {
+            window._moveHistory.pop(); 
+        }
+        
+        const last = window._moveHistory.pop();
+        window._boardState = cloneBoard(last.board);
+        window._turn = last.turn;
+        window._capW = last.capW ? [...last.capW] : [];
+        window._capB = last.capB ? [...last.capB] : [];
+
+        buildBoardFromState(window._boardState);
+        renderCapturedPieces();
+        
+        updateStatus();
+        clearHighlights();
+        document.getElementById('gameOverOverlay').style.display = 'none';
+        window._gameOver = false;
+      }
+    });
+
+    document.getElementById('flipBtn').addEventListener('click', ()=> {
+      const g = document.querySelector('#board .grid');
+
+      const isFlipped = g.style.transform === 'rotate(180deg)';
+
+      g.style.transform = isFlipped ? '' : 'rotate(180deg)';
+      document.querySelectorAll('.piece').forEach(p => {
+
+      p.style.transform = isFlipped ? 'translate(-50%, -50%) rotate(0deg)' : 'translate(-50%, -50%) rotate(180deg)';
+
+      });
+
+      const timerB = document.getElementById('timerB');
+      const timerW = document.getElementById('timerW');
+
+      timerB.style.height = 'fit-content';
+      timerW.style.height = 'fit-content';
+
+      const isMobile = window.innerWidth < 768;
+    
+      const desktopGap = '10px'; 
+      const mobileGap = '5px'; 
+      
+      const currentGap = isMobile ? mobileGap : desktopGap;
+
+      if(!isFlipped) {
+        timerB.style.setProperty('top', 'unset', 'important');
+        timerB.style.setProperty('bottom', '10px', 'important');
+
+        timerW.style.setProperty('bottom', 'unset', 'important');
+        timerW.style.setProperty('top', '10px', 'important');
+      } else {
+        timerB.style.setProperty('bottom', 'unset', 'important');
+        timerB.style.setProperty('top', '10px', 'important');
+
+        timerW.style.setProperty('top', 'unset', 'important');
+        timerW.style.setProperty('bottom', '10px', 'important' );
+      }
+    });
+
+  </script>

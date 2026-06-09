@@ -1,0 +1,180 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>N-Queens Visualizer</title>
+<style>
+  body{font-family:Arial;background:#071018;color:#e6f0ef;padding:18px}
+  #wrap{max-width:920px;margin:0 auto}
+  .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+  .btn{background:#18a37b;color:#04221a;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
+  .muted{color:#9fbfb3}
+  /* board layout */
+  #board{display:grid;gap:6px;background:#09221b;padding:8px;border-radius:8px;width:100%}
+  .cell{display:flex;align-items:center;justify-content:center;user-select:none;background-clip:padding-box}
+  .cell.light{background:#f0d9b5}
+  .cell.dark{background:#b58863}
+  .cell.conflict{outline:3px solid rgba(200,40,40,0.6)}
+  /* make cells square and responsive */
+  .cell{aspect-ratio:1/1;height:auto}
+  .cell{font-size:clamp(12px,1.6vw,22px)}
+
+  /* vertical layout for queens page */
+  .queens-layout{display:flex;flex-direction:column;gap:12px}
+  @media(min-width:1100px){ .queens-layout{flex-direction:row} .queens-layout .controls{width:320px} .queens-layout #board{flex:1} }
+
+  @media(max-width:700px){ .cell{font-size:16px} }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h2 style="margin:0 0 8px">N‑Queens Visualizer</h2>
+  <div style="margin-bottom:8px"><a href="index.html">← Back</a></div>
+  <div class="queens-layout">
+    <div class="controls">
+    <label class="muted">N: <input id="nsel" type="number" min="4" max="14" value="8" style="width:64px"></label>
+    <button id="solve" class="btn">Solve</button>
+    <button id="random" class="btn">Random</button>
+    <button id="aiEasy" class="btn">AI Easy</button>
+    <button id="aiHard" class="btn">AI Hard</button>
+    <button id="clear" class="btn">Clear</button>
+    <div id="status" class="muted" style="margin-left:12px">Click a cell to place/remove a queen.</div>
+    </div>
+    <div id="board" role="grid" aria-label="N-Queens board"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const nsel = document.getElementById('nsel');
+  const boardDiv = document.getElementById('board');
+  const status = document.getElementById('status');
+  let N = parseInt(nsel.value,10);
+  let board = new Array(N).fill(-1);
+
+  function initBoard(){ N = parseInt(nsel.value,10); board = new Array(N).fill(-1); render(); }
+
+  function render(){
+    boardDiv.innerHTML = '';
+    boardDiv.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
+    for(let r=0;r<N;r++){
+      for(let c=0;c<N;c++){
+        const cell = document.createElement('div');
+        cell.className = 'cell ' + (((r+c)%2) ? 'dark' : 'light');
+        // size and font are handled by CSS (aspect-ratio and clamp)
+        cell.dataset.r = r; cell.dataset.c = c;
+        cell.addEventListener('click', onCellClick);
+        if(board[r]===c) cell.textContent = '♛';
+        boardDiv.appendChild(cell);
+      }
+    }
+    updateConflicts();
+  }
+
+  function onCellClick(e){
+    const r = parseInt(e.currentTarget.dataset.r,10);
+    const c = parseInt(e.currentTarget.dataset.c,10);
+    if(board[r]===c) board[r] = -1; else board[r] = c;
+    render();
+  }
+
+  function updateConflicts(){
+    const conflicts = new Set();
+    for(let r1=0;r1<N;r1++){
+      const c1 = board[r1]; if(c1<0) continue;
+      for(let r2=r1+1;r2<N;r2++){
+        const c2 = board[r2]; if(c2<0) continue;
+        if(c1===c2 || Math.abs(r1-r2)===Math.abs(c1-c2)){
+          conflicts.add(r1+','+c1); conflicts.add(r2+','+c2);
+        }
+      }
+    }
+    const cells = boardDiv.querySelectorAll('.cell');
+    cells.forEach(cell=>{
+      const key = cell.dataset.r+','+cell.dataset.c;
+      if(conflicts.has(key)) cell.classList.add('conflict'); else cell.classList.remove('conflict');
+    });
+    status.textContent = (conflicts.size>0) ? ('Conflicts: ' + (conflicts.size/2)) : 'No conflicts.';
+  }
+
+  function solveNBacktrack(N){
+    const out = new Array(N).fill(-1);
+    const cols = new Array(N).fill(false);
+    const d1 = new Array(2*N).fill(false);
+    const d2 = new Array(2*N).fill(false);
+    let found = null;
+    function go(r){
+      if(found) return;
+      if(r===N){ found = out.slice(); return; }
+      for(let c=0;c<N;c++){
+        if(!cols[c] && !d1[r+c] && !d2[r-c+N-1]){
+          out[r]=c; cols[c]=d1[r+c]=d2[r-c+N-1]=true;
+          go(r+1);
+          if(found) return;
+          cols[c]=d1[r+c]=d2[r-c+N-1]=false; out[r]=-1;
+        }
+      }
+    }
+    go(0);
+    return found;
+  }
+
+  function randomBacktrack(N){
+    const out = new Array(N).fill(-1);
+    const cols = new Array(N).fill(false);
+    const d1 = new Array(2*N).fill(false);
+    const d2 = new Array(2*N).fill(false);
+    let found = null;
+    function go(r){
+      if(found) return;
+      if(r===N){ found = out.slice(); return; }
+      const order = [...Array(N).keys()];
+      for(let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
+      for(const c of order){
+        if(!cols[c] && !d1[r+c] && !d2[r-c+N-1]){
+          out[r]=c; cols[c]=d1[r+c]=d2[r-c+N-1]=true;
+          go(r+1);
+          if(found) return;
+          cols[c]=d1[r+c]=d2[r-c+N-1]=false; out[r]=-1;
+        }
+      }
+    }
+    go(0);
+    return found;
+  }
+
+  function minConflicts(N, maxSteps=10000){
+    const b = new Array(N).fill(0).map(()=>Math.floor(Math.random()*N));
+    function conflictsAt(b,row,col){ let cnt=0; for(let r=0;r<N;r++){ if(r===row) continue; const c=b[r]; if(c===col) cnt++; if(Math.abs(r-row)===Math.abs(c-col)) cnt++; } return cnt; }
+    for(let step=0; step<maxSteps; step++){
+      const conflicted = [];
+      for(let r=0;r<N;r++) if(conflictsAt(b,r,b[r])>0) conflicted.push(r);
+      if(conflicted.length===0) return b.slice();
+      const row = conflicted[Math.floor(Math.random()*conflicted.length)];
+      let minc = 1e9, best=[];
+      for(let c=0;c<N;c++){ const cc = conflictsAt(b,row,c); if(cc<minc){ minc=cc; best=[c]; } else if(cc===minc) best.push(c); }
+      b[row] = best[Math.floor(Math.random()*best.length)];
+    }
+    return null;
+  }
+
+  document.getElementById('solve').addEventListener('click', ()=>{
+    N = parseInt(nsel.value,10); const sol = solveNBacktrack(N); if(sol){ board = sol; render(); status.textContent='Found solution'; } else alert('No solution');
+  });
+  document.getElementById('random').addEventListener('click', ()=>{
+    N = parseInt(nsel.value,10); const sol = randomBacktrack(N); if(sol){ board = sol; render(); status.textContent='Random solution'; } else alert('No solution');
+  });
+  document.getElementById('aiEasy').addEventListener('click', ()=>{
+    N = parseInt(nsel.value,10); status.textContent='AI Easy running...'; setTimeout(()=>{ const sol = minConflicts(N,200); if(sol){ board = sol; render(); status.textContent='AI Easy found solution'; } else status.textContent='AI Easy failed'; },20);
+  });
+  document.getElementById('aiHard').addEventListener('click', ()=>{
+    N = parseInt(nsel.value,10); status.textContent='AI Hard running...'; setTimeout(()=>{ const sol = minConflicts(N,10000); if(sol){ board = sol; render(); status.textContent='AI Hard found solution'; } else status.textContent='AI Hard failed'; },20);
+  });
+  document.getElementById('clear').addEventListener('click', ()=>{ initBoard(); status.textContent='Cleared'; });
+  nsel.addEventListener('change', initBoard);
+
+  initBoard();
+})();
+</script>
+</body>
+</html>
