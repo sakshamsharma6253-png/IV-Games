@@ -22,7 +22,7 @@
             font-size: 24px;
             font-weight: bold;
             z-index: 100;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Text clear dikhne ke liye */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); 
         }
         #gameOverScreen {
             position: absolute;
@@ -274,7 +274,6 @@
             obstacles.push(obsGroup);
         }
 
-        // --- 8. MAIN GAME LOOP ---
         function animate() {
             if (isGameOver) return;
 
@@ -328,6 +327,15 @@
                 
                 if (obs.isTrain) {
                     obs.position.z += (obstacleSpeed + 0.25);
+                    
+                    for (let j = 0; j < obstacles.length; j++) {
+                        let frontObs = obstacles[j];
+                        if (!frontObs.isTrain && Math.abs(obs.position.x - frontObs.position.x) < 0.5) {
+                            if (frontObs.position.z > obs.position.z && frontObs.position.z - obs.position.z < 15) {
+                                frontObs.isDestroyed = true; 
+                            }
+                        }
+                    }
                 } else {
                     obs.position.z += obstacleSpeed;
                 }
@@ -337,8 +345,7 @@
 
                 let zHitbox = obs.isTrain ? 5.5 : 1.5;
 
-                // COLLISION DETECT SYSTEM
-                if (diffX < 1.2 && diffZ < zHitbox) {
+                if (!obs.isDestroyed && diffX < 1.2 && diffZ < zHitbox) {
                     let isHit = false;
 
                     if (obs.type === 0 && player.position.y < 0.8)  {
@@ -355,7 +362,7 @@
                     }
                 }
                 
-                if(!obs.passed && obs.position.z > player.position.z + 1) {
+                if(!obs.passed && !obs.isDestroyed && obs.position.z > player.position.z + 1) {
                     obs.passed = true;
                     score += 10;
                     document.getElementById('scoreVal').innerText = score;
@@ -373,7 +380,7 @@
                     }
                 }
 
-                if(obs.position.z > 15) {
+                if(obs.position.z > 15 || obs.isDestroyed) {
                     scene.remove(obs);
                     obstacles.splice(i, 1);
                 }

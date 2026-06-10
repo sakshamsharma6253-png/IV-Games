@@ -1,35 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width-device-width, initial-scale= 1.0" />
+    <title>About IV Games</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+      .about-content {
+        background: var(--panel);
+        padding: 30px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        margin-top: 18px;
+        line-height: 1.6;
+      }
 
-<html>
-    <head>
-        <meta charset ="utf-8"  />
-        <meta name = "viewport">
-        <title>About - IV GAMES</title>
-        <link rel="stylesheet" href="/styles.css">
-  </head> 
+      .about-content h2 {
+        color: var(--accent);
+        margin-top: 0;
+        margin-bottom: 12px;
+        font-size: 22px;
+      }
+
+
+      .about-content h3 {
+        color: var(--accent-2);
+        font-size: 18px;
+        margin-top: 28px;
+        margin-bottom: 8px;
+      }
+
+      .about-content p {
+        color: var(--muted);
+        margin-bottom: 16px;
+      }
+   
+    </style>
+  </head>
   <body>
-   <div class="wrap">
+    <div class="wrap" style="height: auto; overflow: visible;";>
       <header>
-            <div class="Brand">
-                <h1>About  IV Games</h1>
-                 </div>
-                 <div style="display:flex;gap:8px;align-items:center">
-                    <a
-       class="btn-ghost" href="index.html"> ←Back to Home</a>             
-                 </div>
-               </header>
-               <div clSSS="grid"style="display: block;"><section
-       clas="catalog" style="padding:30px;">
-                      <h2 style="color:#fff; margin-top: 0;">Welcome to IV GAMES</h2>   
-                      <p style ="color:#bbb; line-height: 1.6;">IV GAMES is a centeralised,web based gaming hub featuring a collection of classic mini-games.
-                        play your favorites directly in the browser without any downloads or local installations</p>
-                        <h3 style="color:#fff; margin-top: 24px;">Vision</h3>
-                         <p style="color:#bbb; line-height: 1.6;">To demostrate the power of asynchronous execution and WebAssembly by running complex logic(like pygame modules)seamlessly withn a lightweight browser enviorement</p>               
-      </section>
-    </div>    
-   </div>
+        <div class="brand">
+          <h1>About IV Games</h1>
+          <p>The Vision and the developer behind the dashbaord.</p>   
+        </div>
+        <div>
+          <a class="btn-ghost" href="index.html">←Back to Home</a>
+        </div>
+      </header>
+
+      <main class="about-content">
+        <h2>Welcome to IV Games</h2>
+        <p>IV Games is a centeralized, web based gaming hub featuring a collection of classic-mini-games. Play your favorites directly in the browser with instant responsiveness-no downloads or local installations requied.</p>
+
+        <h3>The Vision</h3>
+        <p>This project was built to demonstrate the power of asynchronous execution and modern web technologies. By running complex logic (like Python and Pygame Modules converted for the web) seamlessly within a lightweight browser envioronment, IV Games bridges the gap between classic programming and modern user expierience.</p>
+
+        <h3>Behind The Code</h3>
+        <p> Developed by Saksham Sharma, a software developer and BCA graduate from Shree Mahaveer College, Jaipur. This plateform serves as a practical implemantation of software development principals, utilizing clean coding practices, intuitive  UI/UX design and algorithmic logic (DSA) to deliver a seamless gaming expierience.</p>
+      </main>
+
+      <footer style="margin-top: 30px;">IV Games • Created by Saksham Sharma</footer>
+            
+
+    </div>
   </body>
- </html>     
-                            
+</html>
+   
       
 
 
