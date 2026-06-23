@@ -150,15 +150,13 @@
       cursor: pointer;
   }
 
-  /* Dynamic CSS sizes depending on grid size */
   .grid-4 td, .grid-6 td { width: 55px; height: 55px; font-size: 28px; }
-  .grid-9 td { width: 35px; height: 35px; font-size: 22px; } /* Smaller cells for 9x9 */
+  .grid-9 td { width: 35px; height: 35px; font-size: 22px; } 
 
   .selected { background-color: #ffeb3b !important; }
   .fixed { color: #111; }
   .user-input { color: #0066cc; }
 
-  /* --- ON-SCREEN KEYPAD --- */
   .keypad-container {
       margin-top: 20px;
       display: flex;
@@ -171,7 +169,7 @@
       display: flex;
       justify-content: center;
       gap: 10px;
-      flex-wrap: wrap; /* Allows wrapping on very small screens */
+      flex-wrap: wrap; 
   }
 
   .btn {
@@ -333,7 +331,7 @@
         currentSize = size;
         if(size === 4) { blockRows = 2; blockCols = 2; table.className = "grid-4"; }
         else if(size === 6) { blockRows = 2; blockCols = 3; table.className = "grid-6"; }
-        else if(size === 9) { blockRows = 3; blockCols = 3; table.className = "grid-9"; } // Added 9x9 Logic
+        else if(size === 9) { blockRows = 3; blockCols = 3; table.className = "grid-9"; } 
         
         document.getElementById('homeScreen').style.display = 'none';
         document.getElementById('gameScreen').style.display = 'flex';

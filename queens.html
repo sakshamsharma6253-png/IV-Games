@@ -1,46 +1,214 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>N-Queens Visualizer</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>N-Queens Pro Puzzle</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  body{font-family:Arial;background:#071018;color:#e6f0ef;padding:18px}
-  #wrap{max-width:920px;margin:0 auto}
-  .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
-  .btn{background:#18a37b;color:#04221a;padding:8px 12px;border-radius:8px;border:0;cursor:pointer}
-  .muted{color:#9fbfb3}
-  /* board layout */
-  #board{display:grid;gap:6px;background:#09221b;padding:8px;border-radius:8px;width:100%}
-  .cell{display:flex;align-items:center;justify-content:center;user-select:none;background-clip:padding-box}
-  .cell.light{background:#f0d9b5}
-  .cell.dark{background:#b58863}
-  .cell.conflict{outline:3px solid rgba(200,40,40,0.6)}
-  /* make cells square and responsive */
-  .cell{aspect-ratio:1/1;height:auto}
-  .cell{font-size:clamp(12px,1.6vw,22px)}
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #e6f0ef;
+    padding: 20px;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #wrap {
+    width: 100%;
+    max-width: 1000px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+  }
+  h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  }
+  .top-bar { 
+    display: flex; justify-content: space-between; align-items: center; 
+    margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .btn-back {
+    background: transparent; border: 2px solid #18a37b; color: #20d8a4; text-decoration: none;
+    padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; transition: all 0.3s ease;
+  }
+  .btn-back:hover { background: #18a37b; color: #fff; box-shadow: 0 4px 10px rgba(24, 163, 123, 0.4); }
+  
+  .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+  .muted { color: #b0c4de; font-size: 15px; }
+  
+  .control-wrapper {
+    display: flex; align-items: center; background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(24, 163, 123, 0.5); border-radius: 8px; padding: 6px 14px;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.3); transition: border-color 0.3s;
+  }
+  .control-wrapper:focus-within { border-color: #20d8a4; }
+  .control-wrapper label { font-size: 14px; font-weight: 600; color: #b0c4de; margin-right: 10px; cursor: pointer; }
+  
+  input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { 
+    opacity: 1 !important; display: block !important; cursor: pointer; 
+  }
+  input[type="number"] {
+    background: transparent; border: none; color: #20d8a4; font-size: 16px; font-weight: bold; 
+    width: 45px; text-align: center; outline: none; padding: 0;
+  }
+  select.theme-select {
+    background: transparent; border: none; color: #20d8a4; font-size: 15px; font-weight: bold; 
+    outline: none; cursor: pointer; padding-right: 5px;
+  }
+  select.theme-select option { background: #222; color: #fff; }
+  
+  .btn {
+    background: #18a37b; color: #fff; padding: 10px 18px; font-size: 14px; font-family: inherit;
+    font-weight: 600; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  }
+  .btn:hover { background: #1bc292; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
+  .btn:active { transform: translateY(0); box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
-  /* vertical layout for queens page */
-  .queens-layout{display:flex;flex-direction:column;gap:12px}
-  @media(min-width:1100px){ .queens-layout{flex-direction:row} .queens-layout .controls{width:320px} .queens-layout #board{flex:1} }
+  #status {
+    margin-top: 10px; background: rgba(0,0,0,0.3); padding: 10px 15px;
+    border-radius: 8px; border-left: 4px solid #18a37b; font-weight: 600;
+  }
 
-  @media(max-width:700px){ .cell{font-size:16px} }
+  /* --- Fixed Board Container --- */
+  .board-container {
+    position: relative; 
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+  }
+
+  #win-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    border-radius: 12px;
+    display: none; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    animation: fadeIn 0.4s ease;
+    padding: 20px;
+  }
+
+  .win-text {
+    font-size: clamp(24px, 4vw, 36px); font-weight: 600; color: #4ade80;
+    text-shadow: 0 0 15px rgba(74, 222, 128, 0.6); margin-bottom: 20px; text-align: center;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  #board {
+    display: grid; gap: 0; padding: 10px; border-radius: 12px; width: 100%;
+    container-type: inline-size; 
+  }
+  
+  /* Themes */
+  .theme-classic { background: #111; border: 2px solid #2a2a2a; }
+  .theme-classic .cell.light { background: #e8ecef; color: #111; } 
+  .theme-classic .cell.dark { background: #2b2d30; color: #f0f0f0; }
+  
+  .theme-wooden { background: #3b2313; border: 2px solid #5c3a21; }
+  .theme-wooden .cell.light { background: #eedcb5; color: #111; }
+  .theme-wooden .cell.dark { background: #b88b5e; color: #111; }
+  
+  /* Fixed Cell Logic */
+  .cell {
+    display: flex; align-items: center; justify-content: center; user-select: none;
+    cursor: pointer; transition: background 0.2s, transform 0.1s; aspect-ratio: 1/1;
+    min-width: 0; 
+    min-height: 0; 
+    overflow: hidden; 
+  }
+  .cell:hover { opacity: 0.85; }
+  .cell.conflict { background-color: #ff4d4d !important; box-shadow: inset 0 0 15px rgba(200, 0, 0, 0.8); animation: shake 0.3s; color: #fff !important; }
+  
+  /* Fixed Queen Resizing */
+  .queen { 
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+    font-size: calc(100cqi / var(--grid-n, 8) * 0.65); 
+    line-height: 1;
+  }
+  
+  @supports not (container-type: inline-size) {
+    .queen { font-size: calc(60vw / var(--grid-n, 8)); }
+    @media(min-width: 900px){ .queen { font-size: calc(600px / var(--grid-n, 8) * 0.65); } }
+  }
+
+  @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-3px); } 50% { transform: translateX(3px); } 75% { transform: translateX(-3px); } 100% { transform: translateX(0); } }
+  @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+
+  .queens-layout { display: flex; flex-direction: column; gap: 20px; }
+  @media(min-width: 900px){
+    .queens-layout { flex-direction: row; align-items: flex-start; }
+    .queens-layout .controls-wrapper { width: 300px; flex-shrink: 0; }
+    .queens-layout .board-container { flex: 1; max-width: 600px; margin: 0 auto; }
+    .controls { flex-direction: column; align-items: stretch; }
+  }
 </style>
 </head>
 <body>
 <div id="wrap">
-  <h2 style="margin:0 0 8px">N‑Queens Visualizer</h2>
-  <div style="margin-bottom:8px"><a href="index.html">← Back</a></div>
+  <div class="top-bar">
+    <h2>N‑Queens Pro Puzzle</h2>
+    <a href="dashboard.html" class="btn-back">← Back to Dashboard</a>
+  </div>
+  
   <div class="queens-layout">
-    <div class="controls">
-    <label class="muted">N: <input id="nsel" type="number" min="4" max="14" value="8" style="width:64px"></label>
-    <button id="solve" class="btn">Solve</button>
-    <button id="random" class="btn">Random</button>
-    <button id="aiEasy" class="btn">AI Easy</button>
-    <button id="aiHard" class="btn">AI Hard</button>
-    <button id="clear" class="btn">Clear</button>
-    <div id="status" class="muted" style="margin-left:12px">Click a cell to place/remove a queen.</div>
+    <div class="controls-wrapper">
+      <div class="controls">
+        <div class="control-wrapper">
+          <label for="themeSelect">Board Theme:</label>
+          <select id="themeSelect" class="theme-select">
+            <option value="theme-classic">Black & White</option>
+            <option value="theme-wooden">Wooden Chess</option>
+          </select>
+        </div>
+
+        <div class="control-wrapper">
+          <label for="nsel">Grid Size (N):</label>
+          <input id="nsel" type="number" min="4" max="14" value="8" 
+                 onkeydown="if(event.key !== 'ArrowUp' && event.key !== 'ArrowDown') event.preventDefault();">
+        </div>
+        
+        <button id="solve" class="btn">Auto Solve</button>
+        <button id="random" class="btn">Random Solution</button>
+        <button id="clear" class="btn" style="background: #e63946;">Clear Board</button>
+      </div>
+      <div id="status" class="muted">Click a cell to place/remove a queen.</div>
     </div>
-    <div id="board" role="grid" aria-label="N-Queens board"></div>
+    
+    <div class="board-container">
+      <div id="board" class="theme-classic" role="grid" aria-label="N-Queens board"></div>
+      
+      <!-- Solved Overlay with Watch Ad Button -->
+      <div id="win-overlay">
+        <div class="win-text">🎉 Puzzle Solved!</div>
+        <!-- Flex wrap added here to ensure buttons look good on smaller screens too -->
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+          <button id="play-again-btn" class="btn">Play Again</button>
+          <button id="close-overlay-btn" class="btn" style="background: #555;">View Board</button>
+          <button id="watchAd" class="btn" style="background: #f59e0b; color: #fff;">🎬 Watch Ad</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -49,22 +217,43 @@
   const nsel = document.getElementById('nsel');
   const boardDiv = document.getElementById('board');
   const status = document.getElementById('status');
+  const themeSelect = document.getElementById('themeSelect');
+  const winOverlay = document.getElementById('win-overlay');
+  
   let N = parseInt(nsel.value,10);
   let board = new Array(N).fill(-1);
 
-  function initBoard(){ N = parseInt(nsel.value,10); board = new Array(N).fill(-1); render(); }
+  themeSelect.addEventListener('change', (e) => {
+    boardDiv.className = e.target.value;
+  });
+
+  function initBoard(){ 
+    N = parseInt(nsel.value,10); 
+    board = new Array(N).fill(-1); 
+    hideOverlay();
+    render(); 
+  }
+
+  function hideOverlay() {
+    winOverlay.style.display = 'none';
+  }
 
   function render(){
     boardDiv.innerHTML = '';
     boardDiv.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
-    for(let r=0;r<N;r++){
-      for(let c=0;c<N;c++){
+    
+    boardDiv.style.setProperty('--grid-n', N);
+
+    for(let r=0; r<N; r++){
+      for(let c=0; c<N; c++){
         const cell = document.createElement('div');
         cell.className = 'cell ' + (((r+c)%2) ? 'dark' : 'light');
-        // size and font are handled by CSS (aspect-ratio and clamp)
         cell.dataset.r = r; cell.dataset.c = c;
         cell.addEventListener('click', onCellClick);
-        if(board[r]===c) cell.textContent = '♛';
+        
+        if(board[r] === c) {
+          cell.innerHTML = '<span class="queen">♛</span>';
+        }
         boardDiv.appendChild(cell);
       }
     }
@@ -72,29 +261,53 @@
   }
 
   function onCellClick(e){
+    hideOverlay();
+    
     const r = parseInt(e.currentTarget.dataset.r,10);
     const c = parseInt(e.currentTarget.dataset.c,10);
-    if(board[r]===c) board[r] = -1; else board[r] = c;
+    
+    if(board[r] === c) board[r] = -1; else board[r] = c;  
     render();
   }
 
   function updateConflicts(){
     const conflicts = new Set();
-    for(let r1=0;r1<N;r1++){
-      const c1 = board[r1]; if(c1<0) continue;
-      for(let r2=r1+1;r2<N;r2++){
-        const c2 = board[r2]; if(c2<0) continue;
-        if(c1===c2 || Math.abs(r1-r2)===Math.abs(c1-c2)){
+    let placedQueens = 0;
+
+    for(let r1=0; r1<N; r1++){
+      const c1 = board[r1]; 
+      if(c1 < 0) continue;
+      placedQueens++;
+      
+      for(let r2=r1+1; r2<N; r2++){
+        const c2 = board[r2]; 
+        if(c2 < 0) continue;
+        if(c1 === c2 || Math.abs(r1-r2) === Math.abs(c1-c2)){
           conflicts.add(r1+','+c1); conflicts.add(r2+','+c2);
         }
       }
     }
+
     const cells = boardDiv.querySelectorAll('.cell');
-    cells.forEach(cell=>{
-      const key = cell.dataset.r+','+cell.dataset.c;
-      if(conflicts.has(key)) cell.classList.add('conflict'); else cell.classList.remove('conflict');
+    cells.forEach(cell => {
+      const key = cell.dataset.r + ',' + cell.dataset.c;
+      if(conflicts.has(key)) cell.classList.add('conflict'); 
+      else cell.classList.remove('conflict');
     });
-    status.textContent = (conflicts.size>0) ? ('Conflicts: ' + (conflicts.size/2)) : 'No conflicts.';
+
+    if(conflicts.size > 0) {
+      status.style.borderLeftColor = "#ff4d4d";
+      status.innerHTML = `<span style="color:#ff4d4d">Conflicts Found: ${conflicts.size/2}</span>`;
+      hideOverlay();
+    } else if (placedQueens === N) {
+      status.style.borderLeftColor = "#4ade80";
+      status.innerHTML = `<span style="color:#4ade80; font-size: 16px;">✓ Solved successfully!</span>`;
+      winOverlay.style.display = 'flex';
+    } else {
+      status.style.borderLeftColor = "#18a37b";
+      status.innerHTML = `Placed: ${placedQueens} / ${N}<br><span style="font-size:12px; opacity:0.8">No conflicts yet.</span>`;
+      hideOverlay();
+    }
   }
 
   function solveNBacktrack(N){
@@ -105,18 +318,16 @@
     let found = null;
     function go(r){
       if(found) return;
-      if(r===N){ found = out.slice(); return; }
-      for(let c=0;c<N;c++){
+      if(r === N){ found = out.slice(); return; }
+      for(let c=0; c<N; c++){
         if(!cols[c] && !d1[r+c] && !d2[r-c+N-1]){
-          out[r]=c; cols[c]=d1[r+c]=d2[r-c+N-1]=true;
-          go(r+1);
+          out[r]=c; cols[c]=d1[r+c]=d2[r-c+N-1]=true; go(r+1);
           if(found) return;
           cols[c]=d1[r+c]=d2[r-c+N-1]=false; out[r]=-1;
         }
       }
     }
-    go(0);
-    return found;
+    go(0); return found;
   }
 
   function randomBacktrack(N){
@@ -127,51 +338,41 @@
     let found = null;
     function go(r){
       if(found) return;
-      if(r===N){ found = out.slice(); return; }
+      if(r === N){ found = out.slice(); return; }
       const order = [...Array(N).keys()];
-      for(let i=order.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
+      for(let i=order.length-1; i>0; i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
       for(const c of order){
         if(!cols[c] && !d1[r+c] && !d2[r-c+N-1]){
-          out[r]=c; cols[c]=d1[r+c]=d2[r-c+N-1]=true;
-          go(r+1);
+          out[r]=c; cols[c]=d1[r+c]=d2[r-c+N-1]=true; go(r+1);
           if(found) return;
           cols[c]=d1[r+c]=d2[r-c+N-1]=false; out[r]=-1;
         }
       }
     }
-    go(0);
-    return found;
-  }
-
-  function minConflicts(N, maxSteps=10000){
-    const b = new Array(N).fill(0).map(()=>Math.floor(Math.random()*N));
-    function conflictsAt(b,row,col){ let cnt=0; for(let r=0;r<N;r++){ if(r===row) continue; const c=b[r]; if(c===col) cnt++; if(Math.abs(r-row)===Math.abs(c-col)) cnt++; } return cnt; }
-    for(let step=0; step<maxSteps; step++){
-      const conflicted = [];
-      for(let r=0;r<N;r++) if(conflictsAt(b,r,b[r])>0) conflicted.push(r);
-      if(conflicted.length===0) return b.slice();
-      const row = conflicted[Math.floor(Math.random()*conflicted.length)];
-      let minc = 1e9, best=[];
-      for(let c=0;c<N;c++){ const cc = conflictsAt(b,row,c); if(cc<minc){ minc=cc; best=[c]; } else if(cc===minc) best.push(c); }
-      b[row] = best[Math.floor(Math.random()*best.length)];
-    }
-    return null;
+    go(0); return found;
   }
 
   document.getElementById('solve').addEventListener('click', ()=>{
-    N = parseInt(nsel.value,10); const sol = solveNBacktrack(N); if(sol){ board = sol; render(); status.textContent='Found solution'; } else alert('No solution');
+    N = parseInt(nsel.value,10); const sol = solveNBacktrack(N); 
+    if(sol){ board = sol; render(); } else alert('No solution exists for this grid size.');
   });
+  
   document.getElementById('random').addEventListener('click', ()=>{
-    N = parseInt(nsel.value,10); const sol = randomBacktrack(N); if(sol){ board = sol; render(); status.textContent='Random solution'; } else alert('No solution');
+    N = parseInt(nsel.value,10); const sol = randomBacktrack(N); 
+    if(sol){ board = sol; render(); } else alert('No solution exists for this grid size.');
   });
-  document.getElementById('aiEasy').addEventListener('click', ()=>{
-    N = parseInt(nsel.value,10); status.textContent='AI Easy running...'; setTimeout(()=>{ const sol = minConflicts(N,200); if(sol){ board = sol; render(); status.textContent='AI Easy found solution'; } else status.textContent='AI Easy failed'; },20);
-  });
-  document.getElementById('aiHard').addEventListener('click', ()=>{
-    N = parseInt(nsel.value,10); status.textContent='AI Hard running...'; setTimeout(()=>{ const sol = minConflicts(N,10000); if(sol){ board = sol; render(); status.textContent='AI Hard found solution'; } else status.textContent='AI Hard failed'; },20);
-  });
-  document.getElementById('clear').addEventListener('click', ()=>{ initBoard(); status.textContent='Cleared'; });
+  
+  document.getElementById('clear').addEventListener('click', initBoard);
   nsel.addEventListener('change', initBoard);
+
+  document.getElementById('play-again-btn').addEventListener('click', initBoard);
+  document.getElementById('close-overlay-btn').addEventListener('click', hideOverlay);
+  
+  // Watch Ad Button Event Listener
+  document.getElementById('watchAd').addEventListener('click', () => {
+    // Jab domain set ho jaye, yahan ad trigger function lagayein
+    alert('Video Ad will play here! (Integration pending after domain setup)');
+  });
 
   initBoard();
 })();
