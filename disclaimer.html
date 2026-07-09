@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>IV Games — Disclaimer</title>
+    
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+
+       html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100%;
+        background-color: #0f172a; 
+      }
+
+      body {
+        color: #cbd5e1;
+        font-family: sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #0f172a;
+      }
+      
+      .wrap {
+        max-width: 1000px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px 20px 0 20px !important; 
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; 
+        box-sizing: border-box;
+      }
+
+      .main-footer {
+        margin-top: -19px; 
+        margin-bottom: -30px !important;
+        padding: 30px 20px 20px 20px;
+        width: 96%;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.3) 100%);
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 0px 10px 0 0; 
+        text-align: center;
+        backdrop-filter: blur(8px); 
+        -webkit-backdrop-filter: blur(8px);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15); 
+      }
+
+      .disclaimer-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(79, 172, 254, 0.15);
+        border-left: 4px solid #4facfe; 
+        border-radius: 6px 12px 12px 6px;
+        padding: 20px 25px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+      }
+      
+      .disclaimer-card:hover {
+        transform: scale(1.01);
+        background: rgba(255, 255, 255, 0.03);
+        box-shadow: 0 5px 20px rgba(79, 172, 254, 0.15);
+        border-left: 4px solid #00f2fe; 
+      }
+
+      .disclaimer-title {
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 1.25rem;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+      }
+
+      .disclaimer-title::before {
+        content: "🔹";
+        font-size: 1.1rem;
+        margin-right: 8px;
+      }
+
+      .dot-list {
+        padding-left: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      
+      .dot-list li {
+        margin-bottom: 6px;
+        line-height: 1.6;
+      }
+
+       .footer-nav {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; 
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+     
+      .copyright-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        color: #888;
+        font-size: 13px;
+        margin-top: 30px;
+      }
+
+      @media (max-width: 768px) {
+       
+        .nav-buttons {
+          justify-content: center;
+        }
+        .nav-buttons .btn-ghost {
+          font-size: 13px; 
+          padding: 6px 12px;
+        }
+      }
+
+       @media (max-width: 767px) {
+        
+        header {
+          flex-direction: column !important; 
+          justify-content: center !important;
+          text-align: center;
+        }
+        .nav-buttons {
+          justify-content: center;
+        }
+        .nav-buttons .btn-ghost {
+          font-size: 13px; 
+          padding: 6px 12px;
+        }
+        
+        .footer-nav {
+          display: grid !important; 
+          grid-template-columns: repeat(3, 1fr); 
+          gap: 15px 5px;
+          padding: 0 5px;
+          overflow: hidden; 
+        }
+        .footer-nav a {
+          font-size: 11.5px !important; 
+          text-align: center; 
+          white-space: normal; 
+          line-height: 1.4;
+        }
+
+       
+        .copyright-text {
+          flex-direction: column; 
+          gap: 10px;
+        }
+        .copyright-divider {
+          display: none; 
+        }
+      }
+
+       .btn-blue {
+        color: #4facfe !important;
+        border-color: rgba(79, 172, 254, 0.5) !important;
+        font-weight: bold;
+      }
+      .btn-blue:hover {
+        background: rgba(79, 172, 254, 0.15) !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 12px rgba(79, 172, 254, 0.4);
+        border-color: #4facfe !important;
+      }
+
+       @media (min-width: 768px) and (max-width: 1024px) {
+          .main-footer {
+            margin-top: auto !important;
+            flex-shrink: 0 !important;
+            width: 120% !important;
+            margin-left: -60px;
+            position: relative !important;
+            bottom: 20px !important;
+          }
+        }
+
+       @media screen and (min-width: 1024px) and (max-width: 1366px) and (min-height: 750px) {
+         .main-footer {
+           margin-top: 0px !important; 
+           flex-shrink: 0 !important;
+           width: 100% !important;
+           position: relative !important;
+           z-index: 10;
+           padding: 30px 20px 60px 20px;
+       }
+      }
+
+       @media screen and (min-width: 900px) and (max-width: 1023px) {
+            .main-footer {
+                margin-top: -30px !important;
+                flex-shrink: 0 !important;
+                width: 100% !important;
+                position: relative !important;
+                padding-bottom: 80px !important; 
+            }
+        }
+
+    </style>
+  </head>
+  <body>
+
+    <div class="wrap">
+      
+      <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 15px 0; width: 100%; margin-bottom: 30px; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.3);">
+        <div style="display: flex; align-items: center;">
+          <img src="icons/ivgames-logo.webp" alt="IV Games" style="max-height: 55px; display: block; margin-bottom: 40px; padding: 0;">
+        </div>
+        
+        <div class="nav-buttons" style="display: flex; align-items: center; gap: 4px; margin-bottom: 15px; flex-wrap: wrap;">
+         <a class="btn-ghost" href="https://www.itvoice.in/" target="_blank"> Visit Website <span class="arrow" style="font-size: 16px;">&#x2197;</span></a>
+           <a class="btn-ghost" href="contact.html"style="margin: 0;">Contact Us</a>
+          <a class="btn-ghost btn-blue" href="index.html" style="margin: 0;">← Back to Dashboard</a>
+        </div>
+        
+      </header>
+
+      <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: #4facfe; font-size: 2.5rem; margin-bottom: 10px; text-shadow: 0 0 15px rgba(79,172,254,0.4);">Disclaimer</h1>
+        <div style="color: #888; font-style: italic; margin-bottom: 15px;">Last Updated: June 2026</div>
+        <p style="font-size: 1.05rem; line-height: 1.6; max-width: 800px; margin: 0 auto;">
+          The information, games, and content available on IV Games are provided for general entertainment purposes only.
+        </p>
+      </div>
+
+      <div class="disclaimer-card">
+        <div class="disclaimer-title">1. Entertainment Purpose</div>
+        <p style="margin: 0; line-height: 1.6;">IV Games is intended solely as an entertainment platform.<br>
+        The games are designed for recreational enjoyment and do not provide professional, educational, financial, legal, or medical advice.</p>
+      </div>
+
+      <div class="disclaimer-card">
+        <div class="disclaimer-title">2. No Guarantees</div>
+        <p style="margin-top: 0; line-height: 1.6;">While reasonable efforts are made to ensure that the Website functions properly, IT Voice Media Private Limited makes no guarantees regarding:</p>
+        <ul class="dot-list">
+          <li>Availability & Accuracy</li>
+          <li>Reliability & Error-free operation</li>
+          <li>Continuous access</li>
+        </ul>
+        <p style="margin-bottom: 0; line-height: 1.6;">The Website may occasionally experience interruptions due to maintenance or technical issues.</p>
+      </div>
+
+      <div class="disclaimer-card">
+        <div class="disclaimer-title">3. Third-Party Advertisements</div>
+        <p style="margin: 0; line-height: 1.6;">IV Games may display advertisements served by Google AdSense or other third-party advertising providers.<br>
+        We do not endorse or guarantee the products, services, or information contained in such advertisements. Users engage with third-party advertisers at their own discretion.</p>
+      </div>
+
+      <div class="disclaimer-card">
+        <div class="disclaimer-title">4. External Websites</div>
+        <p style="margin: 0; line-height: 1.6;">Links to third-party websites are provided for convenience.<br>
+        IT Voice Media Private Limited has no control over the content or practices of external websites and accepts no responsibility for them.</p>
+      </div>
+
+      <div class="disclaimer-card">
+        <div class="disclaimer-title">5. Limitation of Liability</div>
+        <p style="margin-top: 0; line-height: 1.6;">To the fullest extent permitted by applicable law, IT Voice Media Private Limited shall not be liable for any direct, indirect, incidental, special, or consequential damages arising from:</p>
+        <ul class="dot-list">
+          <li>Use of the Website or Inability to access the Website</li>
+          <li>Website interruptions or Technical failures</li>
+          <li>Third-party advertisements or External links</li>
+        </ul>
+      </div>
+
+      <div class="disclaimer-card">
+        <div class="disclaimer-title">6. Intellectual Property</div>
+        <p style="margin: 0; line-height: 1.6;">All trademarks, logos, brand names, and content remain the property of their respective owners.<br>
+        Nothing contained on this Website grants any license or ownership rights except where expressly stated.</p>
+      </div>
+
+      <div class="disclaimer-card">
+        <div class="disclaimer-title">7. Changes</div>
+        <p style="margin: 0; line-height: 1.6;">This Disclaimer may be updated periodically without prior notice.<br>
+        Continued use of IV Games constitutes acceptance of the current version of this Disclaimer.</p>
+      </div>
+
+      <div class="disclaimer-card">
+        <div class="disclaimer-title">8. Contact</div>
+        <p style="margin: 0; line-height: 1.6;">Questions regarding this Disclaimer may be submitted through the official communication channels of IT Voice Media Private Limited.</p>
+      </div>
+
+       <footer class="main-footer">
+        
+        <div class="footer-nav">
+          <a href="about.html" style="color: #888; text-decoration: none; font-size: 14px;">About Us</a>
+          <a href="contact.html"style="color: #888; text-decoration: none; font-size: 14px;">Contact Us</a>
+          <a href="privacy_policy.html" style="color: #888; text-decoration: none; font-size: 14px;">Privacy Policy</a>
+          <a href="terms.html" style="color: #888; text-decoration: none; font-size: 14px;">Terms & Conditions</a>
+          <a href="disclaimer.html" style="color: #4facfe; text-decoration: none; font-size: 14px;">Disclaimer</a>
+          <a href="cookie_policy.html" style="color: #888; text-decoration: none; font-size: 14px;">Cookie Policy</a>
+        </div>
+        
+        <div class="copyright-text">
+          <span>&copy; 2026 IV Games. All rights reserved.</span>
+          <span class="copyright-divider">|</span>
+          <span>Designed and Developed by <a href="https://icpljpr.com/" target="_blank" style="color: #4facfe; text-decoration: none; font-weight: bold; transition: 0.3s;" onmouseover="this.style.textShadow='0 0 8px rgba(79, 172, 254, 0.8)'" onmouseout="this.style.textShadow='none'">ICPL</a></span>
+        </div>
+        
+      </footer>
+
+    </div>
+  </body>
+</html>

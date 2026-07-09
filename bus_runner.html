@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Subway Runner - Final Full Game</title>
+    <style>
+        html, body { 
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background-color: #87CEEB; 
+            font-family: Arial, sans-serif;
+            user-select: none;
+            touch-action: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            overscroll-behavior: none;
+            position: fixed;
+            inset: 0;
+        }
+        canvas { display: block; width: 100%; height: 100%; }
+
+        .dash-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            border: 2px solid #fff;
+            z-index: 1000;
+            transition: transform 0.1s;
+        }
+        .dash-btn:active {
+            transform: translateY(2px);
+        }
+
+        #scoreBoard {
+            position: absolute;
+            top: 20px; 
+            right: 20px; 
+            left: auto; 
+            color: white;
+            font-size: 24px; 
+            font-family: 'Arial Black', sans-serif;
+            font-weight: bold; 
+            background: rgba(0, 0, 0, 0.5); 
+            padding: 8px 18px; 
+            border-radius: 20px; 
+            border: 2px solid #f39c12; 
+            z-index: 100;
+            text-shadow: 2px 2px 4px #000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px rgba(243, 156, 18, 0.4);
+            pointer-events: none;
+            display: none; 
+        }
+        
+        #pauseBtn {
+            position: absolute; 
+            top: 20px; 
+            left: 20px; 
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.5); 
+            border-radius: 25px; 
+            display: none;
+            justify-content: center; 
+            align-items: center; 
+            color: white;
+            cursor: pointer; 
+            z-index: 100;
+            border: 2px solid #4facfe;
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+            backdrop-filter: blur(5px);
+            transition: transform 0.1s;
+            gap: 6px;
+        }
+        #pauseBtn .btn-icon {
+            font-size: 14px;
+            line-height: 1;
+            font-weight: bold;
+        }
+        #pauseBtn .btn-label {
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        #pauseBtn:active {
+             transform: scale(0.95); 
+        }
+
+        #inGameHomeBtn {
+            position: absolute; 
+            top: 75px; 
+            right: 20px; 
+            left: auto;
+            padding: 8px 16px;
+            background: rgba(0, 0, 0, 0.5); 
+            border-radius: 25px; 
+            display: none; 
+            justify-content: center; 
+            align-items: center; 
+            color: white;
+            cursor: pointer; 
+            z-index: 100;
+            border: 2px solid #ff4757;
+            box-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+            backdrop-filter: blur(5px);
+            transition: transform 0.1s; 
+            gap: 6px;
+        }
+        #inGameHomeBtn .btn-icon {
+            font-size: 16px;
+            line-height: 1;
+        }
+        #inGameHomeBtn .btn-label {
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        #inGameHomeBtn:active {
+             transform: scale(0.95); 
+        }
+
+        .overlay {
+            position: absolute; 
+            top: 0; left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); 
+            display: none; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            z-index: 200; 
+            backdrop-filter: blur(5px);
+        }
+
+        .panel {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 30px; 
+            border-radius: 20px; 
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
+            border: 4px solid #fff;
+            color: white; 
+            min-width: 300px;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% {transform: scale(0.5); opacity: 0; }
+            100% {transform: scale(1); opacity: 1; }
+        }
+
+        .panel h2 { 
+            margin-top: 0; 
+            font-size: 36px; 
+            text-shadow: 2px 2px 0 #000, -1px -1px 0 #000; 
+            letter-spacing: 2px; 
+        }
+        .score-display { 
+            font-size: 24px; 
+            margin-bottom: 20px; 
+            color: #ffd700; 
+            text-shadow: 1px 1px 2px #000; 
+        }
+
+        .game-btn {
+            display: block; 
+            width: 100%; 
+            padding: 15px; 
+            margin: 15px 0; 
+            font-size: 24px; 
+            font-weight: bold; 
+            border: 3px solid rgba(0, 0, 0, 0.2); 
+            border-radius: 12px; 
+            color: white; 
+            cursor: pointer;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); 
+            box-shadow: 0 6px 0 #000, 0 8px 10px rgba(0,0,0,0.3);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        .game-btn:active { 
+            transform: translateY(6px); 
+            box-shadow: 0 0px 0 #000, 0 2px 5px rgba(0,0,0,0.3); 
+        }
+
+        .btn-resume { background: linear-gradient(to bottom, #4facfe, #00f2fe); }
+        .btn-ad { background: linear-gradient(to bottom, #43e97b, #38f9d7); color: #000; text-shadow: none; }
+        .btn-restart { background: linear-gradient(to bottom, #ff0844, #ffb199); }
+        .btn-home { background: linear-gradient(to bottom, #f39c12, #e67e22); }
+        
+        .btn-play { 
+            background: linear-gradient(to bottom, #2ecc71, #27ae60); 
+            width: 250px; 
+            font-size: 30px; 
+            padding: 20px; 
+        }
+
+        #homeScreen, #loadingScreen {
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: linear-gradient(to bottom, #1e3c72, #2a5298); 
+            display: flex;
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 150; 
+            color: white;
+        }
+        #loadingScreen { 
+            display: none; 
+            z-index: 999; 
+        }
+        
+        .game-title, #loadingTitle { 
+            font-size: 50px; 
+            font-weight: bold; 
+            margin-bottom: 30px; 
+            text-shadow: 3px 3px 6px #000; 
+            letter-spacing: 2px; 
+            color: #f1c40f; 
+        }
+
+        #progressContainer { 
+            width: 300px; 
+            height: 20px; 
+            background: rgba(255, 255, 255, 0.2); 
+            border-radius: 10px; 
+            border: 3px solid #fff; 
+            overflow: hidden; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
+        }
+        #progressBar { 
+            width: 0%; height: 100%; 
+            background: #ffd700; transition: 0.1s; 
+        }
+        #loadingText { 
+            margin-top: 10px; 
+            font-size: 18px; }
+
+        @media (max-width: 768px) {
+            .panel { min-width: min(88vw, 320px); 
+                padding: 20px 16px; 
+                border-width: 3px; 
+            }
+            .panel h2 { 
+                font-size: clamp(24px, 6vw, 32px); 
+                margin-bottom: 12px; 
+            }
+            .score-display { 
+                font-size: clamp(18px, 4.8vw, 24px); 
+                margin-bottom: 14px; 
+            }
+            .game-btn { 
+                padding: 12px; 
+                margin: 10px 0; 
+                font-size: clamp(18px, 4.2vw, 22px); 
+                border-radius: 10px; 
+            }
+            .btn-play { width: min(84vw, 250px); 
+                font-size: clamp(22px, 5.4vw, 28px); 
+                padding: 16px; 
+            }
+           #pauseBtn {
+                top: max(12px, env(safe-area-inset-top));
+                left: max(12px, env(safe-area-inset-left));
+                padding: 6px 12px;
+            }
+            #pauseBtn .btn-label { 
+                font-size: 10px; }
+            #pauseBtn .btn-icon { 
+                font-size: 12px; 
+            }
+
+            #scoreBoard {
+                top: max(12px, env(safe-area-inset-top));
+                right: max(12px, env(safe-area-inset-right));
+                font-size: clamp(16px, 4vw, 20px);
+                padding: 6px 14px;
+                border-width: 2px;
+            }
+            
+            #inGameHomeBtn {
+                top: calc(max(12px, env(safe-area-inset-top)) + 55px);
+                right: max(12px, env(safe-area-inset-right));
+                padding: 6px 12px;
+            }
+            #inGameHomeBtn .btn-label { font-size: 10px; }
+            #inGameHomeBtn .btn-icon { font-size: 14px; }
+            
+            .game-title, #loadingTitle {
+            font-size: clamp(32px, 9vw, 48px); 
+            margin-bottom: 20px; text-align: center; 
+        }
+            #progressContainer { 
+                width: min(82vw, 300px); 
+            }
+        }
+
+        @media (max-width: 480px) {
+            .panel { width: min(92vw, 320px); }
+            .game-btn { padding: 11px; font-size: 17px; }
+        }
+
+    </style>
+</head>
+<body>
+
+     <div id="scoreBoard">
+         <span id="scoreVal" style="letter-spacing: 2px;">000000</span>
+     </div>
+     
+    <div id="pauseBtn" onclick="togglePause()"><span class="btn-icon">||</span><span class="btn-label">Pause</span></div>
+     
+     <div id="inGameHomeBtn" onclick="goHome()"><span class="btn-icon">←</span><span class="btn-label">Back to Home</span></div>
+     
+     <div id="homeScreen">
+        <div class="dash-btn" onclick="window.location.href='index.html'">← Back to Dashboard</div>
+        <div class="game-title">Bus Runner</div>
+        <button class="game-btn btn-play" onclick="startGame()">▶ Tap To Play</button>
+     </div>
+
+     <div id="loadingScreen">
+        <div class="dash-btn" onclick="window.location.href='index.html'">← Back to Dashboard</div>
+        <div id="loadingTitle">Bus Runner</div>
+        <div id="progressContainer"><div id="progressBar"></div></div>
+        <div id="loadingText">Loading City...0%</div>
+     </div>
+
+     <div id="pauseScreen" class="overlay">
+         <div class="panel">
+             <h2>PAUSED</h2>
+             <button class="game-btn btn-resume" onclick="togglePause()">▶ Resume Game</button>
+             <button class="game-btn btn-restart" onclick="resetGame()">↻ Restart</button>
+             <button class="dash-btn btn-back-to-dashboard" onclick="window.location.href='index.html'">← Back to Dashboard</div>
+         </div>
+    </div>
+
+    <div id="gameOverScreen" class="overlay">
+        <div class="panel">
+            <h2>GAME OVER</h2>
+            <div class="score-display"> Final Score: <span id="finalScoreVal">0</span></div>
+           <button id="adBtn" class="game-btn btn-ad" onclick="watchAdToResume()">Watch Ad (3 Left)</button>
+            <button class="game-btn btn-restart" onclick="resetGame()">↻ Restart</button>
+            <button class="game-btn btn-home" onclick="goHome()"> Back to Home</button>
+        </div>
+    </div>
+    
+    <script src="three.min.js"></script>
+    <script src="GLTFLoader.js"></script>
+    <script src="DRACOLoader.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+
+        const textureLoader = new THREE.TextureLoader();
+        const skyTexture = textureLoader.load('image/sky.webp'); 
+        skyTexture.encoding = THREE.sRGBEncoding;
+
+        skyTexture.generateMipmaps = false; 
+        skyTexture.minFilter = THREE.LinearFilter;
+
+        const skyGeo = new THREE.PlaneGeometry(1000, 500); 
+        const skyMat = new THREE.MeshBasicMaterial({ map: skyTexture, fog: false, depthWrite: false, side: THREE.FrontSide });
+        const skyPlane = new THREE.Mesh(skyGeo, skyMat);
+        skyPlane.position.set(0, 100, -350); 
+        scene.add(skyPlane);
+
+        const fogColor = 0x87CEEB; 
+        scene.background = new THREE.Color(fogColor); 
+        scene.fog = new THREE.FogExp2(fogColor, 0.002);
+
+        function getViewportSize() {
+            const width = window.visualViewport?.width || window.innerWidth || document.documentElement.clientWidth || 1;
+            const height = window.visualViewport?.height || window.innerHeight || document.documentElement.clientHeight || 1;
+            return { width, height };
+        }
+
+        function updateRendererSize() {
+            const { width, height } = getViewportSize();
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            const maxRatio = isMobile ? 1.25 : 1.5;
+            const pixelRatio = Math.min(window.devicePixelRatio || 1, maxRatio);
+            camera.aspect = width / height;
+            camera.fov = Math.min(78, Math.max(58, isMobile ? 72 : 60));
+            camera.updateProjectionMatrix();
+            renderer.setPixelRatio(pixelRatio);
+            renderer.setSize(width, height, false);
+            renderer.domElement.style.width = '100%';
+            renderer.domElement.style.height = '100%';
+        }
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 400);
+        const renderer = new THREE.WebGLRenderer({ 
+            antialias: false,
+            powerPreference: "high-performance",
+            preserveDrawingBuffer: false
+        });
+        renderer.shadowMap.enabled = false;
+        updateRendererSize();
+        renderer.outputEncoding = THREE.sRGBEncoding; 
+        document.body.appendChild(renderer.domElement);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); 
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.2); 
+        dirLight.position.set(0, 50, -200); 
+        scene.add(dirLight);
+
+        // TRACK SETUP
+        const roadGeo = new THREE.BoxGeometry(12, 0.1, 500);
+        const roadMat = new THREE.MeshStandardMaterial({ color: 0x5c3a21 }); 
+        const road = new THREE.Mesh(roadGeo, roadMat);
+        road.position.set(0, -0.1, -200); 
+        scene.add(road);
+
+        const lanes = [-3.5, 0, 3.5]; 
+        const sleeperGeo = new THREE.BoxGeometry(2.2, 0.1, 0.6);
+        const sleeperMat = new THREE.MeshStandardMaterial({color: 0x8B4513 }); 
+        let sleepersArr = [];
+
+        for (let z = 10; z > -400; z -= 3) {
+            lanes.forEach(laneX => {
+                const sleeper = new THREE.Mesh(sleeperGeo, sleeperMat);
+                sleeper.position.set(laneX, 0, z); scene.add(sleeper); sleepersArr.push(sleeper);
+            });
+        }
+
+        const railGeo = new THREE.BoxGeometry(0.2, 0.15, 500); 
+        const railMat = new THREE.MeshStandardMaterial({ color: 0x222222 }); 
+        const railOffsets = [-0.6, 0.6];
+
+        lanes.forEach(laneX => {
+            railOffsets.forEach(offset => {
+                const rail = new THREE.Mesh(railGeo, railMat);
+                rail.position.set(laneX + offset, 0.12, -200); 
+                scene.add(rail);
+            });
+        });
+
+        // --- GAME VARIABLES ---
+        let currentLane = 1; 
+        let previousLane = 1; 
+        let score = 0; 
+        let displayScore = 0; 
+        let scoreMultiplier = 2; 
+        let timeAlive = 0;
+        let isGameOver = false; 
+        let remainingRevives = 3;
+        let isPaused = false; 
+        let isGameLoaded = false; 
+        let obstacles = []; 
+        let baseSpeed = 0.09; 
+        let obstacleSpeed = baseSpeed; 
+        const maxSpeed = 0.175; 
+        let passedObstaclesCount = 0; 
+        let frameCount = 0;
+        let isTilting = false; 
+        let tiltTimer = 0; 
+        const tiltDuration = 0.5; 
+        let tiltDirection = 1; 
+        let tiltAngle = 0.25;
+        let cityBlocksArr = []; 
+        let cityBlocksRightArr = []; 
+        let cityBlockLength = 16; 
+        let cityBlockLengthRight = 17;
+        let mixer; 
+        let characterWrapper; 
+        let isJumping = false, isRolling = false;
+        let runAction, jumpAction1, jumpAction2, rollAction, playerAction, stumbleAction;
+        let isStumbling = false; 
+        let cameraShakeTime = 0;
+        let collisionGraceTime = 0;
+        let trainCollisionCount = 0;
+        
+        let hasLoadedOnce = false; 
+
+        const jumpDuration = 0.8; 
+        const jumpHeight = 2.2; 
+        const roofHeight = 4.3; 
+        let jumpTimer = 0;     
+        
+        const clock = new THREE.Clock();
+        const player = new THREE.Group(); 
+        player.position.set(lanes[currentLane], 0, 0); 
+        scene.add(player);
+
+      function updateGameplaySpeed() {
+            let targetSpeed = baseSpeed;
+            if (timeAlive < 30) {
+                targetSpeed = baseSpeed;
+            }
+            else if (timeAlive < 80) {
+                let progress = (timeAlive - 30) / 50; 
+                targetSpeed = baseSpeed + (0.13 - baseSpeed) * progress;
+            }
+            else if (timeAlive < 120) {
+                let progress = (timeAlive - 80) / 40; 
+                targetSpeed = 0.13 + (maxSpeed - 0.13) * progress;
+            }
+            else {
+                targetSpeed = maxSpeed;
+            }
+            if (Math.abs(obstacleSpeed - targetSpeed) > 0.0005) {
+                obstacleSpeed = targetSpeed;
+                
+                let animScale = obstacleSpeed / baseSpeed;
+                if (animScale > 1.6) animScale = 1.6; 
+                if (playerAction) playerAction.timeScale = animScale;
+            }
+        }
+
+        setInterval(() => {
+            if (!isGameOver && !isPaused && isGameLoaded) { 
+                timeAlive += 0.1; 
+                updateGameplaySpeed();
+                let speedFactor = 1 + (timeAlive / 60); 
+                displayScore += (0.25 * scoreMultiplier * speedFactor); 
+                let formattedScore = Math.floor(displayScore).toString().padStart(6, '0');
+                let scoreEl = document.getElementById('scoreVal');
+                if(scoreEl) scoreEl.innerText = formattedScore;
+            }
+        }, 100);
+
+        // --- UI FUNCTIONS ---
+        function showGameUI() {
+            document.getElementById('scoreBoard').style.display = 'block';
+            document.getElementById('pauseBtn').style.display = 'flex';
+            document.getElementById('inGameHomeBtn').style.display = 'flex';
+        }
+
+        function hideGameUI() {
+            document.getElementById('scoreBoard').style.display = 'none';
+            document.getElementById('pauseBtn').style.display = 'none';
+            document.getElementById('inGameHomeBtn').style.display = 'none';
+        }
+
+        let customObstacles = [];
+        let trainModel = null, trainModel2 = null, trainModel3 = null;
+
+        function init3DModels() {
+            const manager = new THREE.LoadingManager();
+
+            manager.onProgress = function(url, itemsLoaded, itemsTotal) {
+                let progress = Math.floor((itemsLoaded / itemsTotal) * 100);
+                document.getElementById('progressBar').style.width = progress + '%';
+                document.getElementById('loadingText').innerText = 'Loading City...' + progress + '%';
+            };
+
+          manager.onLoad = function () {
+                document.getElementById('loadingText').innerText = 'Optimizing Graphics... Please wait';
+                
+                camera.position.set(0, 3.0, 4.8);
+                window.currentLookAtY = 1.2;
+                camera.lookAt(0, window.currentLookAtY, -20);
+                
+                spawnObstacle(-50);
+                spawnObstacle(-150);
+                spawnObstacle(-250);
+                
+                renderer.compile(scene, camera);
+
+                let warmUpFrames = 0;
+                function warmUpLoop() {
+                    if (warmUpFrames < 60) {
+                        if (mixer) mixer.update(0.016); 
+                        renderer.render(scene, camera);
+                        warmUpFrames++; 
+                        requestAnimationFrame(warmUpLoop);
+                    } else {
+                        for (let i = 0; i < obstacles.length; i++) scene.remove(obstacles[i]); 
+                        obstacles = [];
+                        window.patternSequence = 0;
+                        frameCount = 0;
+                        
+                        setTimeout(() => {
+                            document.getElementById('loadingScreen').style.display = 'none';
+                            showGameUI();
+                            isGameLoaded = true;
+                            clock.getDelta();
+                            resetGame(); 
+                        }, 500);
+                    }
+                }
+                warmUpLoop();
+            }
+
+            function OptimizeModel(model) {
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        if (child.material && child.material.isMeshStandardMaterial) {
+                            const oldMat = child.material;
+                            child.material = new THREE.MeshLambertMaterial ({
+                                color: oldMat.color,
+                                map: oldMat.map,
+                                transparent: oldMat.transparent,
+                                opacity: oldMat.opacity
+                            });
+                        }
+                        child.castShadow = false;
+                        child.receiveShadow = false;
+                    }   
+                });
+                return model;
+            }
+
+            const loader = new THREE.GLTFLoader(manager);
+            const dracoLoader = new THREE.DRACOLoader();
+            dracoLoader.setDecoderPath('draco/');
+            loader.setDRACOLoader(dracoLoader);
+
+            loader.load('glb/player.glb', function(gltf) {
+                const model = gltf.scene; 
+                model.scale.set(1.5, 1.5, 1.5);
+                characterWrapper = new THREE.Group(); 
+                characterWrapper.rotation.y = Math.PI;
+                characterWrapper.add(model); 
+                player.add(characterWrapper);
+                mixer = new THREE.AnimationMixer(model);
+
+                runAction = mixer.clipAction(gltf.animations[0]); 
+                runAction.play(); playerAction = runAction;
+
+                loader.load('glb/jump1.glb', function(g) { 
+                    jumpAction1 = mixer.clipAction(g.animations[0]); 
+                    jumpAction1.setLoop(THREE.LoopOnce); 
+                    jumpAction1.clampWhenFinished = true; 
+                });
+
+                loader.load('glb/jump2.glb', function(g) { 
+                    jumpAction2 = mixer.clipAction(g.animations[0]); 
+                    jumpAction2.setLoop(THREE.LoopOnce); 
+                    jumpAction2.clampWhenFinished = true; 
+                });
+
+                loader.load('glb/roll.glb', function(g) { 
+                    rollAction = mixer.clipAction(g.animations[0]); 
+                    rollAction.setLoop(THREE.LoopOnce); 
+                    rollAction.clampWhenFinished = true; 
+                });
+
+                loader.load('glb/stumble_new.glb', function(g) { 
+                    stumbleAction = mixer.clipAction(g.animations[0]); 
+                    stumbleAction.setLoop(THREE.LoopOnce); 
+                    stumbleAction.clampWhenFinished = true; 
+                });
+            });
+
+            loader.load('glb/obstacle1.glb', function(gltf) { 
+                let obs = gltf.scene; 
+                obs.scale.set(2, 2, 2); 
+                customObstacles.push({ model: obs, yPos: 0.8, type: 0 }); 
+            });
+
+            loader.load('glb/obstacle2.glb', function(gltf) { 
+                let obs = gltf.scene; 
+                obs.scale.set(2, 2, 2); 
+                customObstacles.push({ model: obs, yPos: 0.5, type: 2 }); 
+            });
+            loader.load('glb/obstacle3.glb', function(gltf) { 
+                let obs = gltf.scene; 
+                obs.scale.set(4, 4, 4); 
+                customObstacles.push({ model: obs, yPos: 2, type: 3 }); 
+            });
+
+            loader.load('glb/trafficlight.glb', function(gltf) { 
+                let obs = gltf.scene; obs.scale.set(4, 5.3, 4); 
+                obs.rotation.y = -Math.PI / 2; 
+                customObstacles.push({model: obs, yPos: 1.9, type: 5}); 
+            });
+
+            loader.load('glb/ramp.glb', function (gltf) { 
+                let obs = gltf.scene; obs.scale.set(5.0, 5.0, 4.4); 
+                obs.rotation.y = Math.PI / 0.67; 
+                obs.ramp = true;
+                customObstacles.push({model: obs, yPos: 1.9, type: 4}); 
+            });
+
+            loader.load('glb/train1.glb', function(gltf) { 
+                trainModel = OptimizeModel( gltf.scene); 
+                trainModel.scale.set(0.7, 0.76, 0.8); 
+                trainModel.baseY = 1.8; 
+                trainModel.rampOffset = 12; 
+                trainModel.zHitbox = 9.0; 
+            });
+
+            loader.load('glb/train2.glb', function(gltf) { 
+                trainModel2 = OptimizeModel(gltf.scene); 
+                trainModel2.scale.set(20.5, 13, 10); 
+                trainModel2.rotation.y = Math.PI / 2; 
+                trainModel2.baseY = 2.3; 
+                trainModel2.rampOffset = 12; 
+                trainModel2.zHitbox = 13.0; 
+            });
+
+            loader.load('glb/train3.glb', function(gltf) { 
+                trainModel3 = OptimizeModel( gltf.scene); 
+                trainModel3.scale.set(9, 12.5, 20.5); 
+                trainModel3.rotation.y = Math.PI / 1.0; 
+                trainModel3.baseY = 2.2; 
+                trainModel3.rampOffset = 11.5; 
+                trainModel3.zHitbox = 8.0; 
+            });
+
+            loader.load('glb/city.glb', function(gltf) { 
+                let cityModel = OptimizeModel(gltf.scene); 
+                cityModel.scale.set(18, 19, 18); 
+                cityModel.rotation.y = 0; 
+                for (let i = 0; i < 12; i++) { 
+                    let block = cityModel.clone(); 
+                    block.position.set(-9.0, 2.5, -(i * cityBlockLength)); 
+                    scene.add(block);
+                     cityBlocksArr.push(block); 
+                    } 
+                });
+            loader.load('glb/city_right.glb', function(gltf) { 
+                let cityModelRight = OptimizeModel(gltf.scene); 
+                cityModelRight.scale.set(18, 30, 18); 
+                cityModelRight.rotation.y = Math.PI; 
+                for (let i = 0; i < 12; i++) {  
+                    let block = cityModelRight.clone(); 
+                    block.position.set(8.0, 3.2, -(i * cityBlockLengthRight)); 
+                    scene.add(block); 
+                    cityBlocksRightArr.push(block); 
+                } 
+                setTimeout(() => {
+                    renderer.info.reset();
+                }, 1000);
+            });
+        }
+
+        // --- CONTROLS SWITCHER ---
+        function switchAnimation(newAction, duration = 0.2) {
+            if (!newAction || playerAction === newAction) return;
+            if (duration === 0) { 
+                mixer.stopAllAction(); 
+                newAction.reset().setEffectiveWeight(1).play(); 
+                playerAction = newAction; 
+                return; 
+            }
+            newAction.reset().setEffectiveTimeScale(1).setEffectiveWeight(1); 
+            newAction.crossFadeFrom(playerAction, duration, true).play();
+            playerAction = newAction;
+        }
+    
+       window.addEventListener('keydown', (e) => {
+            if (isGameOver || isPaused) return;
+            if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') { 
+                togglePause(); return; 
+            }
+            if (e.key === 'ArrowLeft' && currentLane > 0) { 
+                previousLane = currentLane; 
+                currentLane--; 
+            }
+
+            else if (e.key === 'ArrowRight' && currentLane < 2) { 
+                previousLane = currentLane; currentLane++; 
+            }
+            if ((e.key === 'ArrowUp' || e.key === ' ') && !isJumping && !isRolling && !isStumbling) {
+                isJumping = true; 
+                jumpTimer = 0; 
+                let SelectedJump = Math.random() < 0.5 ? jumpAction1 : jumpAction2;
+                if (SelectedJump) { 
+                    SelectedJump.timeScale = 1.8; 
+                    switchAnimation(SelectedJump, 0.02); 
+                }
+            }
+            if (e.key === 'ArrowDown' && !isRolling && !isStumbling) {
+                if (isJumping) { 
+                    isJumping = false; 
+                    jumpTimer = 0; 
+                    player.fallSpeed = 0.4; 
+                }
+
+                isRolling = true; 
+                switchAnimation(rollAction, 0.05);
+                setTimeout(() => { 
+                    isRolling = false; 
+                    if(!isGameOver && !isJumping && !isStumbling && !isPaused) switchAnimation(runAction); 
+                }, 800);
+            }
+        });
+
+        let touchStartX = 0; 
+        let touchStartY = 0; 
+        let touchEndX = 0; 
+        let touchEndY = 0; 
+        const minSwipeDistance = 30; 
+        renderer.domElement.addEventListener('touchstart', function(e) {
+            e.preventDefault(); 
+            touchStartX = e.changedTouches[0].screenX; 
+            touchStartY = e.changedTouches[0].screenY; 
+        }, { 
+            passive: false 
+        });
+
+        renderer.domElement.addEventListener('touchmove', function(e) { 
+            e.preventDefault(); 
+        }, { 
+            passive: false 
+        });
+        renderer.domElement.addEventListener('touchend', function(e) { 
+            e.preventDefault(); 
+            touchEndX = e.changedTouches[0].screenX; 
+            touchEndY = e.changedTouches[0].screenY; 
+            handleSwipe(); 
+        }, { 
+            passive: false 
+        });
+
+        function handleSwipe() {
+            if (isGameOver || isPaused) return;
+            let swipeDistanceX = touchEndX - touchStartX; 
+            let swipeDistanceY = touchEndY - touchStartY;
+            if (Math.abs(swipeDistanceX) < minSwipeDistance && Math.abs(swipeDistanceY) < minSwipeDistance) return; 
+
+            if (Math.abs(swipeDistanceX) > Math.abs(swipeDistanceY)) {
+                if (swipeDistanceX > 0 && currentLane < 2) { 
+                    previousLane = currentLane; currentLane++; 
+                } 
+                else if (swipeDistanceX < 0 && currentLane > 0) { 
+                    previousLane = currentLane; currentLane--; 
+                }
+            } else {
+                if (swipeDistanceY < 0 && !isJumping && !isRolling && !isStumbling) {
+                    isJumping = true; 
+                    jumpTimer = 0; 
+                    let SelectedJump = Math.random() < 0.5 ? jumpAction1 : jumpAction2;
+                    if (SelectedJump) { 
+                        SelectedJump.timeScale = 1.8; 
+                        switchAnimation(SelectedJump, 0.02); 
+                    }
+                } else if (swipeDistanceY > 0 && !isJumping && !isRolling && !isStumbling) {
+                    isRolling = true; switchAnimation(rollAction, 0.05);
+                    setTimeout(() => { 
+                        isRolling = false; 
+                        if(!isGameOver && !isJumping && !isStumbling && !isPaused) switchAnimation(runAction); 
+                    }, 800);
+                }
+            }
+        }
+
+        function addTrain(laneIndex, zPos, isMoving, hasRamp, isTriggerTrain = false) {
+            let availableTrains = [];
+            if (trainModel) availableTrains.push(trainModel);
+            if (trainModel2) availableTrains.push(trainModel2);
+            if (trainModel3) availableTrains.push(trainModel3);
+            if (availableTrains.length === 0) return;
+
+            let selectedTrain = availableTrains[Math.floor(Math.random() * availableTrains.length)];
+            const trainGroup = selectedTrain.clone(); 
+            trainGroup.passed = false; trainGroup.type = 1; 
+            trainGroup.isTrain = true; 
+            trainGroup.hasRampAttached = hasRamp;
+            trainGroup.isMovingTrain = isMoving; 
+            trainGroup.hasCollided = false;
+            trainGroup.lastCollisionTime = 0;
+            if (isTriggerTrain) trainGroup.isTriggerTrain = true;
+            trainGroup.zHitbox = selectedTrain.zHitbox ? selectedTrain.zHitbox : 12;
+            trainGroup.position.set(lanes[laneIndex], selectedTrain.baseY, zPos);
+            scene.add(trainGroup);
+             obstacles.push(trainGroup);
+
+            if (hasRamp && customObstacles.length > 0) {
+                let rampTemplate = customObstacles.find(o => o.type === 4 || o.model.isRamp || o.model.ramp);
+                if(rampTemplate) {
+                    const rampGroup = rampTemplate.model.clone(); 
+                    rampGroup.passed = false; 
+                    rampGroup.isRamp = true; 
+                    rampGroup.ramp = true; rampGroup.type = 4;
+                    let baseOffset = selectedTrain.rampOffset ? selectedTrain.rampOffset : 13.5;
+                    let gap = baseOffset + 0.1; 
+                    rampGroup.position.set(lanes[laneIndex], rampTemplate.yPos, zPos + gap);
+                    scene.add(rampGroup); 
+                    obstacles.push(rampGroup);
+                }
+            }
+        }
+
+        function addObstacle (laneIndex, zPos) {
+            let validObstacles = customObstacles.filter(o => o.type !== 4);
+            if (validObstacles.length === 0) return;
+            let selectedItem = validObstacles[Math.floor(Math.random() * validObstacles.length)];
+            const obsGroup = selectedItem.model.clone(); 
+            obsGroup.passed = false; 
+            obsGroup.type = selectedItem.type;
+            obsGroup.hasCollided = false;
+            obsGroup.lastCollisionTime = 0;
+
+            if (selectedItem.type === 5) {
+                let gaps = [-1.75, 1.75]; 
+                let randomGap = gaps[Math.floor(Math.random() * gaps.length)];
+                obsGroup.position.set(randomGap, selectedItem.yPos, zPos);
+            } else { obsGroup.position.set(lanes[laneIndex], selectedItem.yPos, zPos); 
+
+            }
+            scene.add(obsGroup); 
+            obstacles.push(obsGroup);    
+        }
+
+        function spawnObstacle(customZ) {
+            if (!trainModel && !trainModel2 && customObstacles.length === 0) return; 
+            let startZ = customZ !== undefined ? customZ : -320; 
+            
+            if (typeof window.patternSequence === 'undefined') window.patternSequence = 0; 
+            let patternType = window.patternSequence; window.patternSequence++; 
+            if (window.patternSequence > 3) window.patternSequence = 0;
+
+            if (patternType === 0) {
+                window.currentChunkLength = 280; 
+                addTrain(1, startZ, false, true); 
+                addTrain(2, startZ - 40, false, false); 
+                addObstacle(0, startZ - 10); 
+                addObstacle(0, startZ - 50); 
+                addObstacle(0, startZ - 90); 
+                addTrain(0, startZ - 140, false, false); 
+                addTrain(2, startZ - 150, false, false); 
+                addTrain(0, startZ - 250, false, false); 
+                addTrain(2, startZ - 260, false, false); 
+                addObstacle(1, startZ - 100); 
+                addObstacle(1, startZ - 150); 
+                addObstacle(1, startZ - 200); 
+                addObstacle(1, startZ - 250); 
+            }
+            else if (patternType === 1) {
+                window.currentChunkLength = 450; 
+                addTrain(0, startZ, false, false); 
+                addTrain(2, startZ, false, false); 
+                addTrain(1, startZ - 120, false, false); 
+                addTrain(2, startZ - 120, false, false); 
+                addObstacle(0, startZ - 180);
+                addTrain(0, startZ - 260, false, false); 
+                addTrain(1, startZ - 260, false, false); 
+                addObstacle(2, startZ - 320); 
+                addObstacle(1, startZ - 400); 
+            }
+
+            else if (patternType === 2) {
+                window.currentChunkLength = 550; 
+                let tGap = 20; 
+                
+                addTrain(1, startZ, false, true);  
+                addTrain(0, startZ, false, false); 
+                addTrain(2, startZ, false, false); 
+
+                for (let i = 1; i <= 5; i++) {
+                    addTrain(0, startZ - (tGap * i), false, false); 
+                    addTrain(1, startZ - (tGap * i), false, false); 
+                    addTrain(2, startZ - (tGap * i), false, false); 
+                }
+
+                addObstacle(1, startZ - (tGap * 5) - 40);
+                addObstacle(0, startZ - (tGap * 5) - 40);
+                addObstacle(2, startZ - (tGap * 5) - 80);
+            }
+           
+            else if (patternType === 3) {
+                window.currentChunkLength = 550; 
+                
+                let leftGap = 25;   
+                let middleGap = 50; 
+
+                addTrain(0, startZ, false, true);  
+                
+                addTrain(0, startZ - leftGap, false, false);
+                addTrain(0, startZ - (leftGap * 2), false, false);
+                addTrain(0, startZ - (leftGap * 3), false, false);
+                addTrain(0, startZ - (leftGap * 4), false, false);
+
+                addObstacle(1, startZ - 20); 
+                addObstacle(2, startZ - 20); 
+
+                let movingStartZ = startZ - 250; 
+
+                for (let i = 0; i < 6; i++) {
+                    addTrain(1, movingStartZ - (middleGap * i), false, false, true); 
+                }
+
+                addObstacle(1, startZ - 500); 
+                addObstacle(0, startZ - 500); 
+            }
+        }
+
+       function animate() {
+            requestAnimationFrame(animate);
+
+            if (isPaused) {
+                clock.getDelta();
+                return;
+            }
+            if (!isGameLoaded) {
+                renderer.render(scene, camera);
+                return;
+            }
+
+            const delta = clock.getDelta(); 
+            if (mixer && !isGameOver) mixer.update(delta);
+
+            if (isGameOver) {
+                if (cameraShakeTime > 0) {
+                    cameraShakeTime -= delta;
+                    let shakeIntensity = 0.2;
+                    camera.position.x += (Math.random() - 0.5) * shakeIntensity;
+                    camera.position.y += (Math.random() - 0.5) * shakeIntensity;
+                }
+                renderer.render(scene, camera);
+                return;
+            }
+
+            if (characterWrapper) {
+                if (isTilting) {
+                    tiltTimer += delta; 
+                    let progress = tiltTimer / tiltDuration; 
+                    let sineArc = Math.sin(progress * Math.PI); 
+                    characterWrapper.rotation.z = sineArc * tiltAngle * tiltDirection;
+                    if (progress >= 1.0) { 
+                        isTilting = false; 
+                        tiltTimer = 0; 
+                        characterWrapper.rotation.z = 0; 
+                    }
+                } else if (!isStumbling) { 
+                    characterWrapper.rotation.z = 0; 
+                }
+            }
+            
+            let targetBaseY = 0; 
+            let onSlope = false; 
+            let onRoof = false;
+            
+            for (let i = 0; i < obstacles.length; i++) {
+                let obs = obstacles[i]; 
+                let diffX = Math.abs(player.position.x - obs.position.x);
+
+                if (diffX < 1.5) { 
+                    if (obs.isRamp || obs.type === 4 || obs.ramp) {
+                        let rampStartZ = -5.5; 
+                        let rampEndZ = 4.5;   
+                        if (obs.position.z >= rampStartZ && obs.position.z <= rampEndZ) {
+                            let progress = (obs.position.z - rampStartZ) / (rampEndZ - rampStartZ); 
+                            let currentHeight = progress * roofHeight; 
+                            
+                            if (currentHeight >= targetBaseY) { 
+                                if (player.position.y >= currentHeight - 1.2 || progress < 0.15) {
+                                    targetBaseY = currentHeight; 
+                                    onSlope = true; 
+                                }
+                            }
+                        }
+                    }
+
+                    if (obs.isTrain) {
+                        let roofLimit = obs.zHitbox ? (obs.zHitbox + 1.5) : 14;
+
+                            if (obs.position.z >= -roofLimit && obs.position.z <= roofLimit) {
+                            if (player.position.y > 2.0 && roofHeight > targetBaseY) { 
+                                targetBaseY = roofHeight; 
+                                onRoof = true; 
+                            }   
+                        }
+                    }
+                }
+            }
+
+            // PHYSICS ENGINE
+            if (player.fallSpeed === undefined) player.fallSpeed = 0;
+
+            if (isGameOver) {
+                player.fallSpeed = 0;
+                return; 
+            }
+
+            if (isJumping) {
+                if (jumpTimer === 0) player.jumpBaseHeight = player.position.y;
+                jumpTimer += delta; let progress = jumpTimer / jumpDuration;
+                if (progress <= 1.0) {
+                    let sineArc = Math.sin(progress * Math.PI); 
+                    let jumpY = player.jumpBaseHeight + (sineArc * jumpHeight);
+                    
+                    if ((onSlope || onRoof) && jumpY <= targetBaseY) {
+                        isJumping = false;
+                        jumpTimer = 0;
+                        player.position.y = targetBaseY;
+                        player.fallSpeed = 0;
+                        if (playerAction !== runAction && !isRolling) switchAnimation(runAction, 0.1);
+                    } else {
+                        player.position.y = jumpY;
+                    }
+                } else { 
+                    isJumping = false; jumpTimer = 0; 
+                    player.fallSpeed = 0; 
+                }
+            } else {
+                if (onSlope || onRoof) {
+                    player.position.y = targetBaseY; 
+                    player.fallSpeed = 0;
+                    if (playerAction !== runAction && !isRolling) switchAnimation(runAction, 0.1);
+                } else if (player.position.y > targetBaseY) {
+                    player.fallSpeed += 0.15; 
+                    player.position.y -= player.fallSpeed; 
+                    if (player.position.y <= targetBaseY) {
+                        player.position.y = targetBaseY; 
+                        player.fallSpeed = 0;
+                        if (playerAction !== runAction && !isRolling) switchAnimation(runAction, 0.1);
+                    } else { 
+                        if (playerAction !== jumpAction1 && !isRolling) switchAnimation(jumpAction1, 0.2); 
+
+                    }
+                } else {
+                    player.position.y = targetBaseY; 
+                    player.fallSpeed = 0;
+                    if (playerAction !== runAction && !isRolling) switchAnimation(runAction, 0.1);
+                }
+            }
+
+            // ENVIRONMENT LOOPS
+            for(let i = 0; i < sleepersArr.length; i++) {
+                let sleeper = sleepersArr[i]; 
+                sleeper.position.z += obstacleSpeed;
+                if(sleeper.position.z > 15) sleeper.position.z -= 410;
+            }
+            for (let i = 0; i < cityBlocksArr.length; i++) {
+                let block = cityBlocksArr[i]; 
+                block.position.z += obstacleSpeed;
+                if (block.position.z > 20) block.position.z -= (cityBlockLength * cityBlocksArr.length);
+            }
+            for (let i = 0; i < cityBlocksRightArr.length; i++) {
+                let block = cityBlocksRightArr[i]; 
+                block.position.z += obstacleSpeed;
+                if (block.position.z > 20) block.position.z -= (cityBlockLengthRight * cityBlocksRightArr.length);
+            }
+
+            player.position.x += (lanes[currentLane] - player.position.x) * (delta* 12);
+
+            frameCount++;
+            if (frameCount === 1) {
+                let nextZ = -50; spawnObstacle(nextZ); 
+                nextZ -= window.currentChunkLength; 
+                spawnObstacle(nextZ);
+                nextZ -= window.currentChunkLength; 
+                spawnObstacle(nextZ);
+                nextZ -= window.currentChunkLength; 
+                spawnObstacle(nextZ);
+                window.distTracker = 0;
+            }
+            else {
+                window.distTracker += obstacleSpeed;
+                if (window.distTracker >= window.currentChunkLength) { 
+                    spawnObstacle(-320); window.distTracker = 0; 
+                }
+            }
+            
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                
+                if (obs.isTrain) {
+                    if (obs.isTriggerTrain && (onRoof || obs.position.z > -52)) { 
+                        obs.isMovingTrain = true; 
+                        obs.isTriggerTrain = false; 
+                    }
+                    
+                    if (obs.isMovingTrain) {
+                        obs.position.z += (obstacleSpeed + 0.45); 
+             
+                    } else { 
+                        obs.position.z += obstacleSpeed; 
+                    }
+                } else { 
+                    obs.position.z += obstacleSpeed; 
+                }
+
+                // COLLISION LOGIC
+                let diffXCol = Math.abs(player.position.x - obs.position.x);
+                let diffZCol = Math.abs(player.position.z - obs.position.z);
+                let zHitbox =  0.6; 
+                if (obs.isTrain) zHitbox = obs.zHitbox;
+                else if (obs.isRamp || obs.type === 4 || obs.ramp) zHitbox = 4.8;
+                let canCollideNow = !obs.isDestroyed && collisionGraceTime <= 0 && diffXCol < 1.2 && diffZCol < zHitbox && (!obs.lastCollisionTime || clock.elapsedTime - obs.lastCollisionTime > 0.55);
+
+                if (canCollideNow) {
+                   let isHit = false; 
+                    let isStumble = false; 
+                    let isSideBump = false;
+                    let isSideImpact = (diffXCol > 0.6 && diffXCol < 1.2);
+                    
+                    window.stumbleAngle = -Math.PI / 2; 
+
+                    if (obs.isRamp || obs.type === 4 || obs.ramp) {
+                        if (isSideImpact) isSideBump = true; 
+                    } 
+                   else if (obs.isTrain) {
+                        if (player.position.y < 3.2 && !onSlope && !onRoof) {
+                            if (diffXCol < 0.65) {
+                                if (!obs.hasRampAttached) {
+                                    isHit = true; 
+                                }
+                            } 
+                            else if (isSideImpact) {                          
+                                if (isStumbling) {
+                                    isHit = true;
+                                } else {
+                                    isSideBump = true;
+                                }
+                            }
+                        }
+                    } 
+                    else {
+                        let legHeight = player.position.y;
+                        
+                        if (obs.type === 5) {
+                            if (legHeight > 3.5) {
+
+                            } else if (isSideImpact) {
+                                isSideBump = true; 
+                            } else  {
+                                isStumble = true; 
+                                window.stumbleAngle = 0;
+                                player.position.y = 0.5;
+                                player.fallSpeed = -0.15;
+                            }
+                        } else {
+                            if (isSideImpact) {
+                                isSideBump = true;
+                            } else {
+                                if (obs.type === 0) {
+                                    if (legHeight < 0.3) isHit = true; 
+                                    else if (legHeight >= 0.3 && legHeight < 1.2 && !isRolling) {
+                                        isStumble = true; 
+                                        player.position.y = 0.8; 
+                                        player.fallSpeed = -0.15; 
+                                    }
+                                }
+                                else if (obs.type === 2) {
+                                    if (legHeight < 0.3) { 
+                                        if (!isRolling) isHit = true; 
+                                        else obs.hasCollided = true; 
+                                    } 
+                                    else if (legHeight >= 0.3 && legHeight < 1.1) { 
+                                        if (!isRolling) {
+                                            isStumble = true; 
+                                            player.position.y = 0.5;
+                                            player.fallSpeed = -0.15;
+                                        } else {
+                                            obs.hasCollided = true; 
+                                        }
+                                    }
+                                } 
+                                else if (obs.type === 3) {
+                                    if (legHeight > 2.5) {
+
+                                    }
+                                    else if (!isRolling) {
+                                        isHit = true; 
+                                    }else {
+                                        obs.hasCollided = true;
+                                    } 
+                                }
+                            }
+                        }
+                    }
+
+                    // --- ACTION TRIGGERS ---
+                    if (isHit) {
+                        obs.lastCollisionTime = clock.elapsedTime;
+                        collisionGraceTime = 0.35;
+                        isGameOver = true; 
+                        document.getElementById('finalScoreVal').innerText = Math.floor(displayScore); 
+                        document.getElementById('gameOverScreen').style.display = 'flex';
+                    } 
+                    else if (isSideBump) {
+                        isStumbling = true; 
+                        isTilting = true; 
+                        tiltTimer = 0; 
+                        cameraShakeTime = 0.3; 
+                        if (currentLane > previousLane) tiltDirection = 1;
+                        else tiltDirection = -1; 
+                        currentLane = previousLane; 
+                        obs.lastCollisionTime = clock.elapsedTime;
+                        collisionGraceTime = 0.35;
+                        if (runAction) runAction.timeScale = 0.6;
+                        setTimeout(() => { 
+                            isStumbling = false; 
+                            if (!isGameOver && runAction) runAction.timeScale = obstacleSpeed / baseSpeed; 
+                        }, 500);
+                    }
+                    else if (isStumble && !isStumbling) {
+                        obs.lastCollisionTime = clock.elapsedTime;
+                        collisionGraceTime = 0.35;
+                        isStumbling = true; 
+                        cameraShakeTime = 0.3; 
+                        switchAnimation(stumbleAction, 0.1);
+                        if (stumbleAction) stumbleAction.timeScale = obstacleSpeed / baseSpeed;
+                        setTimeout(() => {
+                            isStumbling = false;
+                            if (!isGameOver) { 
+                                switchAnimation(runAction, 0.1); 
+                                if (runAction) runAction.timeScale = obstacleSpeed / baseSpeed; 
+                            }
+                        }, 800);
+                    }
+                }
+
+                if(!obs.passed && !obs.isDestroyed && obs.position.z > player.position.z + 1) {
+                    obs.passed = true;
+                    score += 1;
+                    updateGameplaySpeed();
+                }
+
+                if(obs.position.z > 15 || obs.isDestroyed) { 
+                    scene.remove(obs); obstacles.splice(i, 1); 
+                }
+            } 
+
+            if (collisionGraceTime > 0) collisionGraceTime -= delta;
+
+            let desiredCamY = (onRoof || player.position.y > 2.5) ? 6.2 : 3.0;
+            camera.position.x += (player.position.x - camera.position.x) * (delta * 8);
+            camera.position.y += (desiredCamY - camera.position.y) * (delta * 4); 
+            camera.position.z = 4.8; 
+            
+            const targetLookAtY = onRoof ? 3.0 : 1.2;
+            if (!window.currentLookAtY) window.currentLookAtY = 1.2;
+            window.currentLookAtY += (targetLookAtY - window.currentLookAtY) * 0.08;
+            camera.lookAt(player.position.x * 0.5, window.currentLookAtY, -20);
+
+            let targetPitch = (onSlope && !onRoof) ? -0.25 : ((isJumping || player.position.y > 0.05) ? 0.1 : 0);
+            player.rotation.x += (targetPitch - player.rotation.x) * 0.15;
+
+            if (characterWrapper && !isTilting) {
+                if (isStumbling) characterWrapper.rotation.x = window.stumbleAngle; 
+                else characterWrapper.rotation.x = 0; 
+            }
+
+            if (cameraShakeTime > 0) {
+                cameraShakeTime -= delta; let shakeIntensity = 0.2;
+                camera.position.x += (Math.random() - 0.5) * shakeIntensity; 
+                camera.position.y += (Math.random() - 0.5) * shakeIntensity;
+            }
+
+            renderer.render(scene, camera);
+        }
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                if (!isPaused && !isGameOver && isGameLoaded) {
+                    togglePause(); 
+                }
+            }
+        });
+
+        function togglePause() {
+            if (isGameOver) return;
+            isPaused = !isPaused;
+            if (isPaused) {
+                document.getElementById('pauseScreen').style.display = 'flex';
+                if (mixer) mixer.timeScale = 0;
+            } else {
+                document.getElementById('pauseScreen').style.display = 'none';
+                clock.getDelta();
+                if (mixer) mixer.timeScale = 1;
+            }
+        }
+
+        function hardResetGameplay() {
+            document.getElementById('gameOverScreen').style.display = 'none';
+            document.getElementById('pauseScreen').style.display = 'none';
+
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                const obs = obstacles[i];
+                if (obs) {
+                    scene.remove(obs);
+                }
+            }
+            obstacles = [];
+
+            remainingRevives = 3;
+            let adBtn = document.getElementById('adBtn');
+            if (adBtn) {
+                adBtn.innerText = "WatchAd (3 Left)";
+                adBtn.style.display = "block"
+            }
+
+            score = 0;
+            displayScore = 0;
+            timeAlive = 0;
+            if (document.getElementById('scoreVal')) document.getElementById('scoreVal').innerText = '000000';
+
+            frameCount = 0;
+            window.patternSequence = 0;
+            window.distTracker = 0;
+            window.currentChunkLength = 80;
+            currentLane = 1;
+            previousLane = 1;
+            passedObstaclesCount = 0;
+            obstacleSpeed = baseSpeed;
+
+            if (characterWrapper) {
+                characterWrapper.rotation.set(0, Math.PI, 0);
+                characterWrapper.position.set(0, 0, 0);
+            }
+
+            player.position.set(lanes[currentLane], 0, 0);
+            player.rotation.set(0, 0, 0);
+            player.fallSpeed = 0;
+
+            camera.position.set(0, 3.0, 4.8);
+            window.currentLookAtY = 1.2;
+
+            isTilting = false;
+            isStumbling = false;
+            isJumping = false;
+            isRolling = false;
+            isPaused = false;
+            isGameOver = false;
+            trainCollisionCount = 0;
+
+            if (mixer) {
+                mixer.timeScale = 1;
+                mixer.stopAllAction();
+            }
+
+            if (runAction) {
+                runAction.reset().play();
+                runAction.timeScale = 1;
+                playerAction = runAction;
+            }
+
+            clock.getDelta();
+        }
+
+        function resumeFromGameOver() {
+            document.getElementById('gameOverScreen').style.display = 'none';
+            document.getElementById('pauseScreen').style.display = 'none';
+
+            isPaused = false;
+            isGameOver = false;
+            isTilting = false;
+            isStumbling = false;
+            isJumping = false;
+            isRolling = false;
+            trainCollisionCount = 0;
+            cameraShakeTime = 0;
+            player.fallSpeed = 0;
+
+            if (mixer) {
+                mixer.timeScale = 1;
+            }
+
+            if (runAction) {
+                runAction.reset().play();
+                runAction.timeScale = obstacleSpeed > 0 ? obstacleSpeed / baseSpeed : 1;
+                playerAction = runAction;
+            }
+
+            clock.getDelta();
+        }
+
+      function watchAdToResume() {
+        if (remainingRevives <= 0) return;
+        remainingRevives--;
+
+            let panel = document.querySelector('#gameOverScreen .panel');
+            let originalHTML = panel.innerHTML; 
+            panel.innerHTML = "<h2> Playing Ad...</h2><p style='color:#fff; font-size:18px;'>Please wait...</p>";
+
+            setTimeout(() => {
+                for (let i = obstacles.length -1; i >= 0; i--) {
+                    let obs = obstacles[i];
+                    if (obs.position.z > -80 && obs.position.z < 20) { 
+                        scene.remove(obs); obstacles.splice(i, 1); 
+                    }
+                }
+                
+                let rampTemplate = customObstacles.find(o => o.type === 4 || o.model.isRamp || o.model.ramp);
+                if(rampTemplate) {
+                    const rampGroup = rampTemplate.model.clone(); 
+                    rampGroup.passed = false; 
+                    rampGroup.isRamp = true; 
+                    rampGroup.ramp = true; 
+                    rampGroup.type = 4;
+                    rampGroup.hasCollided = false;
+                    rampGroup.lastCollisionTime = 0;
+                    rampGroup.position.set(lanes[currentLane], rampTemplate.yPos, -30); 
+                    scene.add(rampGroup); 
+                    obstacles.push(rampGroup);
+                }
+
+                if (characterWrapper) { 
+                    characterWrapper.rotation.x = 0; 
+                    characterWrapper.rotation.y = Math.PI;
+                    characterWrapper.position.y = 0; 
+                }
+                player.position.set(lanes[currentLane], 0, 0); 
+                player.fallSpeed = 0; 
+                
+                baseSpeed = 0.15; 
+                obstacleSpeed = 0.15; 
+                
+                isGameOver = false; 
+                isStumbling = false;
+                document.getElementById('gameOverScreen').style.display = 'none';
+
+
+                panel.innerHTML = originalHTML;
+                let adBtn = document.getElementById('adBtn');
+                if (adBtn) {
+                    if (remainingRevives > 0) {
+                        adBtn.innerText = `Watch Ad (${remainingRevives} Left)`;
+                    } else {
+                        adBtn.style.display = 'none';
+                    }
+                }
+  
+                if (mixer) mixer.timeScale = 1; 
+                if (runAction) { 
+                    switchAnimation(runAction, 0); 
+                    runAction.timeScale = 1; 
+                }
+                clock.getDelta(); 
+            }, 2000); 
+        }
+
+
+        function resetGame() {
+            hardResetGameplay();
+        }
+
+        window.addEventListener('resize', updateRendererSize, { passive: true });
+        window.addEventListener('orientationchange', updateRendererSize, { passive: true });
+        window.visualViewport?.addEventListener('resize', updateRendererSize, { passive: true });
+
+       function startGame() {
+           document.getElementById('homeScreen').style.display = 'none';
+           document.getElementById('loadingScreen').style.display = 'flex';
+           
+           if (!hasLoadedOnce) {
+               init3DModels();
+               hasLoadedOnce = true;
+           } else {
+               document.getElementById('progressBar').style.width = '100%';
+               document.getElementById('loadingText').innerText = 'Ready!';
+               setTimeout(() => {
+                   document.getElementById('loadingScreen').style.display = 'none';
+                   showGameUI();
+                   isGameLoaded = true;
+                   clock.getDelta();
+                   resetGame();
+               }, 500);
+           }
+       }
+
+       function goHome() {
+           document.getElementById('pauseScreen').style.display = 'none'; 
+           document.getElementById('gameOverScreen').style.display = 'none'; 
+           document.getElementById('homeScreen').style.display = 'flex'; 
+           hideGameUI();
+           isGameLoaded = false; 
+           isPaused = false;
+       }
+
+
+
+       requestAnimationFrame(animate); 
+    </script>
+</body>
+</html>

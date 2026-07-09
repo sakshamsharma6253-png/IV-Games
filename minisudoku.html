@@ -215,6 +215,29 @@
     max-width: 80%;
     transform: rotate(-1deg);
   }
+
+  
+  .dashboard-back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: #ffeb3b;
+      color: #111;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 10px 16px;
+      border: 3px solid #111;
+      box-shadow: 4px 4px 0px #111;
+      border-radius: 8px;
+      transition: 0.1s;
+      cursor: pointer;
+  }
+
+  .dashboard-back-btn:active {
+      transform: translate(4px, 4px);
+      box-shadow: 0px 0px 0px #111;
+  }
 </style>
 </head>
 <body>
@@ -227,6 +250,9 @@
     </div>
 
     <div id="homeScreen">
+        
+        <a href="index.html" class="dashboard-back-btn">← Back to Dashboard</a>
+        
         <div class="main-title">Sudoku</div>
         
         <div class="menu-card mini" onclick="showGame(4)">4 x 4<br><span style="font-size: 1rem; font-weight: normal;">Mini</span></div>
@@ -339,7 +365,6 @@
         document.getElementById('headerTitle').innerText = size + "x" + size + " Sudoku";
         document.getElementById('difficultyBtn').innerText = currentDifficulty + " ⌄";
         
-        // Dynamically Show/Hide Keypad Buttons based on game mode
         document.getElementById('btn-5').style.display = size >= 5 ? 'flex' : 'none';
         document.getElementById('btn-6').style.display = size >= 6 ? 'flex' : 'none';
         document.getElementById('btn-7').style.display = size >= 9 ? 'flex' : 'none';
@@ -410,7 +435,7 @@
             else if (currentDifficulty === 'Medium') removals = 20;
             else removals = 24;
         } else if (currentSize === 9) {
-            if (currentDifficulty === 'Easy') removals = 35; // Standard 9x9 removals
+            if (currentDifficulty === 'Easy') removals = 35;  
             else if (currentDifficulty === 'Medium') removals = 45;
             else removals = 55;
         }
@@ -470,7 +495,6 @@
         document.getElementById('grid').style.visibility = 'visible';
     }
 
-    // --- KEYPAD LOGIC ---
     document.querySelectorAll('.num-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             if(selectedCell && !selectedCell.classList.contains('fixed')) {
@@ -479,6 +503,22 @@
             }
         });
     });
+
+    document.addEventListener('keydown', function(event) {
+    if (selectedCell && !selectedCell.classList.contains('fixed')) {
+        const key = event.key;
+        
+        if (key >= '1' && key <= '9') {
+            if (parseInt(key) <= currentSize) {
+                selectedCell.textContent = key;
+                selectedCell.classList.add('user-input');
+            }
+        } 
+        else if (key === 'Backspace' || key === 'Delete') {
+            selectedCell.textContent = "";
+        }
+    }
+});
 
     document.getElementById('eraseBtn').addEventListener('click', function() {
         if(selectedCell && !selectedCell.classList.contains('fixed')) {

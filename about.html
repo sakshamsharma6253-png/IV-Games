@@ -2,74 +2,418 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width-device-width, initial-scale= 1.0" />
-    <title>About IV Games</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>About Us — IV Games</title>
+    
     <link rel="stylesheet" href="styles.css">
+    
     <style>
-      .about-content {
-        background: var(--panel);
+
+     
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: 100%;
+        background-color: #0f172a; 
+      }
+
+      body {
+        color: #cbd5e1;
+        font-family: sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #0f172a;
+      }
+      
+      .wrap {
+        max-width: 1000px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px 20px 0 20px !important; 
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; 
+        box-sizing: border-box;
+      }
+
+      .main-footer {
+        margin-top: auto; 
+        margin-bottom: -30px !important;
+        padding: 30px 20px 20px 20px;
+        width: 98%;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.3) 100%);
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 16px 16px 0 0; 
+        text-align: center;
+        backdrop-filter: blur(8px); 
+        -webkit-backdrop-filter: blur(8px);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15); 
+      }
+      .brand {
+        display: flex;
+        align-items: center; 
+      }
+
+      .iv-logo {
+        display: block;
+        width: 100%;
+        max-width: 200px; 
+        height: auto;
+        object-fit: contain;
+      }
+
+      .policy-container {
+        background: rgba(255, 255, 255, 0.05);
         padding: 30px;
         border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.03);
-        margin-top: 18px;
-        line-height: 1.6;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #cbd5e1;
+        line-height: 1.8;
+        margin-top: 20px;
       }
 
-      .about-content h2 {
-        color: var(--accent);
+      .policy-container h1 {
         margin-top: 0;
-        margin-bottom: 12px;
-        font-size: 22px;
+        margin-bottom: 25px;
+        text-align: center;
+        font-size: 32px;
+        color: #38bdf8; 
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 15px;
+      }
+      
+      .intro-highlight {
+        background-color: rgba(79, 172, 254, 0.15); 
+        border-left: 4px solid #4facfe; 
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 25px;
       }
 
+      .policy-container p {
+        margin-bottom: 15px;
+        font-size: 1.05rem;
+        white-space: pre-line; 
+      }
 
-      .about-content h3 {
-        color: var(--accent-2);
-        font-size: 18px;
-        margin-top: 28px;
+      .highlight-link {
+        color: #4facfe;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .highlight-link:hover {
+        text-decoration: underline;
+      }
+
+      .blue-heading {
+        color: #4facfe;
+        font-weight: bold;
+        font-size: 1.15rem;
+      }
+
+      .dot-list {
+        margin-top: 5px;
+        margin-bottom: 20px;
+        padding-left: 25px;
+        font-size: 1.05rem;
+      }
+
+      .dot-list li {
         margin-bottom: 8px;
       }
 
-      .about-content p {
-        color: var(--muted);
-        margin-bottom: 16px;
+      .content-box {
+        background: rgba(255, 255, 255, 0.03); 
+        border: 1px solid rgba(79, 172, 254, 0.2); 
+        padding: 20px 25px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
-   
+      
+      .content-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(79, 172, 254, 0.15);
+        border-color: rgba(79, 172, 254, 0.5);
+      }
+
+      .content-box .box-title {
+        color: #4facfe;
+        font-weight: bold;
+        font-size: 1.25rem;
+        margin-bottom: 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 8px;
+      }
+
+      .footer-nav {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; 
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+     
+      .copyright-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        color: #888;
+        font-size: 13px;
+        margin-top: 15px;
+      }
+
+      @media (max-width: 767px) {
+        
+        header {
+          flex-direction: column !important; 
+          justify-content: center !important;
+          text-align: center;
+        }
+        .nav-buttons {
+          justify-content: center;
+        }
+        .nav-buttons .btn-ghost {
+          font-size: 13px; 
+          padding: 6px 12px;
+        }
+        
+        .footer-nav {
+          display: grid !important; 
+          grid-template-columns: repeat(3, 1fr); 
+          gap: 15px 5px;
+          padding: 0 5px;
+          overflow: hidden; 
+        }
+        .footer-nav a {
+          font-size: 11.5px !important; 
+          text-align: center; 
+          white-space: normal; 
+          line-height: 1.4;
+        }
+
+       
+        .copyright-text {
+          flex-direction: column; 
+          gap: 10px;
+        }
+        .copyright-divider {
+          display: none; 
+        }
+      }
+
+       .btn-blue {
+        color: #4facfe !important;
+        border-color: rgba(79, 172, 254, 0.5) !important;
+        font-weight: bold;
+      }
+      .btn-blue:hover {
+        background: rgba(79, 172, 254, 0.15) !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 12px rgba(79, 172, 254, 0.4);
+        border-color: #4facfe !important;
+      }
+
+       @media (min-width: 768px) and (max-width: 1024px) {
+
+        .nav-buttons {
+          justify-content: center;
+        }
+        .nav-buttons .btn-ghost {
+          font-size: 13px; 
+          padding: 6px 12px;
+        }
+
+          .main-footer {
+            margin-top: auto !important;
+            flex-shrink: 0 !important;
+            width: 120% !important;
+            margin-left: -60px;
+            position: relative !important;
+            bottom: 20px !important;
+          }
+        }
+
+       @media screen and (min-width: 1024px) and (max-width: 1366px) and (min-height: 750px) { 
+          .main-footer {
+                margin-top: auto !important;
+                flex-shrink: 0 !important;
+                width: 100% !important;
+                position: relative !important;
+                bottom: 30px !important;
+          }
+        }
+
+         @media screen and (min-width: 900px) and (max-width: 1023px) {
+               .main-footer {
+                margin-top: auto !important;
+                flex-shrink: 0 !important;
+                width: 100% !important;
+                position: relative !important;
+                bottom: 30px !important;
+            }
+          }
+
+</style>
+        
     </style>
   </head>
+  
   <body>
-    <div class="wrap" style="height: auto; overflow: visible;";>
-      <header>
-        <div class="brand">
-          <h1>About IV Games</h1>
-          <p>The Vision and the developer behind the dashbaord.</p>   
+    <div class="wrap">
+      
+      <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 15px 0; width: 100%; margin-bottom: 30px; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.3);">
+        <div style="display: flex; align-items: center;">
+          <img src="icons/ivgames-logo.webp" alt="IV Games" style="max-height: 66px; display: block; margin-top: -46px; padding: 0;">
         </div>
-        <div>
-          <a class="btn-ghost" href="index.html">←Back to Home</a>
+        
+        <div class="nav-buttons" style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px; flex-wrap: wrap;">
+         
+         <a class="btn-ghost" href="https://www.itvoice.in/" target="_blank"> Visit Website <span class="arrow" style="font-size: 16px;">&#x2197;</span></a>
+          <a class="btn-ghost" href="contact.html"style="margin: 0;">Contact Us</a>
+            <a class="btn-ghost btn-blue" href="index.html" style="margin: 0;">← Back to Dashboard</a>
         </div>
+        
       </header>
-
-      <main class="about-content">
-        <h2>Welcome to IV Games</h2>
-        <p>IV Games is a centeralized, web based gaming hub featuring a collection of classic-mini-games. Play your favorites directly in the browser with instant responsiveness-no downloads or local installations requied.</p>
-
-        <h3>The Vision</h3>
-        <p>This project was built to demonstrate the power of asynchronous execution and modern web technologies. By running complex logic (like Python and Pygame Modules converted for the web) seamlessly within a lightweight browser envioronment, IV Games bridges the gap between classic programming and modern user expierience.</p>
-
-        <h3>Behind The Code</h3>
-        <p> Developed by Saksham Sharma, a software developer and BCA graduate from Shree Mahaveer College, Jaipur. This plateform serves as a practical implemantation of software development principals, utilizing clean coding practices, intuitive  UI/UX design and algorithmic logic (DSA) to deliver a seamless gaming expierience.</p>
-      </main>
-
-      <footer style="margin-top: 30px;">IV Games • Created by Saksham Sharma</footer>
+      <div class="policy-container">
+        <h1>About IV Games</h1>
+        
+        <div class="intro-highlight">
+          
+          
+          <div class="blue-heading" style="margin-bottom: 12px;">About IT Voice</div>
+          
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;">
             
+            <p style="margin: 0; flex: 1 1 300px; line-height: 1.6;">IV Games is the official gaming platform developed and operated by IT Voice Media Private Limited, a leading Indian technology media organization dedicated to delivering technology news, industry insights, digital publications, and technology events.
+            For years, IT Voice has served the technology ecosystem by connecting businesses, professionals, and technology enthusiasts through reliable journalism, industry coverage, print and digital publications, interviews, and technology events.
+            With IV Games, we extend our commitment to technology into the world of digital entertainment.</p>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; margin: 0 auto;">
+            
+    
+              <img src="icons/IT-Voice-LOGO.webp" alt="IT Voice Logo" style="max-width: 200px; background-color: #ffffff; padding: 10px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+              
+              <a href="https://www.itvoice.in/" target="_blank" class="highlight-link" style="font-size: 14px;">www.itvoice.in ↗</a>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+        
+        <div class="content-box">
+          <div class="box-title">Our Vision</div>
+          <p style="margin: 0;">Technology is not only about work—it is also about recreation, learning, creativity, and relaxation.
+          IV Games has been created to provide users with a simple, accessible, and enjoyable gaming experience that anyone can enjoy directly from their browser without unnecessary complexity.
+          Our mission is to combine modern web technologies with engaging casual games that offer entertainment during breaks, leisure time, or moments of relaxation.</p>
+        </div>
+
+        <div class="content-box">
+          <div class="box-title">What We Offer</div>
+          <p style="margin-top: 0;">IV Games provides browser-based games that are easy to access without requiring downloads or software installation. Our collection currently includes games such as:</p>
+          
+          <ul class="dot-list">
+            <li><strong>Bus Runner</strong> – Dodge obstacles, collect rewards, and run as far as you can.</li>
+            <li><strong>Chess</strong> – Challenge your strategic thinking with the timeless game of chess.</li>
+            <li><strong>Ludo</strong> – Enjoy the classic multiplayer board game with family and friends.</li>
+            <li><strong>Tic-Tac-Toe</strong> – A simple yet exciting game of quick thinking.</li>
+            <li><strong>Mini Sudoku</strong> – Sharpen your logical reasoning with number puzzles.</li>
+            <li><strong>N-Queens</strong> – Solve the famous chess puzzle by placing queens without conflicts.</li>
+          </ul>
+          <p style="margin-bottom: 0;">We will continue expanding our library by introducing new games, improved gameplay mechanics, enhanced graphics, and additional entertainment experiences.</p>
+        </div>
+
+        <div class="content-box">
+          <div class="box-title">Privacy First</div>
+          <p style="margin-top: 0;">One of the core principles behind IV Games is simplicity.<br>
+          We do not ask users to create accounts before playing.<br>
+          We do not intentionally collect personal information simply to access our games.<br>
+          Our goal is straightforward:</p>
+          <ul class="dot-list" style="margin-bottom: 0;">
+            <li>Visit the website.</li>
+            <li>Choose a game.</li>
+            <li>Play.</li>
+            <li>Enjoy.</li>
+          </ul>
+        </div>
+
+        <div class="content-box">
+          <div class="box-title">Advertising</div>
+          <p style="margin: 0;">To keep IV Games freely accessible, the website may display advertisements through trusted advertising partners, including Google AdSense.
+          These advertisements help us maintain, improve, and expand the platform while keeping access free for all users.
+          Third-party advertising providers may use cookies or similar technologies in accordance with their own privacy policies.</p>
+        </div>
+
+        <div class="content-box">
+          <div class="box-title">Technology</div>
+          <p style="margin-top: 0;">IV Games is built using modern web technologies to deliver responsive and smooth gameplay across desktop, tablet, and mobile devices whenever possible.<br>
+          We continually improve our platform to enhance:</p>
+          <ul class="dot-list" style="margin-bottom: 0;">
+            <li>Performance</li>
+            <li>Security</li>
+            <li>Accessibility</li>
+            <li>User Experience</li>
+            <li>Browser Compatibility</li>
+          </ul>
+        </div>
+
+        <div class="content-box">
+          <div class="box-title">Our Parent Organization</div>
+          <p style="margin-top: 0;">IV Games is a product of IT Voice Media Private Limited.
+          IT Voice is an established technology media organization known for:</p>
+          <ul class="dot-list">
+            <li>Daily Technology News</li>
+            <li>Digital Publications</li>
+            <li>Print Publications</li>
+            <li>Industry Interviews</li>
+            <li>Technology Events</li>
+            <li>Product Launch Coverage</li>
+            <li>IT Industry Updates</li>
+          </ul>
+          <p style="margin-bottom: 0;">To learn more about our parent organization, please visit:
+          <a href="https://www.itvoice.in" target="_blank" class="highlight-link">https://www.itvoice.in ↗</a></p>
+        </div>
+        
+        <div class="content-box">
+            <div class="box-title">Contact</div>
+         <p style="margin: 0;">If you have any questions, feedback, suggestions, or wish to report an issue with the website or any game, you may contact us through the official IT Voice communication channels available on our website.<br> We value your feedback and continuously strive to improve IV Games for our users.<br>
+        <strong>IT Voice Media Private Limited</strong><br>
+        Website (IV Games): <a href="https://itvoicegames.com/" style="color: #4facfe; text-decoration: none;">https://itvoicegames.com/</a><br>
+        Official Website: <a href="https://www.itvoice.in" target="_blank" style="color: #4facfe; text-decoration: none;">https://www.itvoice.in</a><br><br>
+      </p>
+      </div>
+
+       
+      <div style="text-align: center; margin-top: 40px; margin-bottom: 30px; padding: 0 20px; color: #888; font-style: italic; line-height: 1.6; max-width: 800px; margin-left: auto; margin-right: auto;">
+    <strong style="color: #cbd5e1; font-style: normal; font-size: 16px;">IV Games</strong><br>
+    "Entertainment Powered by Technology."<br>
+    "An initiative of IT Voice Media Private Limited."
+</div>
+        
+    
+     <footer class="main-footer">
+        
+        <div class="footer-nav">
+          <a href="about.html" style="color: #4facfe; text-decoration: none; font-size: 14px;">About Us</a>
+          <a href="contact.html"style="color: #888; text-decoration: none; font-size: 14px;">Contact Us</a>
+          <a href="privacy_policy.html" style="color: #888; text-decoration: none; font-size: 14px;">Privacy Policy</a>
+          <a href="terms.html" style="color: #888; text-decoration: none; font-size: 14px;">Terms & Conditions</a>
+          <a href="disclaimer.html" style="color: #888; text-decoration: none; font-size: 14px;">Disclaimer</a>
+          <a href="cookie_policy.html" style="color: #888; text-decoration: none; font-size: 14px;">Cookie Policy</a>
+        </div>
+        
+        <div class="copyright-text">
+          <span>&copy; 2026 IV Games. All rights reserved.</span>
+          <span class="copyright-divider">|</span>
+          <span>Designed and Developed by <a href="https://icpljpr.com/" target="_blank" style="color: #4facfe; text-decoration: none; font-weight: bold; transition: 0.3s;" onmouseover="this.style.textShadow='0 0 8px rgba(79, 172, 254, 0.8)'" onmouseout="this.style.textShadow='none'">ICPL</a></span>
+        </div>
+        
+      </footer>
 
     </div>
   </body>
 </html>
-   
-      
-
-
-    
-              
-

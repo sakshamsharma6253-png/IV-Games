@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ludo — Tutorial</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100%;
+        background-color: #0f172a; 
+      }
+
+      body {
+        color: #cbd5e1;
+        font-family: sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      
+      .wrap {
+        max-width: 1000px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px 20px 0 20px !important; 
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; 
+        box-sizing: border-box;
+      }
+
+      .tutorial {
+        max-width: 820px;
+        width: 100%;
+        margin: 28px auto;
+        padding: 18px;
+        background: rgba(255, 255, 255, 0.05); 
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-sizing: border-box;
+      }
+
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .step {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(60, 39, 177, 0.2));
+        padding: 12px 18px;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.03);
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: #000;
+        text-decoration: none;
+        padding: 8px 15px;
+        border-radius: 6px;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+      }
+      
+      .btn-ghost {
+        color: #cbd5e1;
+        text-decoration: none;
+        padding: 8px 15px;
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 6px;
+        transition: 0.3s;
+      }
+      .btn-ghost:hover {
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+      }
+
+      .main-footer {
+        margin-top: -20px; 
+        margin-left: 25px !important;
+        padding: 30px 20px 20px 20px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.3) 100%);
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 16px 16px 0 0; 
+        text-align: center;
+        backdrop-filter: blur(8px); 
+        -webkit-backdrop-filter: blur(8px);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15); 
+        width: 90%;
+        box-sizing: border-box;
+      }
+
+      .footer-nav {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; 
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .copyright-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        color: #888;
+        font-size: 13px;
+        margin-top: 25px;
+      }
+
+      ul { 
+        padding-left: 20px; 
+        line-height: 1.6; 
+        color: #d1d5db; 
+        font-size: 15px; 
+        margin-top: 10px;
+        margin-bottom: 5px;
+      }
+      li { margin-bottom: 8px; }
+      .highlight { color: #4facfe; font-weight: bold; }
+      .highlight-alert { color: #ff9f43; font-weight: bold; }
+
+      @media (max-width: 767px) {
+        header {
+          flex-direction: column !important;
+          text-align: center;
+          gap: 15px;
+        }
+        
+        .footer-nav {
+          display: grid !important; 
+          grid-template-columns: repeat(3, 1fr); 
+          gap: 15px 5px;
+          padding: 0 5px;
+          overflow: hidden; 
+        }
+        .footer-nav a {
+          font-size: 11.5px !important; 
+          text-align: center; 
+          white-space: normal; 
+          line-height: 1.4;
+        }
+        
+        .copyright-text {
+          flex-direction: column; 
+          gap: 10px;
+        }
+        .copyright-divider {
+          display: none; 
+        }
+      }
+
+        .btn-catalog {
+        color: #4facfe; 
+        text-decoration: none;
+        padding: 8px 18px;
+        border: 2px solid #4facfe; 
+        border-radius: 6px;
+        font-weight: bold;
+        background: rgba(79, 172, 254, 0.05); 
+        transition: all 0.3s ease;
+        display: inline-block;
+      }
+      
+      .btn-catalog:hover {
+        background: #4facfe;
+        color: #0f172a; 
+        box-shadow: 0 0 15px rgba(79, 172, 254, 0.6); 
+        transform: translateY(-2px);
+      }
+
+       @media screen and (min-width: 768px) and (max-width: 834px) {
+          .main-footer {
+              margin-top: auto !important;
+              margin-bottom: 0 !important;
+              bottom: 0 !important; 
+              padding-bottom: 20px !important; 
+              width: 100% !important;
+              margin-left: 0 !important;
+              border-radius: 16px 16px 0 0 !important;
+          }
+          .footer-nav {
+              display: flex !important;
+              flex-direction: row !important;
+              justify-content: center !important;
+              flex-wrap: nowrap !important;
+              gap: 18px !important;
+              width: 100% !important;
+          }
+          .footer-nav a { white-space: nowrap !important; font-size: 13px !important; }
+          .copyright-text {
+              margin-top: 15px !important;
+              text-align: center !important;
+              font-size: 12px !important;
+              display: block !important;
+              width: 100% !important;
+          }
+      }
+
+      @media screen and (min-width: 840px) and (max-width: 899px) {
+          .main-footer {
+              margin-top: auto !important;
+              margin-bottom: 0 !important;
+              bottom: 0 !important; 
+              padding-bottom: 20px !important;
+              width: 100% !important;
+              margin-left: 0 !important;
+              border-radius: 16px 16px 0 0 !important;
+          }
+          .footer-nav {
+              display: flex !important;
+              flex-direction: row !important;
+              justify-content: center !important;
+              flex-wrap: nowrap !important;
+              gap: 18px !important;
+              width: 100% !important;
+          }
+          .footer-nav a { white-space: nowrap !important; 
+            font-size: 13px !important; 
+          }
+          .copyright-text { margin-top: 15px !important; 
+            text-align: center !important; 
+            font-size: 12px !important; 
+            display: block !important; 
+          }
+      }
+
+      @media screen and (min-width: 900px) and (max-width: 1023px) {
+          .main-footer {
+              margin-top: auto !important;
+              margin-bottom: 70px !important;
+              bottom: 0 !important; 
+              padding-bottom: 20px !important;
+              width: 100% !important;
+              margin-left: 0 !important;
+              border-radius: 16px 16px 0 0 !important;
+          }
+          .footer-nav {
+              display: flex !important;
+              flex-direction: row !important;
+              justify-content: center !important;
+              flex-wrap: nowrap !important;
+              gap: 20px !important;
+              width: 100% !important;
+          }
+          .footer-nav a { white-space: nowrap !important; 
+            font-size: 13px !important; 
+          }
+
+          .copyright-text { margin-top: 15px !important; 
+            text-align: center !important; 
+            font-size: 12px !important; 
+            display: block !important; 
+          }
+      }
+
+    
+      @media screen and (min-width: 1024px) and (max-width: 1366px) {
+          .main-footer {
+              margin-top: auto !important;
+              margin-bottom: 60px !important;
+              bottom: 0 !important; 
+              padding-bottom: 20px !important;
+              width: 100% !important;
+              margin-left: 0 !important;
+              border-radius: 16px 16px 0 0 !important;
+          }
+          .footer-nav {
+              display: flex !important;
+              flex-direction: row !important;
+              justify-content: center !important;
+              flex-wrap: nowrap !important;
+              gap: 20px !important;
+              width: 100% !important;
+          }
+          .footer-nav a { white-space: nowrap !important; 
+            font-size: 14px !important; 
+          }
+
+          .copyright-text { 
+            margin-top: 15px !important; 
+            text-align: center !important; 
+            font-size: 13px !important; 
+            display: block !important; 
+          }
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      
+      <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding-top: 10px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <div class="brand" style="text-align: left;">
+          <h1 style="margin: 0; color: #4facfe;">Ludo — Tutorial</h1>
+          <p class="note" style="margin: 5px 0 0 0; color: #888; font-size: 14px;">Basics and how to play the game.</p>
+        </div>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <a class="btn-primary" href="../ludo.html">Play Now</a>
+           <a class="btn-catalog" href="../index.html">← Back to Dashboard</a>
+        </div>
+      </header>
+
+      <main class="tutorial">
+        <h2 style="margin-top:0; color: #fff;">Quick Ludo Guide</h2>
+        <div class="steps">
+          
+          <div class="step">
+            <strong style="color: #4facfe; font-size: 18px;">Objective</strong>
+            <div class="note" style="margin-top: 5px; color: #cbd5e1;">Be the first player to move all 4 of your tokens from your base to the home in the center of the board.</div>
+          </div>
+          
+          <div class="step">
+            <strong style="color: #4facfe; font-size: 18px;">Starting</strong>
+            <div class="note" style="margin-top: 5px; color: #cbd5e1;">You must roll a <span class="highlight">6</span> on the dice to move a token out of your base and onto the starting square.</div>
+          </div>
+          
+          <div class="step">
+            <strong style="color: #4facfe; font-size: 18px;">Movement</strong>
+            <div class="note" style="margin-top: 5px; color: #cbd5e1;">Roll the dice and move your active token forward by the exact number shown. Your tokens move in a clockwise direction around the board.</div>
+          </div>
+
+          <div class="step">
+            <strong style="color: #4facfe; font-size: 18px;">Extra Turn</strong>
+            <div class="note" style="margin-top: 5px; color: #cbd5e1;">Rolling a <span class="highlight">6</span> gives you an additional dice roll! You can either open a new token or advance an active one.</div>
+          </div>
+          
+          <div class="step">
+            <strong style="color: #4facfe; font-size: 18px;">Capturing</strong>
+            <div class="note" style="margin-top: 5px; color: #cbd5e1;">If your token lands exactly on the same square as an opponent's token, their token is <span class="highlight-alert">captured</span> and sent back to base! Plus, you get an extra roll as a reward.</div>
+          </div>
+
+        </div>
+
+        <h3 style="margin-top:25px; color: #fff;">Interactive Tips</h3>
+        <div class="step">
+          <p class="note" style="margin: 0; font-size: 15px; color: #cbd5e1;">
+            In our version, you don't need a "Roll Dice" button. The game rolls automatically when it's your turn, and you simply <strong>click on the token you want to move</strong>. Select the Game Mode from the dropdown before starting!
+          </p>
+        </div>
+      </main>
+
+      <div style="text-align: center; margin-top: -25px; margin-bottom: 25px; color: #64748b; font-size: 18px; font-style: italic; letter-spacing: 0.5px;">
+        IV Games — Ludo tutorial
+      </div>
+
+      <footer class="main-footer">
+        
+        <div class="footer-nav">
+          <a href="../about.html" style="color: #888; text-decoration: none; font-size: 14px;">About Us</a>
+          <a href="../contact.html" style="color: #888; text-decoration: none; font-size: 14px;">Contact Us</a>
+          <a href="../privacy_policy.html" style="color: #888; text-decoration: none; font-size: 14px;">Privacy Policy</a>
+          <a href="../terms.html" style="color: #888; text-decoration: none; font-size: 14px;">Terms & Conditions</a>
+          <a href="../disclaimer.html" style="color: #888; text-decoration: none; font-size: 14px;">Disclaimer</a>
+          <a href="../cookie_policy.html" style="color: #888; text-decoration: none; font-size: 14px;">Cookie Policy</a>
+        </div>
+        
+        <div class="copyright-text">
+          <span>&copy; 2026 IV Games. All rights reserved.</span>
+          <span class="copyright-divider">|</span>
+          <span>Designed and Developed by <a href="https://icpljpr.com/" target="_blank" style="color: #4facfe; text-decoration: none; font-weight: bold; transition: 0.3s;" onmouseover="this.style.textShadow='0 0 8px rgba(79, 172, 254, 0.8)'" onmouseout="this.style.textShadow='none'">ICPL</a></span>
+        </div>
+        
+      </footer>
+      
+    </div>
+  </body>
+</html>

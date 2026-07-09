@@ -1,132 +1,504 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>IV Games — Dashboard</title>
+    
+    <link rel="preload" as="image" href="icons/ivgames-logo.webp">
     <link rel="stylesheet" href="styles.css">
+    
+    <style>
+       html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100%;
+        background-color: #0f172a; 
+      }
+
+      body {
+        color: #cbd5e1;
+        font-family: sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #0f172a;
+      }
+      
+      .wrap {
+        max-width: 1000px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px 20px 0 20px !important; 
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; 
+        box-sizing: border-box;
+      }
+
+      
+      .main-footer {
+        margin-top: auto; 
+        margin-bottom: 0 !important;
+        padding: 30px 20px 20px 20px;
+        width: 100%;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.3) 100%);
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 16px 16px 0 0; 
+        text-align: center;
+        backdrop-filter: blur(8px); 
+        -webkit-backdrop-filter: blur(8px);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15); 
+        box-sizing: border-box;
+      }
+
+      .footer-nav {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; 
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .copyright-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        color: #888;
+        font-size: 13px;
+        margin-top: 25px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center; 
+      }
+
+      .iv-logo {
+        display: block;
+        width: 100%;
+        max-width: 200px; 
+        height: auto;
+        object-fit: contain;
+      }
+
+      .tc-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(5px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9998; 
+      }
+      .tc-modal {
+        background: #0f172a;
+        padding: 30px;
+        border-radius: 12px;
+        border: 1px solid rgba(79, 172, 254, 0.5);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+      }
+      .tc-modal h2 {
+        color: #fff;
+        margin-top: 0;
+        font-size: 24px;
+      }
+      .tc-modal p {
+        color: #cbd5e1;
+        font-size: 15px;
+        margin-bottom: 25px;
+        line-height: 1.5;
+      }
+      .tc-btn {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: #000;
+        border: none;
+        padding: 12px 25px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        width: 100%;
+      }
+      .tc-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+      }
+
+      .cookie-banner-premium {
+        position: fixed;
+        bottom: -150px; 
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 700px;
+        background: rgba(15, 23, 42, 0.85); 
+        backdrop-filter: blur(12px); 
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(79, 172, 254, 0.4); 
+        box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(79, 172, 254, 0.2);
+        border-radius: 12px;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        z-index: 9999; 
+        transition: bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      }
+
+      .cookie-banner-premium.show {
+        bottom: 20px; 
+      }
+
+      .cookie-content p {
+        margin: 0;
+        color: #cbd5e1;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .cookie-content a {
+        color: #4facfe;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .cookie-buttons {
+        display: flex;
+        gap: 10px;
+      }
+      .btn-accept {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: #0f172a;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+      }
+      .btn-accept:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+      }
+      .btn-reject {
+        background: transparent;
+        color: #e74c3c;
+        border: 1px solid #e74c3c;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+      }
+      .btn-reject:hover {
+        background: rgba(231, 76, 60, 0.1);
+      }
+
+      @media (max-width: 767px) {
+        header {
+          flex-direction: column !important; 
+          justify-content: center !important;
+          text-align: center;
+        }
+        .nav-buttons {
+          justify-content: center;
+          margin-top: 5px;
+        }
+        .nav-buttons .btn-ghost {
+          font-size: 13px; 
+          padding: 6px 12px;
+        }
+        
+        .footer-nav {
+          display: grid !important; 
+          grid-template-columns: repeat(3, 1fr); 
+          gap: 15px 5px;
+          padding: 0 5px;
+        }
+        .footer-nav a {
+          font-size: 11.5px !important; 
+          text-align: center; 
+          white-space: normal; 
+          line-height: 1.4;
+        }
+
+        .copyright-text {
+          flex-direction: column; 
+          gap: 10px;
+        }
+        .copyright-divider {
+          display: none; 
+        }
+        
+        .cookie-banner-premium {
+          flex-direction: column;
+          text-align: center;
+          padding: 15px;
+        }
+        .cookie-buttons {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      .card .media {
+        height: 140px !important;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 15px; 
+      }
+      
+      .card .media .icon {
+        max-width: 100% !important;
+        height: 100% !important; 
+        max-height: 120px !important; 
+        object-fit: contain !important; 
+        display: block;
+      }
+
+       @media (min-width: 768px) and (max-width: 1024px) {
+
+        .nav-buttons {
+          justify-content: center;
+        }
+        .nav-buttons .btn-ghost {
+          font-size: 13px; 
+          padding: 6px 12px;
+        }
+
+          .main-footer {
+            margin-top: auto !important;
+            flex-shrink: 0 !important;
+            width: 120% !important;
+            margin-left: -60px;
+            position: relative !important;
+            bottom: 20px !important;
+          }
+        }
+
+
+        @media screen and (min-width: 1024px) and (max-width: 1366px) and (min-height: 750px) {
+          .main-footer {
+                margin-top: auto !important;
+                flex-shrink: 0 !important;
+                width: 120% !important;
+                margin-left: -90px;
+                position: relative !important;
+                bottom: 0px !important;
+            }
+          }
+
+            @media screen and (min-width: 900px) and (max-width: 1023px) {
+               .main-footer {
+                margin-top: auto !important;
+                flex-shrink: 0 !important;
+                width: 100% !important;
+                position: relative !important;
+                bottom: 40px !important;
+            }
+          }
+
+    </style>
   </head>
   <body>
+
+    <div id="tc-popup" class="tc-overlay">
+      <div class="tc-modal">
+        <h2>Welcome to IV Games! 🎮</h2>
+        <p>Before you start playing, please read and accept our <a href="terms.html" target="_blank" style="color: #4facfe; text-decoration: none;">Terms & Conditions</a> and <a href="privacy_policy.html" target="_blank" style="color: #4facfe; text-decoration: none;">Privacy Policy</a>.</p>
+        <button id="accept-tc-btn" class="tc-btn">I Accept & Continue</button>
+      </div>
+    </div>
+
+    <div id="cookieConsentBanner" class="cookie-banner-premium">
+      <div class="cookie-content">
+        <p>We use cookies to improve your experience and analyze website traffic. Read our <a href="cookie_policy.html" target="_blank">Cookie Policy</a>.</p>
+      </div>
+      <div class="cookie-buttons">
+        <button id="acceptCookiesBtn" class="btn-accept">Accept</button>
+        <button id="rejectCookiesBtn" class="btn-reject">Reject All</button>
+      </div>
+    </div>
+
     <div class="wrap">
-      <header>
-        <div class="brand">
-          <h1>IV Games</h1>
-          <p>Small, focused games — one dashboard.</p>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <a class="btn-ghost" href="about.html">About</a>
-          <a class="btn-ghost" href="docs.html">Docs</a>
+      
+      <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding-top: 10px; padding-bottom: 25px; width: 100%; margin-bottom: 30px; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.3);">
+        <div style="display: flex; align-items: center; transform: translateY(-3px);">
+          <img src="icons/ivgames-logo.webp" alt="IV Games" style="max-height: 46px; display: block; margin-bottom: 10px; padding: 0;">
+        </div> 
+        
+        <div class="nav-buttons" style="display: flex; align-items: center; gap: 12px; margin-bottom: -10px; flex-wrap: wrap;">
+          <a class="btn-ghost" href="https://www.itvoice.in/" target="_blank">Visit Website <span class="arrow" style="font-size: 16px;">&#x2197;</span></a>
+          <a class="btn-ghost" href="contact.html" style="margin: 0;">Contact Us</a>
         </div>
       </header>
 
       <div class="grid">
         <section class="catalog">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-            <div>
-              <h4 style="margin:0">Game Catalog</h4>
-              <div class="note">Click a card to open the game.</div>
+          <div style="display: flex; justify-content: center; align-items: center; position: relative; margin-bottom: 25px;">
+            <div style="text-align: center;">
+              <h4 style="margin: 0; font-size: 1.2rem;">Game Catalog</h4>
+              <div class="note" style="margin: 0;">Click and play.</div>
             </div>
-            <div class="note"> IV Games • Responsive • Dark Neon Dashboard • Play Offline</div>
+            <div class="note" style="position: absolute; right: 0;">IV Games</div>
           </div>
 
           <div class="cards">
             
             <div class="card" data-href="tictactoe.html">
               <div class="media">
-                <img class="icon" src="icons/tictactoe-logo.png" alt="Tic-Tac-Toe" />
+                <img src="icons/tictactoe-logo.webp" loading="lazy" alt="Tic-Tac-Toe" width="160" height="160">
               </div>
               <div class="title"><h3>Tic‑Tac‑Toe</h3><div class="note">Quick matches</div></div>
               <p class="desc">Classic X vs O with optional AI. Fast rounds, smart opponent.</p>
               <div class="cta"> 
                 <a href="tictactoe.html" class="btn-primary" style="text-decoration: none;">Play</a>
-                <a href="tictactoe_tutorial.html" class="btn-ghost">Tutorial</a>
+                <a href="tutorial/tictactoe_tutorial.html" class="btn-ghost">Tutorial</a>
               </div>
             </div>
 
             <div class="card" data-href="minisudoku.html">
               <div class="media">
-                <img class="icon" src="icons/MiniSuduko.logo.png" alt="Mini Sudoku" />
+               <img src="icons/MiniSudoko-logo.webp" loading="lazy" alt="Mini Sudoku" width="135" height="135">
               </div>
               <div class="title"><h3>Mini Sudoku</h3><div class="note">4×4 puzzles</div></div>
               <p class="desc">Small Sudoku puzzles for quick logic practice. Generate and solve.</p>
               <div class="cta">
                 <a class="btn-primary" href="minisudoku.html">Play</a>
-                <a class="btn-ghost" href="minisudoku_tutorial.html">Tutorial</a>
+                <a class="btn-ghost" href="tutorial/minisudoku_tutorial.html">Tutorial</a>
               </div>
             </div>
 
             <div class="card" data-href="queens.html">
               <div class="media">
-                <img class="icon" src="icons/NQueens-logo.png" alt="N Queens" />
+                <img src="icons/NQueens-logo.webp" loading="lazy" alt="N‑Queens" width="130" height="130">
               </div>
               <div class="title"><h3>N‑Queens Visualizer</h3><div class="note">Solver & visualizer</div></div>
-              <p class="desc">Place queens, visualize attacks, or let the AI find solutions automatically.</p>
+              <p class="desc">Place queens, visualize attacks, or click random solve for solutions.</p>
               <div class="cta">
                 <a class="btn-primary" href="queens.html">Play</a>
-                <a class="btn-ghost" href="queens_tutorial.html">Tutorial</a>
+                <a class="btn-ghost" href="tutorial/queens_tutorial.html">Tutorial</a>
               </div>
             </div>
 
-            <div class="card" data-href="/chess.html">
+            <div class="card" data-href="chess.html">
               <div class="media">
-                <img class="icon" src="icons/chess-logo.png" alt="Chess " />
+               <img src="icons/chess-logo.webp" loading="lazy" alt="Chess" width="140" height="140">
               </div>
               <div class="title"><h3>Chess</h3><div class="note">Local play</div></div>
               <p class="desc">Lightweight chess with AI. play with mind </p>
               <div class="cta">
                 <a class="btn-primary" href="chess.html">Play</a>
-                <a class="btn-ghost" href="chess_tutorial.html">Tutorial</a>
+                <a class="btn-ghost" href="tutorial/chess_tutorial.html">Tutorial</a>
               </div>
             </div>
 
             <div class="card" data-href="bus_runner.html">
               <div class="media">
-                 <img class="icon" src="icons/BusRunner-logo.png" alt="Bus Runner" />
+              <img src="icons/BusRunner-logo.webp" loading="lazy" alt="Ludo" width="140" height="140">
               </div>
-              <div class="title"><h3>3D Bus Runner</h3><div class="note">Local Play</div></div>
+              <div class="title"><h3>Bus Runner</h3><div class="note">Local Play</div></div>
               <p class="desc">A fast paced endless runner. Dodge obstacles and set a high score right in your browser.</p>
               <div class="cta">
-                <a class="btn-primary" href="3D bus_runner.html">Play</a>
-                <a class="btn-ghost" href="bus_runner_tutorial.html">Tutorial</a>
+                <a class="btn-primary" href="bus_runner.html">Play</a>
+                <a class="btn-ghost" href="tutorial/bus_runner_tutorial.html">Tutorial</a>
               </div>
             </div>
             
             <div class="card" data-href="ludo.html">
               <div class="media">
-                <img class="icon" src="icons/ludo-logo.png" alt="Ludo" />
+                <img src="icons/ludo-logo.webp" loading="lazy" alt="Bus Runner" width="130" height="130">
               </div>
               <div class="title"><h3>Ludo</h3><div class="note">Family board</div></div>
               <p class="desc">Classic Ludo board — roll dice and race your tokens to the finish. Works offline in the dashboard.</p>
               <div class="cta">
                 <a class="btn-primary" href="ludo.html">Play</a>
-                <a class="btn-ghost" href="ludo_tutorial.html">Tutorial</a>
+                <a class="btn-ghost" href="tutorial/ludo_tutorial.html">Tutorial</a>
               </div>
             </div>
-           
+            
           </div>
         </section>
       </div>
+      
+      <footer class="main-footer">
+        <div class="footer-nav">
+          <a href="about.html" style="color: #888; text-decoration: none; font-size: 14px;">About Us</a>
+         <a href="contact.html" style="color: #888; text-decoration: none; font-size: 14px;">Contact Us</a>
+          <a href="privacy_policy.html" style="color: #888; text-decoration: none; font-size: 14px;">Privacy Policy</a>
+          <a href="terms.html" style="color: #888; text-decoration: none; font-size: 14px;">Terms & Conditions</a>
+          <a href="disclaimer.html" style="color: #888; text-decoration: none; font-size: 14px;">Disclaimer</a>
+          <a href="cookie_policy.html" style="color: #888; text-decoration: none; font-size: 14px;">Cookie Policy</a>
+        </div>
+        
+        <div class="copyright-text">
+          <span>&copy; 2026 IV Games. All rights reserved.</span>
+          <span class="copyright-divider">|</span>
+          <span>Designed and Developed by <a href="https://icpljpr.com/" target="_blank" style="color: #4facfe; text-decoration: none; font-weight: bold; transition: 0.3s;" onmouseover="this.style.textShadow='0 0 8px rgba(79, 172, 254, 0.8)'" onmouseout="this.style.textShadow='none'">ICPL</a></span>
+        </div>
+      </footer>
+
     </div>
 
     <script>
-      function openModal(id){
-        const m = document.getElementById(id);
-        if(!m) return;
-        m.style.display = 'block';
-        m.setAttribute('aria-hidden','false');
-      }
-      function closeModal(id){
-        const m = document.getElementById(id);
-        if(!m) return;
-        m.style.display = 'none';
-        m.setAttribute('aria-hidden','true');
-      }
-      window.addEventListener('click', (e)=>{
-        if(e.target.classList && e.target.classList.contains('modal')){
-          e.target.style.display='none';
-          e.target.setAttribute('aria-hidden','true');
+      document.addEventListener("DOMContentLoaded", function() {
+        
+        const tcPopup = document.getElementById("tc-popup");
+        const acceptTcBtn = document.getElementById("accept-tc-btn");
+
+        if (!localStorage.getItem("ivGamesTermsAccepted")) {
+          tcPopup.style.display = "flex"; 
         }
+
+        acceptTcBtn.addEventListener("click", function() {
+          localStorage.setItem("ivGamesTermsAccepted", "true"); 
+          tcPopup.style.display = "none"; 
+          
+          checkAndShowCookieBanner();
+        });
+
+        const cookieBanner = document.getElementById("cookieConsentBanner");
+        const acceptCookiesBtn = document.getElementById("acceptCookiesBtn");
+        const rejectCookiesBtn = document.getElementById("rejectCookiesBtn");
+
+        function checkAndShowCookieBanner() {
+          if (!localStorage.getItem("ivGamesCookieConsent")) {
+            setTimeout(() => {
+              cookieBanner.classList.add("show");
+            }, 1000); 
+          }
+        }
+
+        if (localStorage.getItem("ivGamesTermsAccepted")) {
+           checkAndShowCookieBanner();
+        }
+
+        acceptCookiesBtn.addEventListener("click", function() {
+          localStorage.setItem("ivGamesCookieConsent", "accepted");
+          cookieBanner.classList.remove("show");
+        });
+
+        rejectCookiesBtn.addEventListener("click", function() {
+          localStorage.setItem("ivGamesCookieConsent", "rejected");
+          cookieBanner.classList.remove("show");
+        });
+
       });
+
+      document.addEventListener('contextmenu', event => event.preventDefault());
     </script>
   </body>
 </html>
