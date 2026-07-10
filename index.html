@@ -4,11 +4,466 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>IV Games — Dashboard</title>
+    <meta name="description" content="Play exciting free online games like Tic-Tac-Toe, Mini Sudoku, Chess, Ludo, and Bus Runner directly in your browser at IV Games." />
     
     <link rel="preload" as="image" href="icons/ivgames-logo.webp">
-    <link rel="stylesheet" href="styles.css">
     
     <style>
+
+      
+:root{
+  --bg:#071018;
+  --panel:#0d1f20;
+  --card:#081915;
+  --accent:#26f6b0; 
+  --accent-2:#7b5cff;
+  --muted:#8da3a0;
+  --glow:0 8px 30px rgba(38,246,176,0.08);
+}
+html,body{
+  height:100vh;
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  color:#e6f0ef;
+
+ background: linear-gradient(rgba(4, 16, 20, 0.85), rgba(7, 16, 24, 0.95)),
+ url('image/bg.webp') no-repeat center center fixed;
+ background-size: cover;
+
+}
+
+.wrap{
+  max-width:1000px; 
+  height: 100vh;
+  margin: 0 auto;
+  padding: 30px 20px 15px 20px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
+}
+.brand{
+  display:flex;
+  flex-direction:column
+}
+
+.brand h1{
+  margin:0;
+  font-size:20px
+}
+
+.brand p{
+  margin:2px 0 0 0;
+  color:var(--muted);
+  font-size:13px
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr; 
+  gap:18px;
+  margin-top:18px
+}
+
+.catalog{
+
+  background:var(--panel);
+  padding:20px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.03)
+}
+.side{
+  background:var(--panel);
+  padding:18px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.03)
+}
+
+.cards{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .card .title h3 {
+    font-size: 16px;
+  }
+
+  .card .desc {
+    font-size: 12px;
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card .cta .c {
+    padding: 8px 12px;
+    font-size: 14px;
+    text-align: center;
+  }
+}
+  
+.card{
+  background:linear-gradient(180deg,var(--card),#04221a);
+  border-radius:12px;
+  padding: 16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  transition:transform 200ms ease, box-shadow 200ms ease;
+  border:1px solid rgba(255,255,255,0.03);
+  text-decoration:none;
+  color:inherit
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  box-shadow:var(--glow);
+  outline:1px solid rgba(38,246,176,0.12)
+}
+
+.media{
+  height:100px; 
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+}
+
+.media img.card-photo{
+  width:90%;
+  height:90px;
+  object-fit:contain;
+}
+
+.title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px
+}
+
+.title h3{
+  margin:0;
+  font-size:16px
+}
+
+.desc{
+  color:var(--muted);
+  font-size:13px;
+  margin:0
+}
+
+.cta{
+  margin-top:auto;
+  display:flex;
+  gap:10px
+}
+
+.btn-primary{
+  flex:1;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  color:#031815;
+  padding:10px 12px;
+  border-radius:10px;
+  border: 1px solid var(--accent);
+  font-weight:700;
+  text-align:center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.95;
+  box-shadow: 0 0 15px rgba(38, 246, 176, 0.4);
+}
+
+.btn-primary:active {
+  transform: scale(0.92);
+  opacity: 0.8; 
+}
+
+.btn-ghost{
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid var(--accent);
+  color:var(--accent);
+  background:transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn-ghost:hover {
+  background: rgba(38, 246, 176, 0.15);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(38, 246, 176, 0.2);
+}
+
+.btn-ghost:active {
+  transform: scale(0.92);
+  background: rgba(38, 246, 176, 0.25);
+}
+
+
+.icon{
+  width: 200px;
+  height: 100px;
+}
+
+
+img.icon[alt="Ludo"] {
+  width:96px;
+  height:96px
+}
+
+.side h4{
+  margin:0 0 8px 0
+}
+
+.note{
+  color:var(--muted);font-size:13px
+}
+
+footer{
+  margin-top: auto;
+  color:var(--muted);
+  font-size:13px;
+  text-align:center
+}
+
+@media(max-width:980px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .catalog{
+    grid-column:auto
+  }
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:600px){
+  .cards{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  img.icon[alt="Ludo"]{width:80px;height:80px}
+}
+.media svg.icon {
+    width: 120%;
+    height: 120%;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+    background-color: #121212;
+    margin: 15% auto;
+    padding: 20px;
+    width: 300px;
+    border-radius: 10px;
+    border: 1px solid #4ade80;
+    color: black;
+}
+
+.tutorial-btn {
+    background: linear-gradient(to bottom, #334155, #1e293b);
+    color: #cbd5e1;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 
+        0 6px 0 #0f172a,
+       0 10px 15px rgba(0, 0, 0, 0.4);
+       transition: all 0.1s ease;      
+}
+.tutorial-btn:active {
+    transform: translateY(6px);
+    box-shadow: 
+        0 0 0 #0f172a, 
+        0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+
+img.icon[alt="Tic-Tac-Toe"] {
+  height: auto;
+}
+
+
+img.icon[alt="Mini Sudoku"] {
+ 
+  height: auto;
+}
+
+
+img.icon[alt="N Queens"] {
+  height: auto;
+}
+
+
+img.icon[alt="Chess "] {
+  height: auto;
+}
+
+
+img.icon[alt="Bus Runner"] {
+ 
+  height: auto;
+}
+
+
+img.icon[alt="Ludo"] {
+  
+  height: auto;
+}
+
+.company-showcase {
+    background: linear-gradient(135deg, rgba(30, 60, 114, 0.4) 0%, rgba(42, 82, 152, 0.4) 100%); /* Neon blue gradient tint */
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(79, 172, 254, 0.3);
+    margin-top: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+.features-showcase {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 20px;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px 20px;
+}
+
+.feature-list li {
+    background: rgba(0, 0, 0, 0.3); 
+    color: #cbd5e1;
+    font-size: 16px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    border-left: 3px solid #2ecc71; 
+    transition: transform 0.2s, background 0.2s;
+}
+
+.feature-list li:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px); 
+}
+
+.feature-list .check-icon {
+    font-size: 20px;
+    margin-right: 12px;
+}
+
+
+@media (max-width: 768px) {
+    .feature-list {
+        grid-template-columns: 1fr; 
+    }
+}
+
+.company-showcase {
+    background: linear-gradient(135deg, rgba(30, 60, 114, 0.4) 0%, rgba(42, 82, 152, 0.4) 100%);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(79, 172, 254, 0.3); 
+    margin-top: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.company-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.company-icon {
+    font-size: 28px;
+    margin-right: 12px;
+}
+
+.company-text {
+    color: #cbd5e1;
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 0;
+}
+
+.company-text strong {
+    color: #fff;
+}
+
+.highlight-text {
+    color: #4facfe; 
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.company-link {
+    color: #4facfe;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 5px;
+    transition: color 0.2s, text-shadow 0.2s;
+}
+
+.company-link:hover {
+    color: #fff;
+    text-shadow: 0 0 10px #4facfe; 
+}
+
+
+.itv-logo {
+    height: 40px;
+    margin-right: 15px;
+    background-color: #fff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(79, 172, 254, 0.4); 
+    object-fit: contain;
+}
+
+
+@media (max-width: 768px) {
+    .itv-logo {
+        height: 30px;
+        margin-right: 10px;
+    }
+}
+
        html, body {
         margin: 0 !important;
         padding: 0 !important;
@@ -350,7 +805,7 @@
         <section class="catalog">
           <div style="display: flex; justify-content: center; align-items: center; position: relative; margin-bottom: 25px;">
             <div style="text-align: center;">
-              <h4 style="margin: 0; font-size: 1.2rem;">Game Catalog</h4>
+              <h1 style="margin: 0; font-size: 1.2rem;">Game Catalog</h1>
               <div class="note" style="margin: 0;">Click and play.</div>
             </div>
             <div class="note" style="position: absolute; right: 0;">IV Games</div>
@@ -362,7 +817,7 @@
               <div class="media">
                 <img src="icons/tictactoe-logo.webp" loading="lazy" alt="Tic-Tac-Toe" width="160" height="160">
               </div>
-              <div class="title"><h3>Tic‑Tac‑Toe</h3><div class="note">Quick matches</div></div>
+              <div class="title"><h2 style="font-size: 1.17em; margin: 0;">Tic-Tac-Toe</h2><div class="note">Quick matches</div></div>
               <p class="desc">Classic X vs O with optional AI. Fast rounds, smart opponent.</p>
               <div class="cta"> 
                 <a href="tictactoe.html" class="btn-primary" style="text-decoration: none;">Play</a>
@@ -374,7 +829,7 @@
               <div class="media">
                <img src="icons/MiniSudoko-logo.webp" loading="lazy" alt="Mini Sudoku" width="135" height="135">
               </div>
-              <div class="title"><h3>Mini Sudoku</h3><div class="note">4×4 puzzles</div></div>
+              <div class="title"><h2 style="font-size: 1.17em; margin: 0;">Mini Sudoku</h2><div class="note">4×4 puzzles</div></div>
               <p class="desc">Small Sudoku puzzles for quick logic practice. Generate and solve.</p>
               <div class="cta">
                 <a class="btn-primary" href="minisudoku.html">Play</a>
@@ -386,7 +841,7 @@
               <div class="media">
                 <img src="icons/NQueens-logo.webp" loading="lazy" alt="N‑Queens" width="130" height="130">
               </div>
-              <div class="title"><h3>N‑Queens Visualizer</h3><div class="note">Solver & visualizer</div></div>
+              <div class="title"><h2 style="font-size: 1.17em; margin: 0;">N‑Queens Visualizer</h2><div class="note">Solver & visualizer</div></div>
               <p class="desc">Place queens, visualize attacks, or click random solve for solutions.</p>
               <div class="cta">
                 <a class="btn-primary" href="queens.html">Play</a>
@@ -398,7 +853,7 @@
               <div class="media">
                <img src="icons/chess-logo.webp" loading="lazy" alt="Chess" width="140" height="140">
               </div>
-              <div class="title"><h3>Chess</h3><div class="note">Local play</div></div>
+              <div class="title"><h2 style="font-size: 1.17em; margin: 0;">Chess</h2><div class="note">Local play</div></div>
               <p class="desc">Lightweight chess with AI. play with mind </p>
               <div class="cta">
                 <a class="btn-primary" href="chess.html">Play</a>
@@ -410,7 +865,7 @@
               <div class="media">
               <img src="icons/BusRunner-logo.webp" loading="lazy" alt="Ludo" width="140" height="140">
               </div>
-              <div class="title"><h3>Bus Runner</h3><div class="note">Local Play</div></div>
+              <div class="title"><h2 style="font-size: 1.17em; margin: 0;">Bus Runner</h2><div class="note">Local Play</div></div>
               <p class="desc">A fast paced endless runner. Dodge obstacles and set a high score right in your browser.</p>
               <div class="cta">
                 <a class="btn-primary" href="bus_runner.html">Play</a>
@@ -422,7 +877,7 @@
               <div class="media">
                 <img src="icons/ludo-logo.webp" loading="lazy" alt="Bus Runner" width="130" height="130">
               </div>
-              <div class="title"><h3>Ludo</h3><div class="note">Family board</div></div>
+              <div class="title"><h2 style="font-size: 1.17em; margin: 0;">Ludo</h2><div class="note">Family board</div></div>
               <p class="desc">Classic Ludo board — roll dice and race your tokens to the finish. Works offline in the dashboard.</p>
               <div class="cta">
                 <a class="btn-primary" href="ludo.html">Play</a>
