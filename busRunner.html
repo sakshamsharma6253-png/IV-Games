@@ -421,7 +421,7 @@
             antialias: false,
             powerPreference: "high-performance",
             preserveDrawingBuffer: false,
-            precision: "mediumup"
+            precision: "mediump" // FIX 1: Corrected "mediumup" to "mediump"
         });
         renderer.shadowMap.enabled = false;
         updateRendererSize();
@@ -595,7 +595,14 @@
                         warmUpFrames++; 
                         requestAnimationFrame(warmUpLoop);
                     } else {
-                        for (let i = 0; i < obstacles.length; i++) scene.remove(obstacles[i]); 
+                        // Startup cleanup with new recycling rules
+                        for (let i = obstacles.length - 1; i >= 0; i--) {
+                            let obs = obstacles[i];
+                            obs.visible = false;
+                            if (obs.isTrain) gamePools.trains.push(obs);
+                            else if (obs.isRamp || obs.ramp || obs.type === 4) gamePools.ramps.push(obs);
+                            else gamePools.obstacles.push(obs);
+                        }
                         obstacles = [];
                         window.patternSequence = 0;
                         frameCount = 0;
@@ -867,63 +874,103 @@
             }
         }
 
-        function addTrain(laneIndex, zPos, isMoving, hasRamp, isTriggerTrain = false) {
-            let availableTrains = [];
-            if (trainModel) availableTrains.push(trainModel);
-            if (trainModel2) availableTrains.push(trainModel2);
-            if (trainModel3) availableTrains.push(trainModel3);
-            if (availableTrains.length === 0) return;
+       // --- OBJECT POOLING SYSTEM ---
+       const gamePools = { trains: [], obstacles: [], ramps: [] };
 
-            let selectedTrain = availableTrains[Math.floor(Math.random() * availableTrains.length)];
-            const trainGroup = selectedTrain.clone(); 
-            trainGroup.passed = false; trainGroup.type = 1; 
-            trainGroup.isTrain = true; 
-            trainGroup.hasRampAttached = hasRamp;
-            trainGroup.isMovingTrain = isMoving; 
-            trainGroup.hasCollided = false;
-            trainGroup.lastCollisionTime = 0;
-            if (isTriggerTrain) trainGroup.isTriggerTrain = true;
-            trainGroup.zHitbox = selectedTrain.zHitbox ? selectedTrain.zHitbox : 12;
-            trainGroup.position.set(lanes[laneIndex], selectedTrain.baseY, zPos);
-            scene.add(trainGroup);
-             obstacles.push(trainGroup);
+function addTrain(laneIndex, zPos, isMoving, hasRamp, isTriggerTrain = false) {
+    let trainGroup;
 
-            if (hasRamp && customObstacles.length > 0) {
-                let rampTemplate = customObstacles.find(o => o.type === 4 || o.model.isRamp || o.model.ramp);
-                if(rampTemplate) {
-                    const rampGroup = rampTemplate.model.clone(); 
-                    rampGroup.passed = false; 
-                    rampGroup.isRamp = true; 
-                    rampGroup.ramp = true; rampGroup.type = 4;
-                    let baseOffset = selectedTrain.rampOffset ? selectedTrain.rampOffset : 13.5;
-                    let gap = baseOffset + 0.1; 
-                    rampGroup.position.set(lanes[laneIndex], rampTemplate.yPos, zPos + gap);
-                    scene.add(rampGroup); 
-                    obstacles.push(rampGroup);
-                }
+    if (gamePools.trains.length > 0) {
+        trainGroup = gamePools.trains.pop();
+        trainGroup.visible = true;
+    } else {
+        let availableTrains = [];
+        if (trainModel) availableTrains.push(trainModel);
+        if (trainModel2) availableTrains.push(trainModel2);
+        if (trainModel3) availableTrains.push(trainModel3);
+        if (availableTrains.length === 0) return;
+
+        let selectedTrain = availableTrains[Math.floor(Math.random() * availableTrains.length)];
+        trainGroup = selectedTrain.clone();
+
+        trainGroup.baseY = selectedTrain.baseY;
+        trainGroup.zHitbox = selectedTrain.zHitbox ? selectedTrain.zHitbox : 12;
+        trainGroup.rampOffset = selectedTrain.rampOffset ? selectedTrain.rampOffset : 13.5;
+        scene.add(trainGroup);
+    }
+
+    trainGroup.passed = false;
+    trainGroup.type = 1;
+    trainGroup.isTrain = true;
+    trainGroup.hasRampAttached = hasRamp;
+    trainGroup.isMovingTrain = isMoving;
+    trainGroup.hasCollided = false;
+    trainGroup.lastCollisionTime = 0;
+    trainGroup.isTriggerTrain = isTriggerTrain || false;
+
+    trainGroup.position.set(lanes[laneIndex], trainGroup.baseY, zPos);
+    obstacles.push(trainGroup);
+
+
+    if (hasRamp && customObstacles.length > 0) {
+        let rampGroup;
+        if (gamePools.ramps.length > 0) {
+            rampGroup = gamePools.ramps.pop();
+            rampGroup.visible = true;
+        } else {
+            let rampTemplate = customObstacles.find(o => o.type === 4 || o.model.isRamp || o.model.ramp);
+            if (rampTemplate) {
+                rampGroup = rampTemplate.model.clone();
+                rampGroup.yPos = rampTemplate.yPos;
+                scene.add(rampGroup);
             }
         }
 
-        function addObstacle (laneIndex, zPos) {
-            let validObstacles = customObstacles.filter(o => o.type !== 4);
-            if (validObstacles.length === 0) return;
-            let selectedItem = validObstacles[Math.floor(Math.random() * validObstacles.length)];
-            const obsGroup = selectedItem.model.clone(); 
-            obsGroup.passed = false; 
-            obsGroup.type = selectedItem.type;
-            obsGroup.hasCollided = false;
-            obsGroup.lastCollisionTime = 0;
-
-            if (selectedItem.type === 5) {
-                let gaps = [-1.75, 1.75]; 
-                let randomGap = gaps[Math.floor(Math.random() * gaps.length)];
-                obsGroup.position.set(randomGap, selectedItem.yPos, zPos);
-            } else { obsGroup.position.set(lanes[laneIndex], selectedItem.yPos, zPos); 
-
-            }
-            scene.add(obsGroup); 
-            obstacles.push(obsGroup);    
+        if (rampGroup) {
+            rampGroup.passed = false;
+            rampGroup.isRamp = true;
+            rampGroup.ramp = true;
+            rampGroup.type = 4;
+            rampGroup.hasCollided = false;
+            rampGroup.lastCollisionTime = 0;
+            let gap = trainGroup.rampOffset + 0.1;
+            rampGroup.position.set(lanes[laneIndex], rampGroup.yPos, zPos + gap);
+            obstacles.push(rampGroup);
         }
+    }
+}
+
+function addObstacle(laneIndex, zPos) {
+    let obsGroup;
+
+    if (gamePools.obstacles.length > 0) {
+        obsGroup = gamePools.obstacles.pop();
+        obsGroup.visible = true;
+    } else {
+        let validObstacles = customObstacles.filter(o => o.type !== 4);
+        if (validObstacles.length === 0) return;
+        let selectedItem = validObstacles[Math.floor(Math.random() * validObstacles.length)];
+
+        obsGroup = selectedItem.model.clone();
+        obsGroup.type = selectedItem.type;
+        obsGroup.yPos = selectedItem.yPos;
+        scene.add(obsGroup);
+    }
+
+    obsGroup.passed = false;
+    obsGroup.hasCollided = false;
+    obsGroup.lastCollisionTime = 0;
+
+    if (obsGroup.type === 5) {
+        let gaps = [-1.75, 1.75];
+        let randomGap = gaps[Math.floor(Math.random() * gaps.length)];
+        obsGroup.position.set(randomGap, obsGroup.yPos, zPos);
+    } else {
+        obsGroup.position.set(lanes[laneIndex], obsGroup.yPos, zPos);
+    }
+
+    obstacles.push(obsGroup);
+}
 
         function spawnObstacle(customZ) {
             if (!trainModel && !trainModel2 && customObstacles.length === 0) return; 
@@ -1332,8 +1379,13 @@
                     updateGameplaySpeed();
                 }
 
+                // FIX 2: Recycle objects instead of destroying them in Animate loop
                 if(obs.position.z > 15 || obs.isDestroyed) { 
-                    scene.remove(obs); obstacles.splice(i, 1); 
+                    obs.visible = false;
+                    if (obs.isTrain) gamePools.trains.push(obs);
+                    else if (obs.isRamp || obs.ramp || obs.type === 4) gamePools.ramps.push(obs);
+                    else gamePools.obstacles.push(obs);
+                    obstacles.splice(i, 1); 
                 }
             } 
 
@@ -1390,10 +1442,14 @@
             document.getElementById('gameOverScreen').style.display = 'none';
             document.getElementById('pauseScreen').style.display = 'none';
 
+            // FIX 3: Recycle objects instead of destroying them in Reset
             for (let i = obstacles.length - 1; i >= 0; i--) {
                 const obs = obstacles[i];
                 if (obs) {
-                    scene.remove(obs);
+                    obs.visible = false;
+                    if (obs.isTrain) gamePools.trains.push(obs);
+                    else if (obs.isRamp || obs.ramp || obs.type === 4) gamePools.ramps.push(obs);
+                    else gamePools.obstacles.push(obs);
                 }
             }
             obstacles = [];
@@ -1489,10 +1545,15 @@
             panel.innerHTML = "<h2> Playing Ad...</h2><p style='color:#fff; font-size:18px;'>Please wait...</p>";
 
             setTimeout(() => {
+                // FIX 4: Recycle objects instead of destroying them when watching Ad
                 for (let i = obstacles.length -1; i >= 0; i--) {
                     let obs = obstacles[i];
                     if (obs.position.z > -80 && obs.position.z < 20) { 
-                        scene.remove(obs); obstacles.splice(i, 1); 
+                        obs.visible = false;
+                        if (obs.isTrain) gamePools.trains.push(obs);
+                        else if (obs.isRamp || obs.ramp || obs.type === 4) gamePools.ramps.push(obs);
+                        else gamePools.obstacles.push(obs);
+                        obstacles.splice(i, 1); 
                     }
                 }
                 
@@ -1582,8 +1643,6 @@
            isGameLoaded = false; 
            isPaused = false;
        }
-
-
 
        requestAnimationFrame(animate); 
     </script>
