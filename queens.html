@@ -1,9 +1,24 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>N-Queens Pro Puzzle</title>
+<title>N-Queens Visualizer & Puzzle Game | ITVoice Games</title>
+<meta name="description" content="Solve the classic N-Queens puzzle at ITVoice Games. Place queens strategically on the board or use our algorithm visualizer to find solutions automatically.">
+<link rel="canonical" href="https://itvoicegames.com/queens.html">
+<link rel="icon" type="image/webp" href="favicon/favicon-queens.webp">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Informatic Computech Private Limited">
+<meta name="theme-color" content="#0a0a0a">
+
+<meta property="og:title" content="N-Queens Visualizer & Puzzle Game | ITVoice Games">
+<meta property="og:description" content="Solve the classic N-Queens puzzle or use our algorithm visualizer to find solutions automatically.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://itvoicegames.com/queens.html">
+<meta property="og:image" content="https://itvoicegames.com/assets/queens-logo.jpg">
+<meta property="og:site_name" content="ITVoice Games">
+<meta property="og:locale" content="en_US">
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
@@ -81,7 +96,7 @@
     border-radius: 8px; border-left: 4px solid #18a37b; font-weight: 600;
   }
 
-  /* --- Fixed Board Container --- */
+  
   .board-container {
     position: relative; 
     width: 100%;
@@ -117,7 +132,7 @@
     container-type: inline-size; 
   }
   
-  /* Themes */
+  
   .theme-classic { background: #111; border: 2px solid #2a2a2a; }
   .theme-classic .cell.light { background: #e8ecef; color: #111; } 
   .theme-classic .cell.dark { background: #2b2d30; color: #f0f0f0; }
@@ -126,7 +141,7 @@
   .theme-wooden .cell.light { background: #eedcb5; color: #111; }
   .theme-wooden .cell.dark { background: #b88b5e; color: #111; }
   
-  /* Fixed Cell Logic */
+ 
   .cell {
     display: flex; align-items: center; justify-content: center; user-select: none;
     cursor: pointer; transition: background 0.2s, transform 0.1s; aspect-ratio: 1/1;
@@ -137,7 +152,7 @@
   .cell:hover { opacity: 0.85; }
   .cell.conflict { background-color: #ff4d4d !important; box-shadow: inset 0 0 15px rgba(200, 0, 0, 0.8); animation: shake 0.3s; color: #fff !important; }
   
-  /* Fixed Queen Resizing */
+ 
   .queen { 
     animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
@@ -164,10 +179,11 @@
 </style>
 </head>
 <body>
+
 <div id="wrap">
   <div class="top-bar">
     <h2>N‑Queens Pro Puzzle</h2>
-    <a href="dashboard.html" class="btn-back">← Back to Dashboard</a>
+    <a href="index.html" class="btn-back">← Back to Dashboard</a>
   </div>
   
   <div class="queens-layout">
@@ -368,9 +384,7 @@
   document.getElementById('play-again-btn').addEventListener('click', initBoard);
   document.getElementById('close-overlay-btn').addEventListener('click', hideOverlay);
   
-  // Watch Ad Button Event Listener
   document.getElementById('watchAd').addEventListener('click', () => {
-    // Jab domain set ho jaye, yahan ad trigger function lagayein
     alert('Video Ad will play here! (Integration pending after domain setup)');
   });
 

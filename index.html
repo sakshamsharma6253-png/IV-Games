@@ -1,132 +1,972 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>IV Games — Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>ITVoice Games | Play Free Online Browser Games</title>
+    <link rel="icon" type="image/webp" href="favicon/favicon.webp">
+    <meta name="description" content="Welcome to ITVoice Games! Play the best free online web games like King of Ludo, Chess, Sudoku, and more directly in your browser.">
+    <link rel="canonical" href="https://itvoicegames.com/">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Informatic Computech Private Limited">
+    <meta name="theme-color" content="#0a0a0a">
+    
+    <meta property="og:title" content="ITVoice Games | Play Free Online Browser Games">
+    <meta property="og:description" content="Play free online browser games including Chess, Ludo, Bus Runner, Tic-Tac-Toe, Mini Sudoku and N-Queens.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://itvoicegames.com/">
+    <meta property="og:image" content="https://itvoicegames.com/assets/og-image.jpg">
+    <meta property="og:site_name" content="ITVoice Games">
+    <meta property="og:locale" content="en_US">
+   
+    <link rel="preload" as="image" href="icons/ivgames-logo.webp">
+    
+    <style>
+
+      
+:root{
+  --bg:#071018;
+  --panel:#0d1f20;
+  --card:#081915;
+  --accent:#26f6b0; 
+  --accent-2:#7b5cff;
+  --muted:#8da3a0;
+  --glow:0 8px 30px rgba(38,246,176,0.08);
+}
+html,body{
+  height:100vh;
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  color:#e6f0ef;
+
+ background: linear-gradient(rgba(4, 16, 20, 0.85), rgba(7, 16, 24, 0.95)),
+ url('image/bg.webp') no-repeat center center fixed;
+ background-size: cover;
+
+}
+
+.wrap{
+  max-width:1000px; 
+  height: 100vh;
+  margin: 0 auto;
+  padding: 30px 20px 15px 20px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
+}
+.brand{
+  display:flex;
+  flex-direction:column
+}
+
+.brand h1{
+  margin:0;
+  font-size:20px
+}
+
+.brand p{
+  margin:2px 0 0 0;
+  color:var(--muted);
+  font-size:13px
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr; 
+  gap:18px;
+  margin-top:18px
+}
+
+.catalog{
+
+  background:var(--panel);
+  padding:20px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.03)
+}
+.side{
+  background:var(--panel);
+  padding:18px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.03)
+}
+
+.cards{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .card .title h3 {
+    font-size: 16px;
+  }
+
+  .card .desc {
+    font-size: 12px;
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card .cta .c {
+    padding: 8px 12px;
+    font-size: 14px;
+    text-align: center;
+  }
+}
+  
+.card{
+  background:linear-gradient(180deg,var(--card),#04221a);
+  border-radius:12px;
+  padding: 16px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  transition:transform 200ms ease, box-shadow 200ms ease;
+  border:1px solid rgba(255,255,255,0.03);
+  text-decoration:none;
+  color:inherit
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  box-shadow:var(--glow);
+  outline:1px solid rgba(38,246,176,0.12)
+}
+
+.media{
+  height:100px; 
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(90deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+}
+
+.media img.card-photo{
+  width:90%;
+  height:90px;
+  object-fit:contain;
+}
+
+.title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px
+}
+
+.title h3{
+  margin:0;
+  font-size:16px
+}
+
+.desc{
+  color:var(--muted);
+  font-size:13px;
+  margin:0
+}
+
+.cta{
+  margin-top:auto;
+  display:flex;
+  gap:10px
+}
+
+.btn-primary{
+  flex:1;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  color:#031815;
+  padding:10px 12px;
+  border-radius:10px;
+  border: 1px solid var(--accent);
+  font-weight:700;
+  text-align:center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.95;
+  box-shadow: 0 0 15px rgba(38, 246, 176, 0.4);
+}
+
+.btn-primary:active {
+  transform: scale(0.92);
+  opacity: 0.8; 
+}
+
+.btn-ghost{
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid var(--accent);
+  color:var(--accent);
+  background:transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn-ghost:hover {
+  background: rgba(38, 246, 176, 0.15);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(38, 246, 176, 0.2);
+}
+
+.btn-ghost:active {
+  transform: scale(0.92);
+  background: rgba(38, 246, 176, 0.25);
+}
+
+
+.icon{
+  width: 200px;
+  height: 100px;
+}
+
+
+img.icon[alt="Ludo"] {
+  width:96px;
+  height:96px
+}
+
+.side h4{
+  margin:0 0 8px 0
+}
+
+.note{
+  color:var(--muted);font-size:13px
+}
+
+footer{
+  margin-top: auto;
+  color:var(--muted);
+  font-size:13px;
+  text-align:center
+}
+
+@media(max-width:980px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .catalog{
+    grid-column:auto
+  }
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:600px){
+  .cards{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  img.icon[alt="Ludo"]{width:80px;height:80px}
+}
+.media svg.icon {
+    width: 120%;
+    height: 120%;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+    background-color: #121212;
+    margin: 15% auto;
+    padding: 20px;
+    width: 300px;
+    border-radius: 10px;
+    border: 1px solid #4ade80;
+    color: black;
+}
+
+.tutorial-btn {
+    background: linear-gradient(to bottom, #334155, #1e293b);
+    color: #cbd5e1;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 
+        0 6px 0 #0f172a,
+       0 10px 15px rgba(0, 0, 0, 0.4);
+       transition: all 0.1s ease;      
+}
+.tutorial-btn:active {
+    transform: translateY(6px);
+    box-shadow: 
+        0 0 0 #0f172a, 
+        0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+
+img.icon[alt="Tic-Tac-Toe"] {
+  height: auto;
+}
+
+
+img.icon[alt="Mini Sudoku"] {
+ 
+  height: auto;
+}
+
+
+img.icon[alt="N Queens"] {
+  height: auto;
+}
+
+
+img.icon[alt="Chess "] {
+  height: auto;
+}
+
+
+img.icon[alt="Bus Runner"] {
+ 
+  height: auto;
+}
+
+
+img.icon[alt="Ludo"] {
+  
+  height: auto;
+}
+
+.company-showcase {
+    background: linear-gradient(135deg, rgba(30, 60, 114, 0.4) 0%, rgba(42, 82, 152, 0.4) 100%); /* Neon blue gradient tint */
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(79, 172, 254, 0.3);
+    margin-top: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+.features-showcase {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 20px;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px 20px;
+}
+
+.feature-list li {
+    background: rgba(0, 0, 0, 0.3); 
+    color: #cbd5e1;
+    font-size: 16px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    border-left: 3px solid #2ecc71; 
+    transition: transform 0.2s, background 0.2s;
+}
+
+.feature-list li:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px); 
+}
+
+.feature-list .check-icon {
+    font-size: 20px;
+    margin-right: 12px;
+}
+
+
+@media (max-width: 768px) {
+    .feature-list {
+        grid-template-columns: 1fr; 
+    }
+}
+
+.company-showcase {
+    background: linear-gradient(135deg, rgba(30, 60, 114, 0.4) 0%, rgba(42, 82, 152, 0.4) 100%);
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid rgba(79, 172, 254, 0.3); 
+    margin-top: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.company-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.company-icon {
+    font-size: 28px;
+    margin-right: 12px;
+}
+
+.company-text {
+    color: #cbd5e1;
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 0;
+}
+
+.company-text strong {
+    color: #fff;
+}
+
+.highlight-text {
+    color: #4facfe; 
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.company-link {
+    color: #4facfe;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 5px;
+    transition: color 0.2s, text-shadow 0.2s;
+}
+
+.company-link:hover {
+    color: #fff;
+    text-shadow: 0 0 10px #4facfe; 
+}
+
+
+.itv-logo {
+    height: 40px;
+    margin-right: 15px;
+    background-color: #fff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(79, 172, 254, 0.4); 
+    object-fit: contain;
+}
+
+
+@media (max-width: 768px) {
+    .itv-logo {
+        height: 30px;
+        margin-right: 10px;
+    }
+}
+
+       html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100%;
+        background-color: #0f172a; 
+      }
+
+      body {
+        color: #cbd5e1;
+        font-family: sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #0f172a;
+      }
+      
+      .wrap {
+        max-width: 1000px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px 20px 0 20px !important; 
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; 
+        box-sizing: border-box;
+      }
+
+      
+      .main-footer {
+        margin-top: auto; 
+        margin-bottom: 0 !important;
+        padding: 30px 20px 20px 20px;
+        width: 100%;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.3) 100%);
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 16px 16px 0 0; 
+        text-align: center;
+        backdrop-filter: blur(8px); 
+        -webkit-backdrop-filter: blur(8px);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15); 
+        box-sizing: border-box;
+      }
+
+      .footer-nav {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; 
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .copyright-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        color: #888;
+        font-size: 13px;
+        margin-top: 25px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center; 
+      }
+
+      .iv-logo {
+        display: block;
+        width: 100%;
+        max-width: 200px; 
+        height: auto;
+        object-fit: contain;
+      }
+
+      .tc-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(5px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9998; 
+      }
+      .tc-modal {
+        background: #0f172a;
+        padding: 30px;
+        border-radius: 12px;
+        border: 1px solid rgba(79, 172, 254, 0.5);
+        text-align: center;
+        max-width: 400px;
+        width: 90%;
+        box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+      }
+      .tc-modal h2 {
+        color: #fff;
+        margin-top: 0;
+        font-size: 24px;
+      }
+      .tc-modal p {
+        color: #cbd5e1;
+        font-size: 15px;
+        margin-bottom: 25px;
+        line-height: 1.5;
+      }
+      .tc-btn {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: #000;
+        border: none;
+        padding: 12px 25px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        width: 100%;
+      }
+      .tc-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+      }
+
+      .cookie-banner-premium {
+        position: fixed;
+        bottom: -150px; 
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 700px;
+        background: rgba(15, 23, 42, 0.85); 
+        backdrop-filter: blur(12px); 
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(79, 172, 254, 0.4); 
+        box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(79, 172, 254, 0.2);
+        border-radius: 12px;
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        z-index: 9999; 
+        transition: bottom 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      }
+
+      .cookie-banner-premium.show {
+        bottom: 20px; 
+      }
+
+      .cookie-content p {
+        margin: 0;
+        color: #cbd5e1;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .cookie-content a {
+        color: #4facfe;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .cookie-buttons {
+        display: flex;
+        gap: 10px;
+      }
+      .btn-accept {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: #0f172a;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+      }
+      .btn-accept:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+      }
+      .btn-reject {
+        background: transparent;
+        color: #e74c3c;
+        border: 1px solid #e74c3c;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+      }
+      .btn-reject:hover {
+        background: rgba(231, 76, 60, 0.1);
+      }
+
+      @media (max-width: 767px) {
+        header {
+          flex-direction: column !important; 
+          justify-content: center !important;
+          text-align: center;
+        }
+        .nav-buttons {
+          justify-content: center;
+          margin-top: 5px;
+        }
+        .nav-buttons .btn-ghost {
+          font-size: 13px; 
+          padding: 6px 12px;
+        }
+        
+        .footer-nav {
+          display: grid !important; 
+          grid-template-columns: repeat(3, 1fr); 
+          gap: 15px 5px;
+          padding: 0 5px;
+        }
+        .footer-nav a {
+          font-size: 11.5px !important; 
+          text-align: center; 
+          white-space: normal; 
+          line-height: 1.4;
+        }
+
+        .copyright-text {
+          flex-direction: column; 
+          gap: 10px;
+        }
+        .copyright-divider {
+          display: none; 
+        }
+        
+        .cookie-banner-premium {
+          flex-direction: column;
+          text-align: center;
+          padding: 15px;
+        }
+        .cookie-buttons {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      .card .media {
+        height: 140px !important;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 15px; 
+      }
+      
+      .card .media .icon {
+        max-width: 100% !important;
+        height: 100% !important; 
+        max-height: 120px !important; 
+        object-fit: contain !important; 
+        display: block;
+      }
+
+       @media (min-width: 768px) and (max-width: 1024px) {
+
+        .nav-buttons {
+          justify-content: center;
+        }
+        .nav-buttons .btn-ghost {
+          font-size: 13px; 
+          padding: 6px 12px;
+        }
+
+          .main-footer {
+            margin-top: auto !important;
+            flex-shrink: 0 !important;
+            width: 120% !important;
+            margin-left: -60px;
+            position: relative !important;
+            bottom: 20px !important;
+          }
+        }
+
+
+        @media screen and (min-width: 1024px) and (max-width: 1366px) and (min-height: 750px) {
+          .main-footer {
+                margin-top: auto !important;
+                flex-shrink: 0 !important;
+                width: 120% !important;
+                margin-left: -90px;
+                position: relative !important;
+                bottom: 0px !important;
+            }
+          }
+
+            @media screen and (min-width: 900px) and (max-width: 1023px) {
+               .main-footer {
+                margin-top: auto !important;
+                flex-shrink: 0 !important;
+                width: 100% !important;
+                position: relative !important;
+                bottom: 40px !important;
+            }
+          }
+
+    </style>
   </head>
   <body>
+
+    <div id="tc-popup" class="tc-overlay">
+      <div class="tc-modal">
+        <h2>Welcome to IV Games!</h2>
+        <p>Before you start playing, please read and accept our <a href="terms.html" target="_blank" style="color: #4facfe; text-decoration: none;">Terms & Conditions</a> and <a href="privacy_policy.html" target="_blank" style="color: #4facfe; text-decoration: none;">Privacy Policy</a>.</p>
+        <button id="accept-tc-btn" class="tc-btn">I Accept & Continue</button>
+      </div>
+    </div>
+
+    <div id="cookieConsentBanner" class="cookie-banner-premium">
+      <div class="cookie-content">
+        <p>We use cookies to improve your experience and analyze website traffic. Read our <a href="cookie_policy.html" target="_blank">Cookie Policy</a>.</p>
+      </div>
+      <div class="cookie-buttons">
+        <button id="acceptCookiesBtn" class="btn-accept">Accept</button>
+        <button id="rejectCookiesBtn" class="btn-reject">Reject All</button>
+      </div>
+    </div>
+
     <div class="wrap">
-      <header>
-        <div class="brand">
-          <h1>IV Games</h1>
-          <p>Small, focused games — one dashboard.</p>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <a class="btn-ghost" href="about.html">About</a>
-          <a class="btn-ghost" href="docs.html">Docs</a>
+      
+      <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding-top: 10px; padding-bottom: 25px; width: 100%; margin-bottom: 30px; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.3);">
+        <div style="display: flex; align-items: center; transform: translateY(-3px);">
+          <img src="icons/ivgames-logo.webp" alt="IV Games" width="184" height="46" style="max-height: 46px; display: block; margin-bottom: 10px; padding: 0;">
+        </div> 
+        
+        <div class="nav-buttons" style="display: flex; align-items: center; gap: 12px; margin-bottom: -10px; flex-wrap: wrap;">
+          <a class="btn-ghost" href="https://www.itvoice.in/" target="_blank">Visit Website <span class="arrow" style="font-size: 16px;">&#x2197;</span></a>
+          <a class="btn-ghost" href="contact.html" style="margin: 0;">Contact Us</a>
         </div>
       </header>
 
       <div class="grid">
         <section class="catalog">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-            <div>
-              <h4 style="margin:0">Game Catalog</h4>
-              <div class="note">Click a card to open the game.</div>
+          <div style="display: flex; justify-content: center; align-items: center; position: relative; margin-bottom: 25px;">
+            <div style="text-align: center;">
+              <h1 style="margin: 0; font-size: 1.2rem;">Game Catalog</h1>
+              <div class="note" style="margin: 0;">Click and play.</div>
             </div>
-            <div class="note"> IV Games • Responsive • Dark Neon Dashboard • Play Offline</div>
+            <div class="note" style="position: absolute; right: 0;">IV Games</div>
           </div>
 
           <div class="cards">
             
             <div class="card" data-href="tictactoe.html">
               <div class="media">
-                <img class="icon" src="icons/tictactoe-logo.png" alt="Tic-Tac-Toe" />
+                <img src="icons/tictactoe-logo.webp" fetchpriority="high" alt="Tic-Tac-Toe" width="160" height="160">
               </div>
-              <div class="title"><h3>Tic‑Tac‑Toe</h3><div class="note">Quick matches</div></div>
+              <div class="title"><h2 style="font-size: 1.17em; margin: 0;">Tic-Tac-Toe</h2><div class="note">Quick matches</div></div>
               <p class="desc">Classic X vs O with optional AI. Fast rounds, smart opponent.</p>
               <div class="cta"> 
                 <a href="tictactoe.html" class="btn-primary" style="text-decoration: none;">Play</a>
-                <a href="tictactoe_tutorial.html" class="btn-ghost">Tutorial</a>
+                <a href="tutorial/tictactoe_tutorial.html" class="btn-ghost">Tutorial</a>
               </div>
             </div>
 
             <div class="card" data-href="minisudoku.html">
               <div class="media">
-                <img class="icon" src="icons/MiniSuduko.logo.png" alt="Mini Sudoku" />
+               <img src="icons/MiniSudoko-logo.webp" loading="lazy" alt="Mini Sudoku" width="135" height="135">
               </div>
-              <div class="title"><h3>Mini Sudoku</h3><div class="note">4×4 puzzles</div></div>
-              <p class="desc">Small Sudoku puzzles for quick logic practice. Generate and solve.</p>
+              <div class="title"><h2 style="font-size: 1.17em; margin: 0;">Sudoku</h2><div class="note">4×4, 6×6, 9×9</div></div>
+              <p class="desc">Play classic Sudoku grids of various sizes. Train your brain, generate and solve.</p>
               <div class="cta">
                 <a class="btn-primary" href="minisudoku.html">Play</a>
-                <a class="btn-ghost" href="minisudoku_tutorial.html">Tutorial</a>
+                <a class="btn-ghost" href="tutorial/minisudoku_tutorial.html">Tutorial</a>
               </div>
             </div>
 
             <div class="card" data-href="queens.html">
               <div class="media">
-                <img class="icon" src="icons/NQueens-logo.png" alt="N Queens" />
+                <img src="icons/NQueens-logo.webp" loading="lazy" alt="N‑Queens" width="130" height="130">
               </div>
-              <div class="title"><h3>N‑Queens Visualizer</h3><div class="note">Solver & visualizer</div></div>
-              <p class="desc">Place queens, visualize attacks, or let the AI find solutions automatically.</p>
+              <div class="title"><h2 style="font-size: 1.17em; margin: 0;">N‑Queens Visualizer</h2><div class="note">Solver & visualizer</div></div>
+              <p class="desc">Place queens, visualize attacks, or click random solve for solutions.</p>
               <div class="cta">
                 <a class="btn-primary" href="queens.html">Play</a>
-                <a class="btn-ghost" href="queens_tutorial.html">Tutorial</a>
+                <a class="btn-ghost" href="tutorial/queens_tutorial.html">Tutorial</a>
               </div>
             </div>
 
-            <div class="card" data-href="/chess.html">
+            <div class="card" data-href="chess.html">
               <div class="media">
-                <img class="icon" src="icons/chess-logo.png" alt="Chess " />
+               <img src="icons/chess-logo.webp" loading="lazy" alt="Chess" width="140" height="140">
               </div>
-              <div class="title"><h3>Chess</h3><div class="note">Local play</div></div>
+              <div class="title"><h2 style="font-size: 1.17em; margin: 0;">Chess</h2><div class="note">Local play</div></div>
               <p class="desc">Lightweight chess with AI. play with mind </p>
               <div class="cta">
                 <a class="btn-primary" href="chess.html">Play</a>
-                <a class="btn-ghost" href="chess_tutorial.html">Tutorial</a>
+                <a class="btn-ghost" href="tutorial/chess_tutorial.html">Tutorial</a>
               </div>
             </div>
 
-            <div class="card" data-href="bus_runner.html">
+            <div class="card" data-href="busRunner.html">
               <div class="media">
-                 <img class="icon" src="icons/BusRunner-logo.png" alt="Bus Runner" />
+              <img src="icons/BusRunner-logo.webp" loading="lazy" alt="Bus-Runner" width="140" height="140">
               </div>
-              <div class="title"><h3>3D Bus Runner</h3><div class="note">Local Play</div></div>
+              <div class="title"><h2 style="font-size: 1.17em; margin: 0;">Bus Runner</h2><div class="note">Local Play</div></div>
               <p class="desc">A fast paced endless runner. Dodge obstacles and set a high score right in your browser.</p>
               <div class="cta">
-                <a class="btn-primary" href="3D bus_runner.html">Play</a>
-                <a class="btn-ghost" href="bus_runner_tutorial.html">Tutorial</a>
+                <a class="btn-primary" href="busRunner.html">Play</a>
+                <a class="btn-ghost" href="tutorial/bus_runner_tutorial.html">Tutorial</a>
               </div>
             </div>
             
             <div class="card" data-href="ludo.html">
               <div class="media">
-                <img class="icon" src="icons/ludo-logo.png" alt="Ludo" />
+                <img src="icons/ludo-logo.webp" loading="lazy" alt="Ludo" width="140" height="140">
               </div>
-              <div class="title"><h3>Ludo</h3><div class="note">Family board</div></div>
-              <p class="desc">Classic Ludo board — roll dice and race your tokens to the finish. Works offline in the dashboard.</p>
+              <div class="title"><h2 style="font-size: 1.17em; margin: 0;">Ludo</h2><div class="note">Family board</div></div>
+             <p class="desc">Your favorite Classic Ludo, now with a seamless tap-to-play UI. Race your tokens to the finish line.</p>
               <div class="cta">
                 <a class="btn-primary" href="ludo.html">Play</a>
-                <a class="btn-ghost" href="ludo_tutorial.html">Tutorial</a>
+                <a class="btn-ghost" href="tutorial/ludo_tutorial.html">Tutorial</a>
               </div>
             </div>
-           
+            
           </div>
         </section>
       </div>
+      
+      <footer class="main-footer">
+        <div class="footer-nav">
+          <a href="about.html" style="color: #888; text-decoration: none; font-size: 14px;">About Us</a>
+         <a href="contact.html" style="color: #888; text-decoration: none; font-size: 14px;">Contact Us</a>
+          <a href="privacy_policy.html" style="color: #888; text-decoration: none; font-size: 14px;">Privacy Policy</a>
+          <a href="terms.html" style="color: #888; text-decoration: none; font-size: 14px;">Terms & Conditions</a>
+          <a href="disclaimer.html" style="color: #888; text-decoration: none; font-size: 14px;">Disclaimer</a>
+          <a href="cookie_policy.html" style="color: #888; text-decoration: none; font-size: 14px;">Cookie Policy</a>
+        </div>
+        
+        <div class="copyright-text">
+          <span>&copy; 2026 IV Games. All rights reserved.</span>
+          <span class="copyright-divider">|</span>
+          <span>Designed and Developed by <a href="https://icpljpr.com/" target="_blank" style="color: #4facfe; text-decoration: none; font-weight: bold; transition: 0.3s;" onmouseover="this.style.textShadow='0 0 8px rgba(79, 172, 254, 0.8)'" onmouseout="this.style.textShadow='none'">ICPL</a></span>
+        </div>
+      </footer>
+
     </div>
 
     <script>
-      function openModal(id){
-        const m = document.getElementById(id);
-        if(!m) return;
-        m.style.display = 'block';
-        m.setAttribute('aria-hidden','false');
-      }
-      function closeModal(id){
-        const m = document.getElementById(id);
-        if(!m) return;
-        m.style.display = 'none';
-        m.setAttribute('aria-hidden','true');
-      }
-      window.addEventListener('click', (e)=>{
-        if(e.target.classList && e.target.classList.contains('modal')){
-          e.target.style.display='none';
-          e.target.setAttribute('aria-hidden','true');
+      document.addEventListener("DOMContentLoaded", function() {
+        
+        const tcPopup = document.getElementById("tc-popup");
+        const acceptTcBtn = document.getElementById("accept-tc-btn");
+
+        if (!localStorage.getItem("ivGamesTermsAccepted")) {
+          tcPopup.style.display = "flex"; 
         }
+
+        acceptTcBtn.addEventListener("click", function() {
+          localStorage.setItem("ivGamesTermsAccepted", "true"); 
+          tcPopup.style.display = "none"; 
+          
+          checkAndShowCookieBanner();
+        });
+
+        const cookieBanner = document.getElementById("cookieConsentBanner");
+        const acceptCookiesBtn = document.getElementById("acceptCookiesBtn");
+        const rejectCookiesBtn = document.getElementById("rejectCookiesBtn");
+
+        function checkAndShowCookieBanner() {
+          if (!localStorage.getItem("ivGamesCookieConsent")) {
+            setTimeout(() => {
+              cookieBanner.classList.add("show");
+            }, 1000); 
+          }
+        }
+
+        if (localStorage.getItem("ivGamesTermsAccepted")) {
+           checkAndShowCookieBanner();
+        }
+
+        acceptCookiesBtn.addEventListener("click", function() {
+          localStorage.setItem("ivGamesCookieConsent", "accepted");
+          cookieBanner.classList.remove("show");
+        });
+
+        rejectCookiesBtn.addEventListener("click", function() {
+          localStorage.setItem("ivGamesCookieConsent", "rejected");
+          cookieBanner.classList.remove("show");
+        });
+
       });
+
+      document.addEventListener('contextmenu', event => event.preventDefault());
     </script>
   </body>
 </html>
