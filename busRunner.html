@@ -395,7 +395,8 @@
 
         const fogColor = 0x87CEEB; 
         scene.background = new THREE.Color(fogColor); 
-        scene.fog = new THREE.FogExp2(fogColor, 0.006);
+        let isMobileDevice = window.innerWidth <= 768;
+        scene.fog = new THREE.FogExp2(fogColor, isMobileDevice ? 0.006 : 0.002);
 
         function getViewportSize() {
             const width = window.visualViewport?.width || window.innerWidth || document.documentElement.clientWidth || 1;
@@ -403,10 +404,11 @@
             return { width, height };
         }
 
-        function updateRendererSize() {
+      function updateRendererSize() {
             const { width, height } = getViewportSize();
             const isMobile = window.matchMedia('(max-width: 768px)').matches;
-            const maxRatio = isMobile ? 1.0 : 1.5;
+            const maxRatio = isMobile ? 0.8 : 1.5; 
+            
             const pixelRatio = Math.min(window.devicePixelRatio || 1, maxRatio);
             camera.aspect = width / height;
             camera.fov = Math.min(78, Math.max(58, isMobile ? 72 : 60));
@@ -417,7 +419,7 @@
             renderer.domElement.style.height = '100%';
         }
 
-       const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
+     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, isMobileDevice ? 150 : 400)
         const renderer = new THREE.WebGLRenderer({ 
             antialias: false,
             powerPreference: "high-performance",
@@ -637,9 +639,9 @@
             function OptimizeModel(model) {
                 model.traverse((child) => {
                     if (child.isMesh) {
-                        if (child.material && child.material.isMeshStandardMaterial) {
+                        if (child.material) {
                             const oldMat = child.material;
-                            child.material = new THREE.MeshLambertMaterial ({
+                            child.material = new THREE.MeshBasicMaterial({
                                 color: oldMat.color,
                                 map: oldMat.map,
                                 transparent: oldMat.transparent,
@@ -653,6 +655,7 @@
                 return model;
             }
 
+          
             const loader = new THREE.GLTFLoader(manager);
             const dracoLoader = new THREE.DRACOLoader();
             dracoLoader.setDecoderPath('draco/');
