@@ -492,9 +492,10 @@
         let isPaused = false; 
         let isGameLoaded = false; 
         let obstacles = []; 
-        let baseSpeed = 0.09; 
+        let isMobileScreen = window.innerWidth <= 768; 
+        let baseSpeed = isMobileScreen ? 0.13 : 0.09; 
         let obstacleSpeed = baseSpeed; 
-        const maxSpeed = 0.175; 
+        const maxSpeed = isMobileScreen ? 0.22 : 0.175;
         let passedObstaclesCount = 0; 
         let frameCount = 0;
         let isTilting = false; 
@@ -1221,7 +1222,8 @@ function addObstacle(laneIndex, zPos) {
                 if (block.position.z > 20) block.position.z -= (cityBlockLengthRight * cityBlocksRightArr.length);
             }
 
-            player.position.x += (lanes[currentLane] - player.position.x) * (delta* 12);
+            let turnSpeed = window.innerWidth <= 768 ? 20 : 12;
+            player.position.x += (lanes[currentLane] - player.position.x) * (delta * turnSpeed);
 
             frameCount++;
             if (frameCount === 1) {
@@ -1409,7 +1411,7 @@ function addObstacle(laneIndex, zPos) {
             if (collisionGraceTime > 0) collisionGraceTime -= delta;
 
             let desiredCamY = (onRoof || player.position.y > 2.5) ? 6.2 : 3.0;
-            skyPlane.position.x = camera.position.x;
+            camera.position.x += (player.position.x - camera.position.x) * (delta * 8);
             camera.position.y += (desiredCamY - camera.position.y) * (delta * 4); 
             camera.position.z = 4.8; 
             
@@ -1594,8 +1596,8 @@ function addObstacle(laneIndex, zPos) {
                 player.position.set(lanes[currentLane], 0, 0); 
                 player.fallSpeed = 0; 
                 
-                baseSpeed = 0.15; 
-                obstacleSpeed = 0.15; 
+              baseSpeed = isMobileScreen ? 0.13 : 0.09; 
+              obstacleSpeed = baseSpeed;
                 
                 isGameOver = false; 
                 isStumbling = false;
