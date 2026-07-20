@@ -389,7 +389,8 @@
         const skyGeo = new THREE.PlaneGeometry(1000, 500); 
         const skyMat = new THREE.MeshBasicMaterial({ map: skyTexture, fog: false, depthWrite: false, side: THREE.FrontSide });
         const skyPlane = new THREE.Mesh(skyGeo, skyMat);
-        skyPlane.position.set(0, 100, -350); 
+        skyPlane.position.set(0, 100, -350);
+        skyPlane.frustumCulled = false; 
         scene.add(skyPlane);
 
         const fogColor = 0x87CEEB; 
@@ -753,7 +754,7 @@
                 let cityModel = OptimizeModel(gltf.scene); 
                 cityModel.scale.set(18, 19, 18); 
                 cityModel.rotation.y = 0; 
-                for (let i = 0; i < 12; i++) { 
+                for (let i = 0; i < 6; i++) { 
                     let block = cityModel.clone(); 
                     block.position.set(-9.0, 2.5, -(i * cityBlockLength)); 
                     scene.add(block);
@@ -764,7 +765,7 @@
                 let cityModelRight = OptimizeModel(gltf.scene); 
                 cityModelRight.scale.set(18, 30, 18); 
                 cityModelRight.rotation.y = Math.PI; 
-                for (let i = 0; i < 12; i++) {  
+                for (let i = 0; i < 6; i++) {  
                     let block = cityModelRight.clone(); 
                     block.position.set(8.0, 3.2, -(i * cityBlockLengthRight)); 
                     scene.add(block); 
@@ -1408,7 +1409,7 @@ function addObstacle(laneIndex, zPos) {
             if (collisionGraceTime > 0) collisionGraceTime -= delta;
 
             let desiredCamY = (onRoof || player.position.y > 2.5) ? 6.2 : 3.0;
-            camera.position.x += (player.position.x - camera.position.x) * (delta * 8);
+            skyPlane.position.x = camera.position.x;
             camera.position.y += (desiredCamY - camera.position.y) * (delta * 4); 
             camera.position.z = 4.8; 
             
