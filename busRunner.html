@@ -394,7 +394,7 @@
 
         const fogColor = 0x87CEEB; 
         scene.background = new THREE.Color(fogColor); 
-        scene.fog = new THREE.FogExp2(fogColor, 0.002);
+        scene.fog = new THREE.FogExp2(fogColor, 0.006);
 
         function getViewportSize() {
             const width = window.visualViewport?.width || window.innerWidth || document.documentElement.clientWidth || 1;
@@ -416,12 +416,12 @@
             renderer.domElement.style.height = '100%';
         }
 
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 400);
+       const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
         const renderer = new THREE.WebGLRenderer({ 
             antialias: false,
             powerPreference: "high-performance",
             preserveDrawingBuffer: false,
-            precision: "mediump" // FIX 1: Corrected "mediumup" to "mediump"
+            precision: "mediump"
         });
         renderer.shadowMap.enabled = false;
         updateRendererSize();
@@ -434,27 +434,41 @@
         dirLight.position.set(0, 50, -200); 
         scene.add(dirLight);
 
-        // TRACK SETUP
         const roadGeo = new THREE.BoxGeometry(12, 0.1, 500);
-        const roadMat = new THREE.MeshStandardMaterial({ color: 0x5c3a21 }); 
+        const roadMat = new THREE.MeshLambertMaterial({ color: 0x5c3a21 }); 
         const road = new THREE.Mesh(roadGeo, roadMat);
         road.position.set(0, -0.1, -200); 
         scene.add(road);
 
         const lanes = [-3.5, 0, 3.5]; 
         const sleeperGeo = new THREE.BoxGeometry(2.2, 0.1, 0.6);
-        const sleeperMat = new THREE.MeshStandardMaterial({color: 0x8B4513 }); 
-        let sleepersArr = [];
-
+        const sleeperMat = new THREE.MeshBasicMaterial({color: 0x5c2e0e });
+        
+        let sleeperCount = 0;
+        for (let z = 10; z > -400; z -= 3) sleeperCount++;
+        const totalSleepers = sleeperCount * lanes.length;
+        
+        const sleeperInstanced = new THREE.InstancedMesh(sleeperGeo, sleeperMat, totalSleepers);
+        sleeperInstanced.instanceMatrix.setUsage( THREE.DynamicDrawUsage );
+        scene.add(sleeperInstanced);
+        
+        let dummy = new THREE.Object3D();
+        let sleepersData = []; 
+        let sIdx = 0;
+        
         for (let z = 10; z > -400; z -= 3) {
             lanes.forEach(laneX => {
-                const sleeper = new THREE.Mesh(sleeperGeo, sleeperMat);
-                sleeper.position.set(laneX, 0, z); scene.add(sleeper); sleepersArr.push(sleeper);
+                sleepersData.push({ x: laneX, z: z });
+                dummy.position.set(laneX, 0, z);
+                dummy.updateMatrix();
+                sleeperInstanced.setMatrixAt(sIdx, dummy.matrix);
+                sIdx++;
             });
         }
+        sleeperInstanced.instanceMatrix.needsUpdate = true;
 
         const railGeo = new THREE.BoxGeometry(0.2, 0.15, 500); 
-        const railMat = new THREE.MeshStandardMaterial({ color: 0x222222 }); 
+        const railMat = new THREE.MeshLambertMaterial({ color: 0x222222 }); 
         const railOffsets = [-0.6, 0.6];
 
         lanes.forEach(laneX => {
@@ -595,7 +609,6 @@
                         warmUpFrames++; 
                         requestAnimationFrame(warmUpLoop);
                     } else {
-                        // Startup cleanup with new recycling rules
                         for (let i = obstacles.length - 1; i >= 0; i--) {
                             let obs = obstacles[i];
                             obs.visible = false;
@@ -874,7 +887,6 @@
             }
         }
 
-       // --- OBJECT POOLING SYSTEM ---
        const gamePools = { trains: [], obstacles: [], ramps: [] };
 
 function addTrain(laneIndex, zPos, isMoving, hasRamp, isTriggerTrain = false) {
@@ -1185,13 +1197,18 @@ function addObstacle(laneIndex, zPos) {
                     if (playerAction !== runAction && !isRolling) switchAnimation(runAction, 0.1);
                 }
             }
-
-            // ENVIRONMENT LOOPS
-            for(let i = 0; i < sleepersArr.length; i++) {
-                let sleeper = sleepersArr[i]; 
-                sleeper.position.z += obstacleSpeed;
-                if(sleeper.position.z > 15) sleeper.position.z -= 410;
+            for(let i = 0; i < totalSleepers; i++) {
+                let sData = sleepersData[i];
+                sData.z += obstacleSpeed;
+                if (sData.z > 15) sData.z -= 410;
+                
+                dummy.position.set(sData.x, 0, sData.z);
+                dummy.updateMatrix();
+                sleeperInstanced.setMatrixAt(i, dummy.matrix);
             }
+            sleeperInstanced.instanceMatrix.needsUpdate = true;
+            
+            
             for (let i = 0; i < cityBlocksArr.length; i++) {
                 let block = cityBlocksArr[i]; 
                 block.position.z += obstacleSpeed;
@@ -1379,7 +1396,6 @@ function addObstacle(laneIndex, zPos) {
                     updateGameplaySpeed();
                 }
 
-                // FIX 2: Recycle objects instead of destroying them in Animate loop
                 if(obs.position.z > 15 || obs.isDestroyed) { 
                     obs.visible = false;
                     if (obs.isTrain) gamePools.trains.push(obs);
@@ -1442,7 +1458,6 @@ function addObstacle(laneIndex, zPos) {
             document.getElementById('gameOverScreen').style.display = 'none';
             document.getElementById('pauseScreen').style.display = 'none';
 
-            // FIX 3: Recycle objects instead of destroying them in Reset
             for (let i = obstacles.length - 1; i >= 0; i--) {
                 const obs = obstacles[i];
                 if (obs) {
@@ -1545,7 +1560,6 @@ function addObstacle(laneIndex, zPos) {
             panel.innerHTML = "<h2> Playing Ad...</h2><p style='color:#fff; font-size:18px;'>Please wait...</p>";
 
             setTimeout(() => {
-                // FIX 4: Recycle objects instead of destroying them when watching Ad
                 for (let i = obstacles.length -1; i >= 0; i--) {
                     let obs = obstacles[i];
                     if (obs.position.z > -80 && obs.position.z < 20) { 
