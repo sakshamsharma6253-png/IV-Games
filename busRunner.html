@@ -282,7 +282,6 @@
 
       #progressContainer { width: min(82vw, 300px); }
 
-      /* IMPORTANT PERFORMANCE FIX: disable heavy blur/shadows on mobile */
       #scoreBoard, #pauseBtn, #inGameHomeBtn, .overlay {
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
@@ -346,21 +345,21 @@
   <script src="DRACOLoader.js"></script>
 
   <script>
-    // ---------------------------
-    // GLOBAL / DEVICE
-    // ---------------------------
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const deviceMemory = Number(navigator.deviceMemory) || 4;
+    const processorCores = Number(navigator.hardwareConcurrency) || 4;
+    const isBudgetMobile = isMobile && (deviceMemory <= 2 || processorCores <= 4);
+
+    const mobileMinPixelRatio = isBudgetMobile ? 0.75 : 0.85;
+    const mobileMaxPixelRatio = isBudgetMobile ? 0.9 : (deviceMemory >= 6 && processorCores >= 8 ? 1.2 : 1.05);
+    let mobilePixelRatio = mobileMaxPixelRatio;
+
     const scoreEl = document.getElementById('scoreVal');
     const homeScreenEl = document.getElementById('homeScreen');
     const loadingScreenEl = document.getElementById('loadingScreen');
 
-    // Active zone: only do heavy collision/ramp computations for obstacles near the player
     const ACTIVE_Z_MIN = -90;
     const ACTIVE_Z_MAX = 25;
-
-    // ---------------------------
-    // THREE SETUP
-    // ---------------------------
     const scene = new THREE.Scene();
 
     const textureLoader = new THREE.TextureLoader();
@@ -383,18 +382,22 @@
 
     const fogColor = 0x87CEEB;
     scene.background = new THREE.Color(fogColor);
-    scene.fog = new THREE.FogExp2(fogColor, isMobile ? 0.006 : 0.002);
+    scene.fog = new THREE.FogExp2(fogColor, isMobile ? (isBudgetMobile ? 0.006 : 0.0045) : 0.002);
 
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, isMobile ? 150 : 400);
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, isMobile ? (isBudgetMobile ? 150 : 190) : 400);
 
     const renderer = new THREE.WebGLRenderer({
-      antialias: false,
+      antialias: !isMobile,
       powerPreference: "high-performance",
       preserveDrawingBuffer: false,
-      precision: "mediump"
+      precision: isMobile ? "mediump" : "highp"
     });
     renderer.shadowMap.enabled = false;
     renderer.outputEncoding = THREE.sRGBEncoding;
+    if (THREE.ACESFilmicToneMapping !== undefined) {
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = isMobile ? 1.0 : 1.12;
+    }
     document.body.appendChild(renderer.domElement);
 
     function getViewportSize() {
@@ -407,8 +410,7 @@
       const { width, height } = getViewportSize();
       const mobile = window.matchMedia('(max-width: 768px)').matches;
 
-      // Lower pixel ratio cap on mobile for smoother FPS
-      const maxRatio = mobile ? 0.75 : 1.5;
+      const maxRatio = mobile ? mobilePixelRatio : 1.75;
       const pixelRatio = Math.min(window.devicePixelRatio || 1, maxRatio);
 
       camera.aspect = width / height;
@@ -421,11 +423,18 @@
       renderer.domElement.style.height = '100%';
     }
 
+    function setMobilePixelRatio(nextRatio) {
+      const limitedRatio = Math.max(mobileMinPixelRatio, Math.min(mobileMaxPixelRatio, nextRatio));
+      if (Math.abs(limitedRatio - mobilePixelRatio) < 0.04) return;
+      mobilePixelRatio = limitedRatio;
+      updateRendererSize();
+    }
+
     updateRendererSize();
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    const ambientLight = new THREE.AmbientLight(0xffffff, isMobile ? 0.9 : 0.72);
     scene.add(ambientLight);
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    const dirLight = new THREE.DirectionalLight(0xffffff, isMobile ? 1.1 : 1.35);
     dirLight.position.set(0, 50, -200);
     scene.add(dirLight);
 
@@ -436,14 +445,10 @@
     scene.add(road);
 
     const lanes = [-3.5, 0, 3.5];
-
-    // ---------------------------
-    // SLEEPERS (Instanced Mesh) optimized
-    // ---------------------------
     const sleeperGeo = new THREE.BoxGeometry(2.2, 0.1, 0.6);
     const sleeperMat = new THREE.MeshBasicMaterial({ color: 0x5c2e0e });
 
-    const SLEEPER_STEP = isMobile ? 4 : 3;     // fewer sleepers on mobile
+    const SLEEPER_STEP = isMobile ? 4 : 3;  
     const SLEEPER_Z_START = 10;
     const SLEEPER_Z_END = -400;
 
@@ -469,7 +474,6 @@
     }
     sleeperInstanced.instanceMatrix.needsUpdate = true;
 
-    // Rails
     const railGeo = new THREE.BoxGeometry(0.2, 0.15, 500);
     const railMat = new THREE.MeshLambertMaterial({ color: 0x222222 });
     const railOffsets = [-0.6, 0.6];
@@ -482,9 +486,6 @@
       });
     });
 
-    // ---------------------------
-    // GAME VARIABLES
-    // ---------------------------
     let currentLane = 1;
     let previousLane = 1;
     let score = 0;
@@ -537,6 +538,11 @@
     scene.add(player);
 
     const gamePools = { trains: [], obstacles: [], ramps: [] };
+    const maxLiveObstacles = isMobile ? (isBudgetMobile ? 34 : 48) : 90;
+
+    function canAddObstacle() {
+      return obstacles.length < maxLiveObstacles;
+    }
 
     function updateGameplaySpeed() {
       let targetSpeed = baseSpeed;
@@ -561,9 +567,6 @@
       }
     }
 
-    // ---------------------------
-    // UI FUNCTIONS
-    // ---------------------------
     function showGameUI() {
       document.getElementById('scoreBoard').style.display = 'block';
       document.getElementById('pauseBtn').style.display = 'flex';
@@ -576,23 +579,54 @@
       document.getElementById('inGameHomeBtn').style.display = 'none';
     }
 
-    // ---------------------------
-    // MODELS
-    // ---------------------------
     let customObstacles = [];
     let trainModel = null, trainModel2 = null, trainModel3 = null;
+
+    function tuneTexture(texture, anisotropy) {
+      if (!texture) return;
+      texture.anisotropy = Math.min(anisotropy, renderer.capabilities.getMaxAnisotropy());
+      texture.needsUpdate = true;
+    }
+
+    function createMobileMaterial(sourceMaterial) {
+      const material = new THREE.MeshLambertMaterial({
+        color: sourceMaterial.color ? sourceMaterial.color.clone() : 0xffffff,
+        map: sourceMaterial.map || null,
+        transparent: sourceMaterial.transparent,
+        opacity: sourceMaterial.opacity,
+        side: sourceMaterial.side,
+        alphaTest: sourceMaterial.alphaTest || 0,
+        fog: sourceMaterial.fog !== false
+      });
+
+      if (sourceMaterial.emissive) material.emissive.copy(sourceMaterial.emissive);
+      material.depthWrite = sourceMaterial.depthWrite;
+      material.name = sourceMaterial.name;
+      tuneTexture(material.map, 2);
+      return material;
+    }
+
+    function optimizeMaterial(material) {
+      if (!material) return material;
+
+      if (isMobile) return createMobileMaterial(material);
+
+      tuneTexture(material.map, 8);
+      tuneTexture(material.normalMap, 8);
+      tuneTexture(material.roughnessMap, 8);
+      tuneTexture(material.metalnessMap, 8);
+      tuneTexture(material.emissiveMap, 8);
+      material.needsUpdate = true;
+      return material;
+    }
 
     function OptimizeModel(model) {
       model.traverse((child) => {
         if (child.isMesh) {
           if (child.material) {
-            const oldMat = child.material;
-            child.material = new THREE.MeshBasicMaterial({
-              color: oldMat.color,
-              map: oldMat.map,
-              transparent: oldMat.transparent,
-              opacity: oldMat.opacity
-            });
+            child.material = Array.isArray(child.material)
+              ? child.material.map(optimizeMaterial)
+              : optimizeMaterial(child.material);
           }
           child.castShadow = false;
           child.receiveShadow = false;
@@ -617,12 +651,11 @@
         window.currentLookAtY = 1.2;
         camera.lookAt(0, window.currentLookAtY, -20);
 
-        // warm-up compile
         renderer.compile(scene, camera);
 
         let warmUpFrames = 0;
         function warmUpLoop() {
-          if (warmUpFrames < 30) { // fewer warmup frames
+          if (warmUpFrames < 30) { 
             if (mixer) mixer.update(0.016);
             renderer.render(scene, camera);
             warmUpFrames++;
@@ -742,8 +775,7 @@
         trainModel3.zHitbox = 8.0;
       });
 
-      // CITY: fewer blocks on mobile
-      const CITY_COUNT = isMobile ? 3 : 6;
+      const CITY_COUNT = isMobile ? (isBudgetMobile ? 2 : 3) : 6;
 
       loader.load('glb/city.glb', function (gltf) {
         let cityModel = OptimizeModel(gltf.scene);
@@ -772,9 +804,7 @@
       });
     }
 
-    // ---------------------------
-    // ANIMATION SWITCHER
-    // ---------------------------
+   
     function switchAnimation(newAction, duration = 0.2) {
       if (!newAction || playerAction === newAction) return;
       if (duration === 0) {
@@ -788,9 +818,6 @@
       playerAction = newAction;
     }
 
-    // ---------------------------
-    // CONTROLS
-    // ---------------------------
     window.addEventListener('keydown', (e) => {
       if (isGameOver || isPaused) return;
 
@@ -863,6 +890,7 @@
     // OBSTACLE SPAWN / POOLS
     // ---------------------------
     function addTrain(laneIndex, zPos, isMoving, hasRamp, isTriggerTrain = false) {
+      if (!canAddObstacle()) return;
       let trainGroup;
 
       if (gamePools.trains.length > 0) {
@@ -925,6 +953,7 @@
     }
 
     function addObstacle(laneIndex, zPos) {
+      if (!canAddObstacle()) return;
       let obsGroup;
 
       if (gamePools.obstacles.length > 0) {
@@ -955,82 +984,153 @@
       obstacles.push(obsGroup);
     }
 
-    function spawnObstacle(customZ) {
-      if (!trainModel && !trainModel2 && customObstacles.length === 0) return;
-      let startZ = customZ !== undefined ? customZ : -320;
+    // ---------------------------
+    // SEAMLESS PATTERN STREAM
+    // ---------------------------
+    // Every pattern occupies one measured stretch of track.  The next pattern starts
+    // exactly where the previous one ends, which prevents the large empty gaps caused
+    // by the old distance-counter approach.
+    let patternFrontierZ = -48;
+    let patternBag = [];
+    let lastPatternId = -1;
+    const patternLookAhead = isMobile ? (isBudgetMobile ? 520 : 680) : 980;
 
-      if (typeof window.patternSequence === 'undefined') window.patternSequence = 0;
-      let patternType = window.patternSequence;
-      window.patternSequence++;
-      if (window.patternSequence > 3) window.patternSequence = 0;
+    function placeTrain(startZ, lane, offset, isMoving = false, hasRamp = false) {
+      addTrain(lane, startZ - offset, isMoving, hasRamp);
+    }
 
-      // Slightly reduce density on mobile
-      if (isMobile && patternType === 2) patternType = 1;
+    function placeObstacle(startZ, lane, offset) {
+      addObstacle(lane, startZ - offset);
+    }
 
-      if (patternType === 0) {
-        window.currentChunkLength = 280;
-        addTrain(1, startZ, false, true);
-        addTrain(2, startZ - 40, false, false);
-        addObstacle(0, startZ - 10);
-        addObstacle(0, startZ - 50);
-        addObstacle(0, startZ - 90);
-        addTrain(0, startZ - 140, false, false);
-        addTrain(2, startZ - 150, false, false);
-        addTrain(0, startZ - 250, false, false);
-        addTrain(2, startZ - 260, false, false);
-        addObstacle(1, startZ - 100);
-        addObstacle(1, startZ - 150);
-        addObstacle(1, startZ - 200);
-        addObstacle(1, startZ - 250);
-      } else if (patternType === 1) {
-        window.currentChunkLength = 450;
-        addTrain(0, startZ, false, false);
-        addTrain(2, startZ, false, false);
-        addTrain(1, startZ - 120, false, false);
-        addTrain(2, startZ - 120, false, false);
-        addObstacle(0, startZ - 180);
-        addTrain(0, startZ - 260, false, false);
-        addTrain(1, startZ - 260, false, false);
-        addObstacle(2, startZ - 320);
-        addObstacle(1, startZ - 400);
-      } else if (patternType === 2) {
-        window.currentChunkLength = 550;
-        let tGap = 20;
-        addTrain(1, startZ, false, true);
-        addTrain(0, startZ, false, false);
-        addTrain(2, startZ, false, false);
-
-        for (let i = 1; i <= 5; i++) {
-          addTrain(0, startZ - (tGap * i), false, false);
-          addTrain(1, startZ - (tGap * i), false, false);
-          addTrain(2, startZ - (tGap * i), false, false);
+    const patternLibrary = [
+      {
+        id: 0,
+        length: 172,
+        build(startZ) {
+          placeObstacle(startZ, 0, 8);
+          placeTrain(startZ, 2, 34, false);
+          placeObstacle(startZ, 1, 58);
+          placeTrain(startZ, 0, 84, true);
+          placeObstacle(startZ, 2, 110);
+          placeTrain(startZ, 1, 138, false);
+          placeObstacle(startZ, 0, 162);
         }
-
-        addObstacle(1, startZ - (tGap * 5) - 40);
-        addObstacle(0, startZ - (tGap * 5) - 40);
-        addObstacle(2, startZ - (tGap * 5) - 80);
-      } else if (patternType === 3) {
-        window.currentChunkLength = 550;
-        let leftGap = 25;
-        let middleGap = 50;
-
-        addTrain(0, startZ, false, true);
-
-        addTrain(0, startZ - leftGap, false, false);
-        addTrain(0, startZ - (leftGap * 2), false, false);
-        addTrain(0, startZ - (leftGap * 3), false, false);
-        addTrain(0, startZ - (leftGap * 4), false, false);
-
-        addObstacle(1, startZ - 20);
-        addObstacle(2, startZ - 20);
-
-        let movingStartZ = startZ - 250;
-        for (let i = 0; i < 6; i++) {
-          addTrain(1, movingStartZ - (middleGap * i), false, false, true);
+      },
+      {
+        id: 1,
+        length: 182,
+        build(startZ) {
+          placeTrain(startZ, 0, 10, true);
+          placeObstacle(startZ, 2, 40);
+          placeTrain(startZ, 2, 66, true);
+          placeObstacle(startZ, 1, 94);
+          placeTrain(startZ, 1, 120, true);
+          placeObstacle(startZ, 0, 148);
+          placeTrain(startZ, 2, 172, false);
         }
+      },
+      {
+        id: 2,
+        length: 192,
+        build(startZ) {
+          // The ramp is placed just before the centre train, creating a roof-run route.
+          placeObstacle(startZ, 0, 8);
+          placeTrain(startZ, 1, 34, false, true);
+          placeObstacle(startZ, 0, 68);
+          placeObstacle(startZ, 2, 68);
+          placeTrain(startZ, 0, 102, true);
+          placeTrain(startZ, 2, 126, false);
+          placeObstacle(startZ, 1, 156);
+          placeObstacle(startZ, 0, 182);
+        }
+      },
+      {
+        id: 3,
+        length: 180,
+        build(startZ) {
+          // Alternating paired gates always leave a clear lane for a fair dodge.
+          placeObstacle(startZ, 0, 10);
+          placeObstacle(startZ, 1, 10);
+          placeObstacle(startZ, 1, 44);
+          placeObstacle(startZ, 2, 44);
+          placeObstacle(startZ, 0, 74);
+          placeObstacle(startZ, 2, 74);
+          placeTrain(startZ, 0, 108, true);
+          placeTrain(startZ, 2, 138, false);
+          placeObstacle(startZ, 1, 168);
+        }
+      },
+      {
+        id: 4,
+        length: 198,
+        build(startZ) {
+          placeTrain(startZ, 2, 10, true);
+          placeTrain(startZ, 0, 48, true);
+          placeObstacle(startZ, 1, 76);
+          placeTrain(startZ, 1, 104, true);
+          placeObstacle(startZ, 0, 132);
+          placeTrain(startZ, 2, 160, true);
+          placeObstacle(startZ, 1, 188);
+        }
+      },
+      {
+        id: 5,
+        length: 186,
+        build(startZ) {
+          placeObstacle(startZ, 2, 8);
+          placeTrain(startZ, 0, 38, false);
+          placeObstacle(startZ, 1, 64);
+          placeTrain(startZ, 2, 92, true);
+          placeObstacle(startZ, 0, 120);
+          placeTrain(startZ, 1, 148, false);
+          placeObstacle(startZ, 2, 174);
+        }
+      }
+    ];
 
-        addObstacle(1, startZ - 500);
-        addObstacle(0, startZ - 500);
+    function refillPatternBag() {
+      patternBag = patternLibrary.map(pattern => pattern.id);
+
+      for (let i = patternBag.length - 1; i > 0; i--) {
+        const swapIndex = Math.floor(Math.random() * (i + 1));
+        [patternBag[i], patternBag[swapIndex]] = [patternBag[swapIndex], patternBag[i]];
+      }
+
+      // A bag shuffle can put the previous pattern first; rotate once to avoid repeats.
+      if (patternBag[patternBag.length - 1] === lastPatternId) {
+        [patternBag[0], patternBag[patternBag.length - 1]] = [patternBag[patternBag.length - 1], patternBag[0]];
+      }
+    }
+
+    function getNextPattern() {
+      if (patternBag.length === 0) refillPatternBag();
+      const nextId = patternBag.pop();
+      lastPatternId = nextId;
+      return patternLibrary[nextId];
+    }
+
+    function spawnNextPattern() {
+      const pattern = getNextPattern();
+      pattern.build(patternFrontierZ);
+      patternFrontierZ -= pattern.length;
+    }
+
+    function resetPatternStream() {
+      patternFrontierZ = -48;
+      patternBag = [];
+      lastPatternId = -1;
+
+      while (patternFrontierZ > -patternLookAhead) {
+        spawnNextPattern();
+      }
+    }
+
+    function advancePatternStream(distanceMoved) {
+      patternFrontierZ += distanceMoved;
+
+      while (patternFrontierZ > -patternLookAhead) {
+        spawnNextPattern();
       }
     }
 
@@ -1039,22 +1139,69 @@
     // ---------------------------
     let scoreTimer = 0;
     let homeRenderTimer = 0;
+    let lastMobileFrameTime = 0;
+    let mobileFrameAccumulator = 0;
+    let performanceSampleTime = 0;
+    let performanceSampleFrames = 0;
 
-    function animate() {
+    function monitorMobilePerformance(delta) {
+      if (!isMobile || !isGameLoaded) return;
+
+      performanceSampleTime += delta;
+      performanceSampleFrames++;
+
+      if (performanceSampleTime < 0.9) return;
+
+      const fps = performanceSampleFrames / performanceSampleTime;
+      if (fps < 48) {
+        setMobilePixelRatio(mobilePixelRatio - 0.1);
+      } else if (fps > 57) {
+        setMobilePixelRatio(mobilePixelRatio + 0.05);
+      }
+
+      performanceSampleTime = 0;
+      performanceSampleFrames = 0;
+    }
+
+    function animate(now) {
       requestAnimationFrame(animate);
-
-      const delta = clock.getDelta();
 
       // Throttle rendering while on home / not loaded (saves battery + avoids heat)
       if (!isGameLoaded) {
-        homeRenderTimer += delta;
+        lastMobileFrameTime = 0;
+        mobileFrameAccumulator = 0;
+        homeRenderTimer += clock.getDelta();
         if (homeRenderTimer < 0.2) return; // ~5 FPS
         homeRenderTimer = 0;
         renderer.render(scene, camera);
         return;
       }
 
-      if (isPaused) return;
+      // Keep the clock current during a pause so resuming never causes a movement jump.
+      if (isPaused) {
+        lastMobileFrameTime = now;
+        mobileFrameAccumulator = 0;
+        clock.getDelta();
+        return;
+      }
+
+      // High-refresh phones may request 90/120 frames per second. Capping the game to a
+      // stable 60 saves battery and prevents frame-rate dependent gameplay from speeding up.
+      if (isMobile) {
+        if (lastMobileFrameTime) {
+          mobileFrameAccumulator += Math.min(now - lastMobileFrameTime, 50);
+          lastMobileFrameTime = now;
+          if (mobileFrameAccumulator < 16.1) return;
+          mobileFrameAccumulator = Math.max(0, mobileFrameAccumulator - (1000 / 60));
+        } else {
+          lastMobileFrameTime = now;
+        }
+      }
+
+      const rawDelta = clock.getDelta();
+      const delta = Math.min(rawDelta, 0.05);
+      const frameScale = Math.min(delta * 60, 3);
+      monitorMobilePerformance(rawDelta);
 
       if (mixer && !isGameOver) mixer.update(delta);
 
@@ -1115,9 +1262,9 @@
             obs.isMovingTrain = true;
             obs.isTriggerTrain = false;
           }
-          obs.position.z += (obs.isMovingTrain ? (obstacleSpeed + 0.45) : obstacleSpeed);
+          obs.position.z += (obs.isMovingTrain ? (obstacleSpeed + 0.45) : obstacleSpeed) * frameScale;
         } else {
-          obs.position.z += obstacleSpeed;
+          obs.position.z += obstacleSpeed * frameScale;
         }
 
         const z = obs.position.z;
@@ -1342,7 +1489,7 @@
       if (updateSleepers) {
         for (let i = 0; i < totalSleepers; i++) {
           let sData = sleepersData[i];
-          sData.z += obstacleSpeed;
+          sData.z += obstacleSpeed * frameScale * (isMobile ? 2 : 1);
           if (sData.z > 15) sData.z -= 410;
 
           dummy.position.set(sData.x, 0, sData.z);
@@ -1355,37 +1502,21 @@
       // city loop
       for (let i = 0; i < cityBlocksArr.length; i++) {
         let block = cityBlocksArr[i];
-        block.position.z += obstacleSpeed;
+        block.position.z += obstacleSpeed * frameScale;
         if (block.position.z > 20) block.position.z -= (cityBlockLength * cityBlocksArr.length);
       }
       for (let i = 0; i < cityBlocksRightArr.length; i++) {
         let block = cityBlocksRightArr[i];
-        block.position.z += obstacleSpeed;
+        block.position.z += obstacleSpeed * frameScale;
         if (block.position.z > 20) block.position.z -= (cityBlockLengthRight * cityBlocksRightArr.length);
       }
 
       // lane movement
       let turnSpeed = isMobile ? 20 : 12;
-      player.position.x += (lanes[currentLane] - player.position.x) * (delta * turnSpeed);
+      player.position.x += (lanes[currentLane] - player.position.x) * (1 - Math.exp(-turnSpeed * delta));
 
-      // spawn management
-      if (frameCount === 1) {
-        let nextZ = -50;
-        spawnObstacle(nextZ);
-        nextZ -= window.currentChunkLength || 280;
-        spawnObstacle(nextZ);
-        nextZ -= window.currentChunkLength || 280;
-        spawnObstacle(nextZ);
-        nextZ -= window.currentChunkLength || 280;
-        spawnObstacle(nextZ);
-        window.distTracker = 0;
-      } else {
-        window.distTracker = (window.distTracker || 0) + obstacleSpeed;
-        if (window.distTracker >= (window.currentChunkLength || 280)) {
-          spawnObstacle(-320);
-          window.distTracker = 0;
-        }
-      }
+      // Keep the randomized pattern stream continuously filled ahead of the player.
+      advancePatternStream(obstacleSpeed * frameScale);
 
       if (collisionGraceTime > 0) collisionGraceTime -= delta;
 
@@ -1471,9 +1602,7 @@
       if (scoreEl) scoreEl.textContent = '000000';
 
       frameCount = 0;
-      window.patternSequence = 0;
-      window.distTracker = 0;
-      window.currentChunkLength = 280;
+      resetPatternStream();
 
       currentLane = 1;
       previousLane = 1;
@@ -1611,7 +1740,6 @@
     window.addEventListener('orientationchange', updateRendererSize, { passive: true });
     window.visualViewport?.addEventListener('resize', updateRendererSize, { passive: true });
 
-    // start loop
     requestAnimationFrame(animate);
   </script>
 </body>

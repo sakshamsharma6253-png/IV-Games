@@ -20,6 +20,7 @@
     <meta property="og:locale" content="en_US">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
     <style>
         
         :root {
@@ -247,111 +248,199 @@
         }
 
         /*==============================================
-         -----3rd ALL MOBILES LAYOUT (850px)----
+         -----3rd ALL MOBILES LAYOUT-----
          ===============================================*/
-        @media (max-width: 767px) {
-            :root { --cell-size: min(4.8vh, 5.5vw) !important; }
-            
-            .header h2 {
-                font-size: 24px !important;
-                margin-top: 140px !important;
-                margin-bottom: -60px !important;
-                line-height: 1.1 !important;
-            }
+       @media (max-width: 767px) {
+    :root {
+        --cell-size: min(
+            calc((100vw - 48px) / 15),
+            calc((100svh - 310px) / 15)
+        ) !important;
+    }
 
-            button[onclick="goHome()"] {
-                font-size: 11px !important;
-                padding: 6px 10px !important;
-                margin-bottom: 50px !important;
-                margin-top: -20px !important;
-            }
+    body {
+        padding: 8px 10px calc(8px + env(safe-area-inset-bottom)) !important;
+        overflow-x: hidden;
+    }
 
-            .game-container {
-                flex-direction: column !important;
-                gap: 0 !important;
-            }
+    #game-screen {
+        min-height: calc(100svh - 16px);
+        position: relative;
+    }
 
-            .board-wrapper {
-                margin-top: 65px !important;
-                margin-bottom: 65px !important; 
-                position: relative !important;
-            }
+    .header {
+        width: 100%;
+        margin: 0 !important;
+    }
 
-            .player-panel {
-                transform: scale(0.7) !important;
-                padding: 5px 10px !important;
-                background: rgba(0,0,0,0.75) !important;
-                position: absolute !important;
-                z-index: 105 !important;
-                border-radius: 12px !important;
-            }
+    .header h2 {
+        font-size: clamp(19px, 5.8vw, 25px) !important;
+        line-height: 1.15 !important;
+        margin: 60px 0 0 !important;
+        white-space: nowrap;
+    }
 
-            .pos-tl { top: -68px !important; left: -5px !important; right: auto !important; bottom: auto !important; transform-origin: bottom left !important; }
-            .pos-tr { top: -68px !important; right: -5px !important; left: auto !important; bottom: auto !important; transform-origin: bottom right !important; }
-            .pos-bl { bottom: -68px !important; left: -5px !important; right: auto !important; top: auto !important; transform-origin: top left !important; }
-            .pos-br { bottom: -68px !important; right: -5px !important; left: auto !important; top: auto !important; transform-origin: top right !important; }
+    #game-controls-container {
+        top: calc(8px + env(safe-area-inset-top)) !important;
+        left: 10px !important;
+        right: auto !important;
+        transform: none !important;
+        z-index: 9000 !important;
+    }
 
-            .player-label {
-                font-size: 10px !important; 
-                white-space: nowrap !important;
-                text-shadow: 1px 1px 2px #000 !important;
-            }
+    #controls-inner-box {
+        flex-direction: row !important;
+        gap: 7px !important;
+    }
 
-            .cell {
-                font-size: 15px !important;
-            }
+    #globalSoundBtn,
+    #pauseBtn {
+        height: 34px !important;
+        margin: 0 !important;
+        padding: 0 9px !important;
+        border-radius: 18px !important;
+        font-size: 11px !important;
+    }
 
-           #floating-status {
-                bottom: auto !important;
-                z-index: 200 !important;
-            }
+    #game-screen > div:nth-child(2) {
+        position: fixed !important;
+        top: calc(8px + env(safe-area-inset-top)) !important;
+        right: 8px !important;
+        width: auto !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 9001 !important;
+    }
 
-             #panel-red #floating-status {
-                top: 40% !important;
-                left: 100% !important;
-                right: auto !important;
-                transform: translateY(-50%) scale(0.9) !important;
-             }
+    #game-screen > div:nth-child(2) button {
+        height: 34px !important;
+        margin: 0 !important;
+        padding: 0 9px !important;
+        font-size: 11px !important;
+        border-radius: 18px !important;
+    }
 
-              #panel-green #floating-status {
-                top: 30% !important;
-                left: -112% !important;
-                right: auto !important;
-                transform: translateY(-50%) scale(0.9) !important;
+    .game-area {
+        width: 100%;
+        flex: 1 0 auto;
+    }
 
-              }
+    .board-wrapper {
+        margin: 96px 0 66px !important;
+        position: relative !important;
+    }
 
-             #panel-blue #floating-status {
-                top: 80% !important;
-                left: 115% !important;
-                right: auto !important;
-                transform: translateY(-50%) scale(0.9) !important;
-            }
+    .board {
+        padding: 6px !important;
+        border-width: 2px !important;
+        border-radius: 18px !important;
+    }
 
-            #panel-yellow #floating-status {
-                top: 70% !important;
-                right: 100% !important; 
-                left: auto !important;
-                transform: translateY(-50%) scale(0.9) !important;
-            }
-        }
+    .player-panel {
+        transform: scale(0.74) !important;
+        padding: 5px 8px !important;
+        gap: 8px !important;
+        background: rgba(0, 0, 0, 0.78) !important;
+        position: absolute !important;
+        z-index: 105 !important;
+        border-radius: 12px !important;
+    }
+
+    .pos-tl { top: -74px !important; left: 0 !important; right: auto !important; bottom: auto !important; transform-origin: bottom left !important; }
+    .pos-tr { top: -74px !important; right: 0 !important; left: auto !important; bottom: auto !important; transform-origin: bottom right !important; }
+    .pos-bl { bottom: -74px !important; left: 0 !important; right: auto !important; top: auto !important; transform-origin: top left !important; }
+    .pos-br { bottom: -74px !important; right: 0 !important; left: auto !important; top: auto !important; transform-origin: top right !important; }
+
+    .player-panel .player-dice-box {
+        width: 56px !important;
+        height: 56px !important;
+    }
+
+    .player-panel .dice-inner {
+        width: 42px !important;
+        height: 42px !important;
+        border-radius: 10px !important;
+    }
+
+    .dice-dot {
+        width: 10px !important;
+        height: 10px !important;
+    }
+
+    .player-label {
+        font-size: clamp(8px, 2.5vw, 10px) !important;
+        white-space: nowrap !important;
+        text-shadow: 1px 1px 2px #000 !important;
+    }
+
+    .cell {
+        font-size: calc(var(--cell-size) * 0.66) !important;
+    }
+
+    #floating-status {
+        bottom: auto !important;
+        padding: 4px 8px !important;
+        z-index: 200 !important;
+    }
+
+    #floating-status #turn-text {
+        font-size: 11px !important;
+        letter-spacing: 0.4px !important;
+    }
+
+    #floating-status #ai-status {
+        font-size: 9px !important;
+    }
+
+    #turn-timer-display {
+        font-size: 12px !important;
+        margin-top: 3px !important;
+        padding: 1px 6px !important;
+    }
+
+    #panel-red #floating-status,
+    #panel-blue #floating-status {
+        top: 50% !important;
+        left: 106% !important;
+        right: auto !important;
+        transform: translateY(-50%) scale(0.72) !important;
+        transform-origin: left center !important;
+    }
+
+    #panel-green #floating-status,
+    #panel-yellow #floating-status {
+        top: 50% !important;
+        right: 106% !important;
+        left: auto !important;
+        transform: translateY(-50%) scale(0.72) !important;
+        transform-origin: right center !important;
+    }
+}
          
         /*==============================================
         ----4th MICRO SCREENS (FOLDABLE PHONES)---
         ===============================================*/
         @media (max-width: 350px) {
-            :root { --cell-size: 5.2vw !important; }
+            :root {
+                --cell-size: min(
+                    calc((100vw - 36px) / 15),
+                    calc((100svh - 290px) / 15)
+                ) !important;
+            }
             
             .player-panel {
-                transform: scale(0.6) !important;
+                transform: scale(0.66) !important;
             }
 
             .header h2 {
-                font-size: 22px !important;
+                font-size: 18px !important;
+                margin-top: 58px !important;
             }
 
-            button[onclick="goHome()"] {
-                font-size: 10px !important;
+            .board-wrapper {
+                margin-top: 84px !important;
+                margin-bottom: 56px !important;
             }
         }
 
@@ -959,7 +1048,6 @@
         z-index: 9000;
     }
     
-    /* Inner box for flex layout */
     #controls-inner-box {
         display: flex;
         flex-direction: column;
@@ -1570,11 +1658,15 @@
 
     function beautifyBoard() {
         const cells = document.querySelectorAll('.cell');
+        
+        const isMobile = window.innerWidth <= 768;
+        const dynamicBorderStyle = isMobile ? '0.5px solid rgba(18, 18, 18, 0.3)' : '1px solid #121212';
+
         for(let i = 0; i < 225; i++) {
             let row = Math.floor(i / 15);
             let col = i % 15;
             
-            cells[i].style.border = '1px solid #121212';
+            cells[i].style.border = dynamicBorderStyle;
             cells[i].innerHTML = ''; 
 
             if(row < 6 && col < 6) {
@@ -1630,7 +1722,7 @@
                 else if (row === 6 && col === 7) cells[i].style.backgroundColor = '#22c55e';
                 else if (row === 7 && col === 8) cells[i].style.backgroundColor = '#eab308';
                 else if (row === 8 && col === 7) cells[i].style.backgroundColor = '#3b82f6';                 
-                else if (row === 7 && col === 7) cells[i].style.background = 'conic-gradient(from 315deg, #22c55e 0 90deg, #eab308 0 180deg, #3b82f6 0 270deg, #ef4444 0 360deg)';                                                                                                                                                                                                                                                                                                         
+                else if (row === 7 && col === 7) cells[i].style.background = 'conic-gradient(from 315deg, #22c55e 0 90deg, #eab308 0 180deg, #3b82f6 0 270deg, #ef4444 0 360deg)';                                                                                                                                                                                                                                                                        
                 else if (row === 6 && col === 6) cells[i].style.background = 'linear-gradient(to bottom left, #22c55e 50%, #ef4444 50%)';
                 else if (row === 6 && col === 8) cells[i].style.background = 'linear-gradient(to bottom right, #22c55e 50%, #eab308 50%)';
                 else if (row === 8 && col === 6) cells[i].style.background = 'linear-gradient(to bottom right, #ef4444 50%, #3b82f6 50%)';
@@ -1643,7 +1735,7 @@
             basePositions[color].forEach(idx => {
                 cells[idx].style.background = '#ffffff';
                 cells[idx].style.borderRadius = '0%';
-                cells[idx].style.border = 'none';
+                cells[idx].style.border = 'none'; 
                 cells[idx].style.transform = 'none';
                 cells[idx].style.boxShadow ='none';
                 cells[idx].style.display = 'flex';
@@ -1653,19 +1745,17 @@
             });
         });
          
-     const boardMarks = { 
+        const boardMarks = { 
             91: { type: 'arrow', text: '&#10145;', color: '#ef4444' }, 
             23: { type: 'arrow', text: '&#11015;', color: '#22c55e' }, 
             133: { type: 'arrow', text: '&#11013;', color: '#eab308' }, 
             201: { type: 'arrow', text: '&#11014;', color: '#3b82f6' }, 
             
-           
             36: { type: 'star', text: '&#9734;' },  
             102: { type: 'star', text: '&#9734;' }, 
             188: { type: 'star', text: '&#9734;' }, 
             122: { type: 'star', text: '&#9734;' },  
         
-            
             105: {type: 'arrow', text: '&#10145;', color: '#ef4444', dir: 'right' }, 
             7: {type: 'arrow', text: '&#11015;', color: '#22c55e', dir: 'down' }, 
             119: {type: 'arrow', text: '&#11013;', color: '#eab308', dir: 'left' },
@@ -1693,7 +1783,7 @@
                     cell.style.fontSize = '3vmin';
                     cell.style.fontWeight = 'bold';
                 }
-         } else if (mark.type === 'star') {
+            } else if (mark.type === 'star') {
                 cell.innerHTML = mark.text;
                 cell.style.color = '#64748b';  
                 cell.style.fontSize = '4.5vmin'; 
@@ -1703,42 +1793,43 @@
             }
         }
 
-      document.querySelectorAll('.player-label').forEach(el => el.remove());
-      const boardElement = document.getElementById('ludo-board');
+        document.querySelectorAll('.player-label').forEach(el => el.remove());
+        const boardElement = document.getElementById('ludo-board');
         
+        players.forEach(color => {
+            if(!playingColors.includes(color)) return;
 
-      players.forEach(color => {
-          if(!playingColors.includes(color)) return;
-
-          let labelText = playerCustomNames[color];
-          if(!labelText) {
-            labelText = (color === humanPlayerColor) ? 'YOU' : 'COMPUTER';
-          }     
-          
-          let topPos, bottomPos, leftPos;
-          if(color === 'RED') {topPos = '2%'; leftPos = '20%'; }
-          if(color === 'GREEN') {topPos = '2%'; leftPos = '80%'; }
-          if(color === 'BLUE') {bottomPos = '2%'; leftPos = '20%'; }
-          if(color === 'YELLOW') {bottomPos = '2%'; leftPos = '80%'; }
+            let labelText = playerCustomNames[color];
+            if(!labelText) {
+                labelText = (color === humanPlayerColor) ? 'YOU' : 'COMPUTER';
+            }     
+            
+            let topPos, bottomPos, leftPos;
+            if(color === 'RED') {topPos = '2%'; leftPos = '20%'; }
+            if(color === 'GREEN') {topPos = '2%'; leftPos = '80%'; }
+            if(color === 'BLUE') {bottomPos = '2%'; leftPos = '20%'; }
+            if(color === 'YELLOW') {bottomPos = '2%'; leftPos = '80%'; }
         
-          let div = document.createElement('div'); 
-          div.className = 'player-label';
-          div.innerText = labelText; 
-          div.style.position = 'absolute';
-          div.style.color = '#ffffff'
-          div.style.fontWeight = 'bold';
-          div.style.fontSize = '22px';
-          div.style.textShadow = '1px 1px 4px rgba(0,0,0,0.9)';
-          div.style.pointerEvents = 'none'; 
-          div.style.transform = 'translateX(-50%)'; 
+            let div = document.createElement('div'); 
+            div.className = 'player-label';
+            div.innerText = labelText; 
+            div.style.position = 'absolute';
+            div.style.color = '#ffffff'
+            div.style.fontWeight = 'bold';
+            div.style.fontSize = '22px';
+            div.style.textShadow = '1px 1px 4px rgba(0,0,0,0.9)';
+            div.style.pointerEvents = 'none'; 
+            div.style.transform = 'translateX(-50%)'; 
 
-          if(topPos) div.style.top = topPos;
-          if(bottomPos) div.style.bottom = bottomPos;
-          if(leftPos) div.style.left= leftPos;
+            if(topPos) div.style.top = topPos;
+            if(bottomPos) div.style.bottom = bottomPos;
+            if(leftPos) div.style.left= leftPos;
 
-          boardElement.appendChild(div);
-      });
+            boardElement.appendChild(div);
+        });
     }
+
+   
     
     // --- 3. DRAW TOKENS ON PATH ---
     function drawTokens() {
