@@ -514,7 +514,6 @@
     -webkit-tap-highlight-color: transparent !important;
      }
 
-     /* Base tokens need a slightly smaller, perfectly centred pin. */
      .token-in-base {
         --token-y: -50%;
         --token-scale: 0.78;
@@ -843,17 +842,23 @@
             }
 
             .token-alive { animation: mobile-token-ready 1.25s ease-in-out infinite; }
-            .token-moving { animation: none !important; }
+            
+            @keyframes mobileTokenFlipHop {
+                0% { transform: translate3d(calc(-50% + var(--start-x)), calc(var(--token-y) + var(--start-y)), 0) rotate(-45deg) scale(var(--token-scale)); }
+                50% { transform: translate3d(calc(-50% + var(--start-x) * 0.5), calc(var(--token-y) + var(--start-y) * 0.5 - 20px), 0) rotate(-45deg) scale(calc(var(--token-scale) + 0.15)); }
+                100% { transform: translate3d(-50%, var(--token-y), 0) rotate(-45deg) scale(var(--token-scale)); }
+            }
 
             .token-mobile-motion {
-                --mobile-move-x: 0px;
-                --mobile-move-y: 0px;
+                --start-x: 0px;
+                --start-y: 0px;
                 will-change: transform;
-                transform: translate3d(calc(-50% + var(--mobile-move-x)), calc(var(--token-y) + var(--mobile-move-y)), 0) rotate(-45deg) scale(var(--token-scale)) !important;
+                transform: translate3d(calc(-50% + var(--start-x)), calc(var(--token-y) + var(--start-y)), 0) rotate(-45deg) scale(var(--token-scale)) !important;
             }
 
             .token-mobile-motion.token-mobile-animate {
-                transition: transform var(--mobile-step-duration, 112ms) cubic-bezier(0.22, 0.78, 0.22, 1) !important;
+                animation: mobileTokenFlipHop var(--mobile-step-duration, 240ms) ease-in-out forwards !important;
+                transition: none !important;
             }
 
             @keyframes mobile-token-ready {
@@ -1774,7 +1779,7 @@
                 else if (row === 6 && col === 7) cells[i].style.backgroundColor = '#22c55e';
                 else if (row === 7 && col === 8) cells[i].style.backgroundColor = '#eab308';
                 else if (row === 8 && col === 7) cells[i].style.backgroundColor = '#3b82f6';                 
-                else if (row === 7 && col === 7) cells[i].style.background = 'conic-gradient(from 315deg, #22c55e 0 90deg, #eab308 0 180deg, #3b82f6 0 270deg, #ef4444 0 360deg)';                                                                                                                                                                                                                                                                        
+                else if (row === 7 && col === 7) cells[i].style.background = 'conic-gradient(from 315deg, #22c55e 0 90deg, #eab308 0 180deg, #3b82f6 0 270deg, #ef4444 0 360deg)';                                                                                                                                                                             
                 else if (row === 6 && col === 6) cells[i].style.background = 'linear-gradient(to bottom left, #22c55e 50%, #ef4444 50%)';
                 else if (row === 6 && col === 8) cells[i].style.background = 'linear-gradient(to bottom right, #22c55e 50%, #eab308 50%)';
                 else if (row === 8 && col === 6) cells[i].style.background = 'linear-gradient(to bottom right, #ef4444 50%, #3b82f6 50%)';
@@ -1924,21 +1929,20 @@
         const moveX = Math.round((startRect.left + startRect.width / 2) - (endRect.left + endRect.width / 2));
         const moveY = Math.round((startRect.top + startRect.height / 2) - (endRect.top + endRect.height / 2));
 
-        tokenElement.style.setProperty('--mobile-move-x', `${moveX}px`);
-        tokenElement.style.setProperty('--mobile-move-y', `${moveY}px`);
+        tokenElement.style.setProperty('--start-x', `${moveX}px`);
+        tokenElement.style.setProperty('--start-y', `${moveY}px`);
         tokenElement.style.setProperty('--mobile-step-duration', `${duration}ms`);
         void tokenElement.offsetWidth;
 
         requestAnimationFrame(() => {
             if (!tokenElement.isConnected) return;
             tokenElement.classList.add('token-mobile-animate');
-            tokenElement.style.setProperty('--mobile-move-x', '0px');
-            tokenElement.style.setProperty('--mobile-move-y', '0px');
+            
             tokenElement._ludoMotionTimer = setTimeout(() => {
                 if (!tokenElement.isConnected) return;
                 tokenElement.classList.remove('token-mobile-animate', 'token-mobile-motion');
-                tokenElement.style.removeProperty('--mobile-move-x');
-                tokenElement.style.removeProperty('--mobile-move-y');
+                tokenElement.style.removeProperty('--start-x');
+                tokenElement.style.removeProperty('--start-y');
                 tokenElement.style.removeProperty('--mobile-step-duration');
                 tokenElement._ludoMotionTimer = null;
             }, duration + 32);
@@ -2074,9 +2078,7 @@
 
     function moveTokenAnimated(color, tokenIndex, startPos, endPos) {
         const mobilePerformanceMode = isMobilePerformanceMode();
-        // Mobile: a calm, clearly visible glide through every square.
-        // Desktop keeps its existing 350 ms hop timing.
-        let delay = mobilePerformanceMode ? 230 : 350;
+        let delay = mobilePerformanceMode ? 280 : 350;
         let currentStep = startPos;
         
         const aiStatus = document.getElementById('ai-status');
@@ -2090,7 +2092,7 @@
             if (!isMuted) tokenSound.play(); 
 
             if (mobilePerformanceMode) {
-                moveTokenStepMobile(color, tokenIndex, currentStep, 150);
+                moveTokenStepMobile(color, tokenIndex, currentStep, 250);
             } else {
                 const exactTokenId = `token-${color}-${tokenIndex}`;
                 const tokenElement = document.getElementById(exactTokenId);
@@ -2109,7 +2111,7 @@
                 let absolutePos = playerPaths[color][currentStep - 1]; 
                 let killed = false;
 
-               if (currentStep <= 51 && !safeZones.includes(absolutePos)) {
+                if (currentStep <= 51 && !safeZones.includes(absolutePos)) {
                     players.forEach(otherColor => {
                         if (otherColor !== color) { 
                             let tokensAtPos = []; 
@@ -2179,7 +2181,7 @@
  
     function returnTokenToHomeAnimated(color, tokenIndex,currentPos) {
         const mobilePerformanceMode = isMobilePerformanceMode();
-        let delay = mobilePerformanceMode ? 56 : 35;
+        let delay = mobilePerformanceMode ? 60 : 35;
         let stepPos = currentPos;
         const aiStatus = document.getElementById('ai-status');
         if(aiStatus) aiStatus.innerText = `${color} Token returning to base!`;
@@ -2192,7 +2194,7 @@
                 tokenData[color][tokenIndex] = stepPos;
 
                 if (mobilePerformanceMode) {
-                    moveTokenStepMobile(color, tokenIndex, stepPos, 40);
+                    moveTokenStepMobile(color, tokenIndex, stepPos, 50);
                 } else {
                     const exactTokenId = `token-${color}-${tokenIndex}`;
                     const tokenElement = document.getElementById(exactTokenId);
@@ -2974,4 +2976,4 @@ function passTurn(isTimeout = false) {
 
 </script>
 </body>
-</html> 
+</html>
