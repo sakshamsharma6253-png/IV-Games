@@ -2074,7 +2074,9 @@
 
     function moveTokenAnimated(color, tokenIndex, startPos, endPos) {
         const mobilePerformanceMode = isMobilePerformanceMode();
-        let delay = mobilePerformanceMode ? 145 : 350;
+        // Mobile: a calm, clearly visible glide through every square.
+        // Desktop keeps its existing 350 ms hop timing.
+        let delay = mobilePerformanceMode ? 230 : 350;
         let currentStep = startPos;
         
         const aiStatus = document.getElementById('ai-status');
@@ -2088,7 +2090,7 @@
             if (!isMuted) tokenSound.play(); 
 
             if (mobilePerformanceMode) {
-                moveTokenStepMobile(color, tokenIndex, currentStep, 112);
+                moveTokenStepMobile(color, tokenIndex, currentStep, 190);
             } else {
                 const exactTokenId = `token-${color}-${tokenIndex}`;
                 const tokenElement = document.getElementById(exactTokenId);
