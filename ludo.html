@@ -496,13 +496,15 @@
   
  
      .token {
+     --token-y: -65%;
+     --token-scale: 1;
      width: calc(var(--cell-size) * 0.65); 
      height: calc(var(--cell-size) * 0.65); 
      position: absolute; 
      top: 50% !important;
      left: 50% !important;
      border-radius: 50% 50% 50% 0 !important;
-     transform: translate(-50%, -65%) rotate(-45deg);
+     transform: translate3d(-50%, var(--token-y), 0) rotate(-45deg) scale(var(--token-scale));
      border: 3px solid #ffffff !important;
      z-index: 10;
      cursor: pointer;
@@ -510,6 +512,13 @@
      box-shadow: 2px 4px 3px rgba(0,0,0,0.6) !important; 
      outline: none !important;
     -webkit-tap-highlight-color: transparent !important;
+     }
+
+     /* Base tokens need a slightly smaller, perfectly centred pin. */
+     .token-in-base {
+        --token-y: -50%;
+        --token-scale: 0.78;
+        box-sizing: border-box;
      }
 
      .token-alive {
@@ -808,8 +817,49 @@
             50%{transform: translate(-50%,-100%) rotate(-45deg) scale(1.3); opacity: 1;}
             100%{transform: translate(-50%, -70%) rotate(-45deg) scale(1); opacity: 1;}
          }
-         .token-Opening {
+    .token-Opening {
             animation: tokenOpen 0.5s ease-out;
+         }
+
+         /* Mobile-only rendering path: avoid recreating tokens on every square. */
+         @media (max-width: 767px) {
+            body { background-attachment: scroll !important; }
+
+            .board {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                box-shadow: 0 7px 18px rgba(0,0,0,0.34) !important;
+                contain: layout paint style;
+            }
+
+            .cell { box-shadow: none !important; }
+
+            .token {
+                border-width: 2px !important;
+                box-shadow: 1px 2px 2px rgba(0,0,0,0.48) !important;
+                transition: none !important;
+                backface-visibility: hidden;
+                -webkit-backface-visibility: hidden;
+            }
+
+            .token-alive { animation: mobile-token-ready 1.25s ease-in-out infinite; }
+            .token-moving { animation: none !important; }
+
+            .token-mobile-motion {
+                --mobile-move-x: 0px;
+                --mobile-move-y: 0px;
+                will-change: transform;
+                transform: translate3d(calc(-50% + var(--mobile-move-x)), calc(var(--token-y) + var(--mobile-move-y)), 0) rotate(-45deg) scale(var(--token-scale)) !important;
+            }
+
+            .token-mobile-motion.token-mobile-animate {
+                transition: transform var(--mobile-step-duration, 112ms) cubic-bezier(0.22, 0.78, 0.22, 1) !important;
+            }
+
+            @keyframes mobile-token-ready {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.78; }
+            }
          }
           
         .controls {
@@ -1834,6 +1884,67 @@
    
     
     // --- 3. DRAW TOKENS ON PATH ---
+    // Phone screens use an in-place FLIP transition for moving tokens. This keeps
+    // the desktop renderer untouched while removing expensive mobile DOM churn.
+    function isMobilePerformanceMode() {
+        return window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+    }
+
+    function getTokenCellIndex(color, tokenIndex, position) {
+        if (position === 0) return basePositions[color][tokenIndex];
+        if (position >= 57) return playerPaths[color][56];
+        return playerPaths[color][position - 1];
+    }
+
+    function applyTokenLocationStyle(tokenElement, position) {
+        tokenElement.classList.toggle('token-in-base', position === 0);
+    }
+
+    function moveTokenStepMobile(color, tokenIndex, position, duration) {
+        const tokenId = `token-${color}-${tokenIndex}`;
+        const tokenElement = document.getElementById(tokenId);
+        const cells = document.querySelectorAll('.cell');
+        const targetCell = cells[getTokenCellIndex(color, tokenIndex, position)];
+
+        if (!tokenElement || !targetCell) {
+            drawTokenStep(color, tokenIndex, position);
+            return;
+        }
+
+        const startRect = tokenElement.getBoundingClientRect();
+        if (tokenElement._ludoMotionTimer) clearTimeout(tokenElement._ludoMotionTimer);
+        tokenElement.classList.remove('token-alive', 'token-moving', 'token-Opening', 'token-mobile-animate');
+        tokenElement.classList.add('token-mobile-motion');
+        tokenElement.style.transform = '';
+        tokenElement.style.pointerEvents = 'none';
+        applyTokenLocationStyle(tokenElement, position);
+        targetCell.appendChild(tokenElement);
+
+        const endRect = tokenElement.getBoundingClientRect();
+        const moveX = Math.round((startRect.left + startRect.width / 2) - (endRect.left + endRect.width / 2));
+        const moveY = Math.round((startRect.top + startRect.height / 2) - (endRect.top + endRect.height / 2));
+
+        tokenElement.style.setProperty('--mobile-move-x', `${moveX}px`);
+        tokenElement.style.setProperty('--mobile-move-y', `${moveY}px`);
+        tokenElement.style.setProperty('--mobile-step-duration', `${duration}ms`);
+        void tokenElement.offsetWidth;
+
+        requestAnimationFrame(() => {
+            if (!tokenElement.isConnected) return;
+            tokenElement.classList.add('token-mobile-animate');
+            tokenElement.style.setProperty('--mobile-move-x', '0px');
+            tokenElement.style.setProperty('--mobile-move-y', '0px');
+            tokenElement._ludoMotionTimer = setTimeout(() => {
+                if (!tokenElement.isConnected) return;
+                tokenElement.classList.remove('token-mobile-animate', 'token-mobile-motion');
+                tokenElement.style.removeProperty('--mobile-move-x');
+                tokenElement.style.removeProperty('--mobile-move-y');
+                tokenElement.style.removeProperty('--mobile-step-duration');
+                tokenElement._ludoMotionTimer = null;
+            }, duration + 32);
+        });
+    }
+
     function drawTokens() {
         document.querySelectorAll('.token').forEach(t => t.remove());
         let cellMap = {};
@@ -1863,6 +1974,7 @@
                 let tokenEl = document.createElement('div');
                 tokenEl.className = `token token-${tData.color}`;
                 tokenEl.id = `token-${tData.color}-${tData.id}`;
+                applyTokenLocationStyle(tokenEl, tData.pos);
 
                 let isClickable = false;
 
@@ -1912,15 +2024,13 @@
 
     function drawTokenStep(color, tokenIndex, position) {
         const cells = document.querySelectorAll('.cell');
-        let targetCellIndex;
-        if (position === 0) targetCellIndex = basePositions[color][tokenIndex]; 
-        else if (position >= 57) targetCellIndex = playerPaths[color][56]; 
-        else targetCellIndex = playerPaths[color][position - 1]; 
+        const targetCellIndex = getTokenCellIndex(color, tokenIndex, position);
         
         let tokenEl = document.createElement('div');
         tokenEl.className = `token token-${color}`; 
         tokenEl.id = `token-${color}-${tokenIndex}`; 
         tokenEl.style.pointerEvents = 'none';
+        applyTokenLocationStyle(tokenEl, position);
         
         tokenEl.onclick = function() { handleTokenClick(color, tokenIndex); };
         cells[targetCellIndex].appendChild(tokenEl);
@@ -1963,7 +2073,8 @@
     }
 
     function moveTokenAnimated(color, tokenIndex, startPos, endPos) {
-        let delay = 350; 
+        const mobilePerformanceMode = isMobilePerformanceMode();
+        let delay = mobilePerformanceMode ? 145 : 350;
         let currentStep = startPos;
         
         const aiStatus = document.getElementById('ai-status');
@@ -1976,15 +2087,19 @@
             tokenSound.currentTime = 0.1; 
             if (!isMuted) tokenSound.play(); 
 
-            const exactTokenId = `token-${color}-${tokenIndex}`;
-            const tokenElement = document.getElementById(exactTokenId);
-            if(tokenElement) tokenElement.remove();
-            
-            drawTokenStep(color, tokenIndex, currentStep);
+            if (mobilePerformanceMode) {
+                moveTokenStepMobile(color, tokenIndex, currentStep, 112);
+            } else {
+                const exactTokenId = `token-${color}-${tokenIndex}`;
+                const tokenElement = document.getElementById(exactTokenId);
+                if(tokenElement) tokenElement.remove();
 
-            const newTokenElement = document.getElementById(exactTokenId);
-            if(newTokenElement) 
-                newTokenElement.classList.add('token-moving');
+                drawTokenStep(color, tokenIndex, currentStep);
+
+                const newTokenElement = document.getElementById(exactTokenId);
+                if(newTokenElement)
+                    newTokenElement.classList.add('token-moving');
+            }
 
             if (currentStep < endPos) {
                 setTimeout(step, delay); 
@@ -2061,7 +2176,8 @@
     }
  
     function returnTokenToHomeAnimated(color, tokenIndex,currentPos) {
-        let delay = 35;
+        const mobilePerformanceMode = isMobilePerformanceMode();
+        let delay = mobilePerformanceMode ? 56 : 35;
         let stepPos = currentPos;
         const aiStatus = document.getElementById('ai-status');
         if(aiStatus) aiStatus.innerText = `${color} Token returning to base!`;
@@ -2073,11 +2189,15 @@
                 stepPos--;
                 tokenData[color][tokenIndex] = stepPos;
 
-                const exactTokenId = `token-${color}-${tokenIndex}`;
-                const tokenElement = document.getElementById(exactTokenId);
-                if(tokenElement) tokenElement.remove();
+                if (mobilePerformanceMode) {
+                    moveTokenStepMobile(color, tokenIndex, stepPos, 40);
+                } else {
+                    const exactTokenId = `token-${color}-${tokenIndex}`;
+                    const tokenElement = document.getElementById(exactTokenId);
+                    if(tokenElement) tokenElement.remove();
 
-                drawTokenStep(color, tokenIndex, stepPos);
+                    drawTokenStep(color, tokenIndex, stepPos);
+                }
 
                 setTimeout(stepBack, delay);
             } else {
