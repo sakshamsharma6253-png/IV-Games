@@ -843,24 +843,6 @@
 
             .token-alive { animation: mobile-token-ready 1.25s ease-in-out infinite; }
             
-            @keyframes mobileTokenFlipHop {
-                0% { transform: translate3d(calc(-50% + var(--start-x)), calc(var(--token-y) + var(--start-y)), 0) rotate(-45deg) scale(var(--token-scale)); }
-                50% { transform: translate3d(calc(-50% + var(--start-x) * 0.5), calc(var(--token-y) + var(--start-y) * 0.5 - 20px), 0) rotate(-45deg) scale(calc(var(--token-scale) + 0.15)); }
-                100% { transform: translate3d(-50%, var(--token-y), 0) rotate(-45deg) scale(var(--token-scale)); }
-            }
-
-            .token-mobile-motion {
-                --start-x: 0px;
-                --start-y: 0px;
-                will-change: transform;
-                transform: translate3d(calc(-50% + var(--start-x)), calc(var(--token-y) + var(--start-y)), 0) rotate(-45deg) scale(var(--token-scale)) !important;
-            }
-
-            .token-mobile-motion.token-mobile-animate {
-                animation: mobileTokenFlipHop var(--mobile-step-duration, 240ms) ease-in-out forwards !important;
-                transition: none !important;
-            }
-
             @keyframes mobile-token-ready {
                 0%, 100% { opacity: 1; }
                 50% { opacity: 0.78; }
@@ -1916,36 +1898,29 @@
             return;
         }
 
+        // 1. Hop shuru hone se pehle ki exact pixel position
         const startRect = tokenElement.getBoundingClientRect();
-        if (tokenElement._ludoMotionTimer) clearTimeout(tokenElement._ludoMotionTimer);
-        tokenElement.classList.remove('token-alive', 'token-moving', 'token-Opening', 'token-mobile-animate');
-        tokenElement.classList.add('token-mobile-motion');
-        tokenElement.style.transform = '';
-        tokenElement.style.pointerEvents = 'none';
-        applyTokenLocationStyle(tokenElement, position);
+        
+        // 2. Token ko naye block mein daalo
         targetCell.appendChild(tokenElement);
+        applyTokenLocationStyle(tokenElement, position);
 
+        // 3. Naye block ki exact pixel position
         const endRect = tokenElement.getBoundingClientRect();
-        const moveX = Math.round((startRect.left + startRect.width / 2) - (endRect.left + endRect.width / 2));
-        const moveY = Math.round((startRect.top + startRect.height / 2) - (endRect.top + endRect.height / 2));
+        
+        // 4. Distance calculate karo
+        const moveX = startRect.left - endRect.left;
+        const moveY = startRect.top - endRect.top;
 
-        tokenElement.style.setProperty('--start-x', `${moveX}px`);
-        tokenElement.style.setProperty('--start-y', `${moveY}px`);
-        tokenElement.style.setProperty('--mobile-step-duration', `${duration}ms`);
-        void tokenElement.offsetWidth;
-
-        requestAnimationFrame(() => {
-            if (!tokenElement.isConnected) return;
-            tokenElement.classList.add('token-mobile-animate');
-            
-            tokenElement._ludoMotionTimer = setTimeout(() => {
-                if (!tokenElement.isConnected) return;
-                tokenElement.classList.remove('token-mobile-animate', 'token-mobile-motion');
-                tokenElement.style.removeProperty('--start-x');
-                tokenElement.style.removeProperty('--start-y');
-                tokenElement.style.removeProperty('--mobile-step-duration');
-                tokenElement._ludoMotionTimer = null;
-            }, duration + 32);
+        // 5. LUDO KING STYLE HOP (Web Animations API - GPU Accelerated 60FPS)
+        tokenElement.animate([
+            { transform: `translate3d(calc(-50% + ${moveX}px), calc(var(--token-y) + ${moveY}px), 0) rotate(-45deg) scale(var(--token-scale))` },
+            { transform: `translate3d(calc(-50% + ${moveX * 0.5}px), calc(var(--token-y) + ${moveY * 0.5}px - 30px), 0) rotate(-45deg) scale(calc(var(--token-scale) + 0.15))` },
+            { transform: `translate3d(-50%, var(--token-y), 0) rotate(-45deg) scale(var(--token-scale))` }
+        ], {
+            duration: duration,
+            easing: 'ease-in-out',
+            fill: 'forwards'
         });
     }
 
@@ -2181,7 +2156,7 @@
  
     function returnTokenToHomeAnimated(color, tokenIndex,currentPos) {
         const mobilePerformanceMode = isMobilePerformanceMode();
-        let delay = mobilePerformanceMode ? 60 : 35;
+        let delay = mobilePerformanceMode ? 80 : 35;
         let stepPos = currentPos;
         const aiStatus = document.getElementById('ai-status');
         if(aiStatus) aiStatus.innerText = `${color} Token returning to base!`;
@@ -2194,7 +2169,7 @@
                 tokenData[color][tokenIndex] = stepPos;
 
                 if (mobilePerformanceMode) {
-                    moveTokenStepMobile(color, tokenIndex, stepPos, 50);
+                    moveTokenStepMobile(color, tokenIndex, stepPos, 70);
                 } else {
                     const exactTokenId = `token-${color}-${tokenIndex}`;
                     const tokenElement = document.getElementById(exactTokenId);
