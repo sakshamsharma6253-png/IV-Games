@@ -1868,11 +1868,6 @@
         });
     }
 
-   
-    
-    // --- 3. DRAW TOKENS ON PATH ---
-    // Phone screens use an in-place FLIP transition for moving tokens. This keeps
-    // the desktop renderer untouched while removing expensive mobile DOM churn.
     function isMobilePerformanceMode() {
         return window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
     }
@@ -1898,21 +1893,15 @@
             return;
         }
 
-        // 1. Hop shuru hone se pehle ki exact pixel position
         const startRect = tokenElement.getBoundingClientRect();
-        
-        // 2. Token ko naye block mein daalo
+    
         targetCell.appendChild(tokenElement);
         applyTokenLocationStyle(tokenElement, position);
 
-        // 3. Naye block ki exact pixel position
         const endRect = tokenElement.getBoundingClientRect();
-        
-        // 4. Distance calculate karo
         const moveX = startRect.left - endRect.left;
         const moveY = startRect.top - endRect.top;
 
-        // 5. LUDO KING STYLE HOP (Web Animations API - GPU Accelerated 60FPS)
         tokenElement.animate([
             { transform: `translate3d(calc(-50% + ${moveX}px), calc(var(--token-y) + ${moveY}px), 0) rotate(-45deg) scale(var(--token-scale))` },
             { transform: `translate3d(calc(-50% + ${moveX * 0.5}px), calc(var(--token-y) + ${moveY * 0.5}px - 30px), 0) rotate(-45deg) scale(calc(var(--token-scale) + 0.15))` },

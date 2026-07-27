@@ -810,9 +810,23 @@
 
   <div class="completion-layer" id="stats-layer" role="dialog">
     <section class="completion-card">
-      <h2 style="margin-bottom: 20px; font-family: 'Space Grotesk', sans-serif;">Statistics</h2>
+      <h2 style="margin-bottom: 15px; font-family: 'Space Grotesk', sans-serif;">Statistics</h2>
       
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px;">
+      <div style="margin-bottom: 20px;">
+        <select id="stat-size-select" style="width: 100%; padding: 10px; background: var(--surface-2); color: #fff; border: 1px solid var(--line); border-radius: 8px; font-family: 'Space Grotesk', sans-serif; font-size: 15px; cursor: pointer; outline: none;">
+          <option value="4">4x4 Grid</option>
+          <option value="5">5x5 Grid</option>
+          <option value="6">6x6 Grid</option>
+          <option value="7">7x7 Grid</option>
+          <option value="8">8x8 Grid</option>
+          <option value="9">9x9 Grid</option>
+          <option value="10">10x10 Grid</option>
+          <option value="11">11x11 Grid</option>
+          <option value="12">12x12 Grid</option>
+        </select>
+      </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px;">
         <div style="background: var(--surface-2); padding: 15px; border-radius: 12px; border: 1px solid var(--line);">
           <span style="display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; font-weight: 800;">Games Won</span>
           <strong id="stat-wins" style="font-size: 28px; font-family: 'Space Grotesk', sans-serif; color: var(--success);">0</strong>
@@ -859,11 +873,18 @@
   let elapsedTimer = null;
   let isGamePaused = false;
 
-  let hintsLeft = 4;
+ let hintsLeft = 4;
   let solutionsLeft = 2;
   let isPreviewing = false; 
   let userSettings = { hintsEnabled: true, solutionsEnabled: true };
-  let gameStats = JSON.parse(localStorage.getItem('nQueensStats')) || { wins: 0, bestTimeMs: Infinity };
+  
+  let gameStats = JSON.parse(localStorage.getItem('nQueensStatsV2'));
+  if (!gameStats || gameStats.wins !== undefined) { 
+      gameStats = {};
+      for (let i = 4; i <= 12; i++) {
+          gameStats[i] = { wins: 0, bestTimeMs: Infinity };
+      }
+  }
 
   function formatTime(ms) { 
     const totalSeconds = Math.floor(Math.max(0, ms) / 1000);
@@ -1025,12 +1046,13 @@ if (placedCount === settings.size && !hasConflict) {
       stopTimers();
       updateStatus("Puzzle Solved!", "complete");
 
-      gameStats.wins++;
+      let currentGrid = settings.size;
+      gameStats[currentGrid].wins++;
       let finalMs = currentElapsed();
-      if (finalMs < gameStats.bestTimeMs) {
-        gameStats.bestTimeMs = finalMs;
+      if (finalMs < gameStats[currentGrid].bestTimeMs) {
+        gameStats[currentGrid].bestTimeMs = finalMs;
       }
-      localStorage.setItem('nQueensStats', JSON.stringify(gameStats));
+      localStorage.setItem('nQueensStatsV2', JSON.stringify(gameStats));
 
       const sizeBtn = $("#change-size-btn");
       if(sizeBtn) {
@@ -1058,7 +1080,6 @@ if (placedCount === settings.size && !hasConflict) {
         restartBtn.style.pointerEvents = "none";
       }
 
-      // NAYA: Match jeetne ke baad top wala Back to Home button disable karo
       const topBackBtn = $("#top-back-home");
       if (topBackBtn) {
         topBackBtn.style.pointerEvents = "none";
@@ -1497,10 +1518,21 @@ if (placedCount === settings.size && !hasConflict) {
       $("#settings-layer").classList.remove("visible");
     });
 
+    function updateStatsUI(sizeStr) {
+      let stats = gameStats[sizeStr];
+      $("#stat-wins").textContent = stats.wins;
+      $("#stat-time").textContent = stats.bestTimeMs === Infinity ? "--:--" : formatTime(stats.bestTimeMs);
+    }
+
     $("#home-stats-btn").addEventListener("click", () => {
-      $("#stat-wins").textContent = gameStats.wins;
-      $("#stat-time").textContent = gameStats.bestTimeMs === Infinity ? "--:--" : formatTime(gameStats.bestTimeMs);
+      let currentSizeStr = settings.size.toString();
+      $("#stat-size-select").value = currentSizeStr;
+      updateStatsUI(currentSizeStr);
       $("#stats-layer").classList.add("visible");
+    });
+
+    $("#stat-size-select").addEventListener("change", (e) => {
+      updateStatsUI(e.target.value);
     });
 
     $("#close-stats-btn").addEventListener("click", () => {
