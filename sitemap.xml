@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://itvoicegames.com/index.html</loc>
+    <loc>https://itvoicegames.com/</loc>
     <lastmod>2026-07-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -64,13 +64,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://itvoicegames.com/minisudoku_tutorial.html</loc>
+    <loc>https://itvoicegames.com/tutorial/minisudoku_tutorial.html</loc>
     <lastmod>2026-07-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://itvoicegames.com//queens_tutorial.html</loc>
+    <loc>https://itvoicegames.com/tutorial/queens_tutorial.html</loc>
     <lastmod>2026-07-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

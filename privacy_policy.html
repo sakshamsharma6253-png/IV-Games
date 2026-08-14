@@ -1,96 +1,260 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Privacy Policy — IV Games</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Privacy Policy | ITVoice Games</title>
+    <link id="favicon" rel="icon" type="image/webp" href="favicon/favicon.dark.webp">
+    <meta name="description" content="Read the Privacy Policy of ITVoice Games. Learn how we collect, use, and protect your personal data while you enjoy playing our free online web games.">
+    <link rel="canonical" href="https://itvoicegames.com/privacy_policy.html">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Informatic Computech Private Limited">
+    <meta name="theme-color" content="#0a0a0a">
+
+     <meta property="og:title" content="Privacy Policy | ITVoice Games">
+     <meta property="og:description" content="Read the Privacy Policy of ITVoice Games. Learn how we collect, use, and protect your personal data.">
+     <meta property="og:type" content="website">
+     <meta property="og:url" content="https://itvoicegames.com/privacy_policy.html">
+     <meta property="og:image" content="https://itvoicegames.com/assets/og-image.jpg">
+     <meta property="og:site_name" content="ITVoice Games">
+     <meta property="og:locale" content="en_US">
+
+     <link rel="preload" as="image" href="icons/ivgames-logo.webp">
+     <link rel="preload" as="image" href="icons/ivgames-logo-light.webp">
+
     <style>
+      :root, [data-theme="dark"] {
+        --bg-fallback: #0f172a;
+        --bg-image: url('image/bg.webp');
+        --bg-overlay: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.95));
+        --text-main: #cbd5e1;
+        --header-border: rgba(255,255,255,0.40);
+        
+        --title-color: #38bdf8;
+        --heading-color: #4facfe;
+        
+        --footer-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.3) 100%);
+        --footer-border: rgba(255, 255, 255, 0.15);
+        --footer-link: #888;
+        --footer-text: #888;
+      }
+
+      [data-theme="light"] {
+        --bg-fallback: #f8fafc;
+        --bg-image: none;
+        --bg-overlay: linear-gradient(rgba(248, 250, 252, 0.9), rgba(241, 245, 249, 0.98));
+        --text-main: #334155;
+        --header-border: rgba(0, 0, 0, 0.40);
+        
+        --title-color: #0ea5e9;
+        --heading-color: #2563eb;
+        
+        --footer-bg: #ffffff;
+        --footer-border: #e2e8f0;
+        --footer-link: #64748b;
+        --footer-text: #475569;
+      }
+
+      [data-theme="dark"] .logo-light { display: none !important; }
+      [data-theme="dark"] .logo-dark { display: block !important; }
+      [data-theme="light"] .logo-dark { display: none !important; }
+      [data-theme="light"] .logo-light { display: block !important; }
 
        html, body {
         margin: 0 !important;
         padding: 0 !important;
-        height: 100%;
-        background-color: #0f172a; 
+        min-height: 100vh !important;
+        background-color: var(--bg-fallback);
+        color: var(--text-main);
       }
 
       body {
-        color: #cbd5e1;
         font-family: sans-serif;
-        min-height: 100vh;
         display: flex;
         flex-direction: column;
-        background-color: #0f172a;
+        transition: background-color 0.3s ease, color 0.3s ease;
       }
       
       .wrap {
         max-width: 1000px;
         width: 100%;
         margin: 0 auto;
-        padding: 20px 20px 0 20px !important; 
+        padding: 10px 20px 40px 20px !important; 
         display: flex;
         flex-direction: column;
         flex-grow: 1; 
         box-sizing: border-box;
       }
 
-      .main-footer {
-        margin-top: -18px; 
-        margin-bottom: -30px !important;
-        padding: 30px 20px 20px 20px;
-        width: 95%;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.3) 100%);
-        border-top: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 0px 10px 0 0; 
+      header {
+        display: flex; 
+        flex-wrap: wrap; 
+        justify-content: space-between; 
+        align-items: center; 
+        padding: 5px 0 20px 0; 
+        width: 100%; 
+        margin-bottom: 30px; 
+        gap: 15px; 
+        border-bottom: 1px solid var(--header-border);
+        transition: border-color 0.3s ease;
+      }
+
+      .logo-container a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+
+      .header-logo {
+        height: 65px;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        display: block;
+        margin: 0;
+        padding: 0;
+      }
+
+      .nav-buttons {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 0;
+        margin-top: 0; 
+        flex-wrap: wrap;
+      }  
+
+    .btn-header-outline, .btn-ghost {
+        box-sizing: border-box;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background: transparent;
+        color: #26f6b0 !important; 
+        border: 1px solid #26f6b0 !important; 
+        gap: 6px;
+      }
+      
+      .btn-header-outline:hover, .btn-ghost:hover { 
+        background: #26f6b0 !important; 
+        color: #031815 !important; 
+      }
+      
+     .btn-blue {
+        box-sizing: border-box;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background: transparent !important;
+        color: #4facfe !important; 
+        border: 1px solid #4facfe !important; 
+        gap: 6px;
+      }
+      
+      .btn-blue:hover {
+        background: #4facfe !important; 
+        color: #ffffff !important;      
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+      }
+
+     [data-theme="light"] .btn-header-outline, 
+      [data-theme="light"] .btn-ghost {
+        background: transparent !important; 
+        border-color: #3b82f6 !important;   
+        color: #3b82f6 !important;          
+      }
+      
+      [data-theme="light"] .btn-header-outline:hover, 
+      [data-theme="light"] .btn-ghost:hover {
+        background: #3b82f6 !important;     
+        color: #ffffff !important;          
+        border-color: #3b82f6 !important;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+
+       .page-header-text {
         text-align: center;
-        backdrop-filter: blur(8px); 
-        -webkit-backdrop-filter: blur(8px);
-        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15); 
+        margin-bottom: 40px;
       }
 
       .policy-card {
         background: linear-gradient(90deg, rgba(79,172,254,0.06) 0%, rgba(255,255,255,0.01) 100%);
-        border-left: 4px solid #4facfe; 
+        border-left: 4px solid var(--heading-color); 
         border-radius: 4px 12px 12px 4px;
         padding: 20px 25px;
         margin-bottom: 20px;
         transition: all 0.3s ease;
       }
       
+      [data-theme="light"] .policy-card {
+        background: rgba(37, 99, 235, 0.05);
+        border: 1px solid rgba(0,0,0,0.05);
+        border-left: 4px solid var(--heading-color); 
+      }
+
       .policy-card:hover {
+        transform: translateX(6px); 
+        box-shadow: -2px 5px 15px rgba(0,0,0,0.1);
+      }
+      
+      [data-theme="dark"] .policy-card:hover {
         background: linear-gradient(90deg, rgba(79,172,254,0.12) 0%, rgba(255,255,255,0.02) 100%);
         border-left: 4px solid #00f2fe;
-        transform: translateX(6px); 
         box-shadow: -2px 5px 15px rgba(0,0,0,0.2);
       }
 
       .policy-title {
-        color: #ffffff;
+        color: var(--title-color);
         font-weight: bold;
         font-size: 1.25rem;
         margin-bottom: 12px;
         display: flex;
         align-items: center;
         gap: 8px;
+        transition: color 0.3s ease;
       }
 
       .policy-title::before {
         content: "◈"; 
-        color: #4facfe;
+        color: var(--heading-color);
         font-size: 1.2rem;
+        transition: color 0.3s ease;
       }
 
-      .brand {
-        display: flex;
-        align-items: center; 
+      .dot-list {
+        margin-top: 5px;
+        margin-bottom: 20px;
+        padding-left: 25px;
+        font-size: 1.05rem;
       }
 
-      .iv-logo {
-        display: block;
+      .dot-list li {
+        margin-bottom: 8px;
+      }
+
+      .main-footer {
+        margin-top: auto !important; 
+        padding: 30px 20px 20px 20px;
         width: 100%;
-        max-width: 200px; 
-        height: auto;
-        object-fit: contain; 
+        background: var(--footer-bg);
+        border-top: 1px solid var(--footer-border);
+        text-align: center;
+        box-sizing: border-box;
+        transition: background 0.3s ease, border-color 0.3s ease;
       }
 
        .footer-nav {
@@ -100,41 +264,44 @@
         gap: 15px;
         margin-bottom: 15px;
       }
-     
+      
+      .footer-nav a {
+        color: var(--footer-link);
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.2s;
+      }
+
+      .footer-nav a:hover,
+      .footer-nav a.active-link {
+        color: #4facfe !important;
+      }
+
       .copyright-text {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 10px;
-        color: #888;
+        color: var(--footer-link);
         font-size: 13px;
-        margin-top: 30px;
+        margin-top: 20px;
+        transition: color 0.3s ease;
       }
 
-
-       @media (max-width: 768px) {
-        .nav-buttons {
-          justify-content: center;
-        }
-        .nav-buttons .btn-ghost {
-          font-size: 13px; 
-          padding: 6px 12px;
-        }
-      }
-
-      @media (max-width: 767px) {
+       @media (max-width: 767px) {
         
         header {
           flex-direction: column !important; 
           justify-content: center !important;
           text-align: center;
         }
+
         .nav-buttons {
           justify-content: center;
         }
-        .nav-buttons .btn-ghost {
+        .nav-buttons .btn-ghost, .nav-buttons .btn-blue {
           font-size: 13px; 
-          padding: 6px 12px;
+          padding: 8px 12px;
         }
         
         .footer-nav {
@@ -150,7 +317,6 @@
           white-space: normal; 
           line-height: 1.4;
         }
-
        
         .copyright-text {
           flex-direction: column; 
@@ -161,74 +327,28 @@
         }
       }
 
-      .btn-blue {
-        color: #4facfe !important;
-        border-color: rgba(79, 172, 254, 0.5) !important;
-        font-weight: bold;
-      }
-      .btn-blue:hover {
-        background: rgba(79, 172, 254, 0.15) !important;
-        color: #ffffff !important;
-        box-shadow: 0 0 12px rgba(79, 172, 254, 0.4);
-        border-color: #4facfe !important;
-      }
-
-      @media (min-width: 768px) and (max-width: 1024px) {
-
-          .main-footer {
-            margin-top: auto !important;
-            flex-shrink: 0 !important;
-            width: 120% !important;
-            margin-left: -60px;
-            position: relative !important;
-            bottom: 20px !important;
-          }
-        }
-
-        @media screen and (min-width: 1024px) and (max-width: 1366px) and (min-height: 750px) {
-            .main-footer {
-                margin-top: auto !important; 
-                flex-shrink: 0 !important;
-                width: 100% !important;
-                position: relative !important;
-                z-index: 10;
-                padding: 30px 20px 60px 20px;
-            }
-        }
-
-        @media screen and (min-width: 900px) and (max-width: 1023px) {
-            .main-footer {
-                margin-top: 0px !important;
-                flex-shrink: 0 !important;
-                width: 100% !important;
-                position: relative !important;
-                padding-bottom: 80px !important; 
-            }
-        }
-
     </style>
   </head>
   <body>
     <div class="wrap">
-       <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 15px 0; width: 100%; margin-bottom: 30px; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.3);">
-        <div style="display: flex; align-items: center;">
-          <img src="icons/ivgames-logo.webp" alt="IV Games" style="max-height: 60px; display: block; margin-top: -40px; padding: 0;">
+       <header>
+          <a href="index.html" style="display: flex; align-items: center; text-decoration: none; cursor: pointer;">
+           <img src="icons/ivgames-logo.webp" alt="IV Games" class="logo-dark header-logo">
+           <img src="icons/ivgames-logo-light.webp" alt="IV Games" class="logo-light header-logo">
+        </a>
+        
+       <div class="nav-buttons">
+          <a class="btn-ghost" href="https://www.itvoice.in/" target="_blank"> Visit Website <span class="arrow" style="font-size: 16px;">&#x2197;</span></a>
+          <a class="btn-ghost" href="contact.html">Contact Us</a>
+          <a class="btn-blue" href="index.html">← Back to Dashboard</a>
         </div>
-        
-        <div class="nav-buttons" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-         <a class="btn-ghost" href="https://www.itvoice.in/" target="_blank"> Visit Website <span class="arrow" style="font-size: 16px;">&#x2197;</span></a>
-          <a class="btn-ghost" href="contact.html" style="margin: 0;">Contact Us</a>
-           <a class="btn-ghost btn-blue" href="index.html" style="margin: 0;">← Back to Dashboard</a>
-        </div>
-        
       </header>
-        
-      </header>
+
       <div class="policy-container">
         
-        <div class="intro-highlight" style="text-align: center; padding: 25px 20px; margin-bottom: 30px; border-radius: 12px; border: 1px solid rgba(79, 172, 254, 0.2);">
-          <div class="blue-heading" style="font-size: 2rem; margin-bottom: 10px;">Privacy Policy</div>
-          <div style="color: #888; font-size: 0.9rem; margin-bottom: 15px; font-style: italic;">Last Updated: June 2026</div>
+        <div class="intro-highlight" style="text-align: center; padding: 25px 20px; margin-bottom: 30px; border-radius: 12px; border: 1px solid var(--header-border);">
+          <div class="blue-heading" style="font-size: 2rem; margin-bottom: 10px; color: var(--heading-color);">Privacy Policy</div>
+          <div style="color: var(--footer-link); font-size: 0.9rem; margin-bottom: 15px; font-style: italic;">Last Updated: June 2026</div>
           <p style="margin: 0; font-size: 1.05rem;">
             IV Games is owned and operated by IT Voice Media Private Limited.<br>
             We respect your privacy and are committed to protecting it.
@@ -238,7 +358,7 @@
         <div class="policy-card">
           <div class="policy-title">1. Introduction</div>
           <p style="margin: 0;">IV Games is designed to allow users to enjoy browser-based games with minimal data collection.<br>
-          <strong style="color: #4facfe;">Our philosophy is simple:</strong><br>
+          <strong style="color: var(--heading-color);">Our philosophy is simple:</strong><br>
           Play games without creating unnecessary accounts or sharing personal information.</p>
         </div>
 
@@ -308,18 +428,18 @@
           <p style="margin: 0;">We reserve the right to update this Privacy Policy at any time. Changes become effective upon publication on this page.<br><br>
           Questions regarding this Privacy Policy may be directed to IT Voice Media Private Limited through the official contact details published on the Website.</p>
         </div>
-
       </div>
+    </div>
    
       <footer class="main-footer">
         
         <div class="footer-nav">
-          <a href="about.html" style="color: #888; text-decoration: none; font-size: 14px;">About Us</a>
-          <a href="contact.html"style="color: #888; text-decoration: none; font-size: 14px;">Contact Us</a>
-          <a href="privacy_policy.html" style="color: #4facfe; text-decoration: none; font-size: 14px;">Privacy Policy</a>
-          <a href="terms.html" style="color: #888; text-decoration: none; font-size: 14px;">Terms & Conditions</a>
-          <a href="disclaimer.html" style="color: #888; text-decoration: none; font-size: 14px;">Disclaimer</a>
-          <a href="cookie_policy.html" style="color: #888; text-decoration: none; font-size: 14px;">Cookie Policy</a>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact Us</a>
+          <a href="privacy_policy.html" class="active-link">Privacy Policy</a>
+          <a href="terms.html">Terms & Conditions</a>
+          <a href="disclaimer.html">Disclaimer</a>
+          <a href="cookie_policy.html">Cookie Policy</a>
         </div>
         
         <div class="copyright-text">
@@ -331,5 +451,38 @@
       </footer>
 
     </div>
+
+   <script>
+      function updateFavicon(theme) {
+          const favicon = document.getElementById('favicon');
+          if (favicon) {
+              favicon.href = theme === 'dark' ? 'favicon/favicon.dark.webp' : 'favicon/favicon.light.webp';
+          }
+      }
+
+      const htmlElement = document.documentElement;
+      const metaThemeColor = document.getElementById('meta-theme-color');
+
+      const savedTheme = localStorage.getItem('ivGamesTheme') || 'dark';
+      htmlElement.setAttribute('data-theme', savedTheme);
+      updateFavicon(savedTheme);
+      
+      if (metaThemeColor) {
+          metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#0f172a' : '#f8fafc');
+      }
+      
+      window.addEventListener('storage', (event) => {
+          if (event.key === 'ivGamesTheme' || !event.key) {
+              const newTheme = localStorage.getItem('ivGamesTheme') || 'dark';
+              htmlElement.setAttribute('data-theme', newTheme);
+              
+              updateFavicon(newTheme);
+              if (metaThemeColor) {
+                  metaThemeColor.setAttribute('content', newTheme === 'dark' ? '#0f172a' : '#f8fafc');
+              }
+          }
+      });
+
+    </script>
   </body>
 </html>

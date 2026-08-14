@@ -451,3 +451,29 @@ img.icon[alt="Ludo"] {
         margin-right: 10px;
     }
 }
+
+@media (max-width: 768px) {
+    .top-header, .game-title { 
+        display: none; 
+    }
+
+    .ludo-board {
+        width: 95vw;
+        height: 95vw; 
+        margin: auto;
+    }
+
+    
+    .player-controls {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #0b346e; 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        z-index: 100;
+    }
+}

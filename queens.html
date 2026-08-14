@@ -1,379 +1,1979 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>N-Queens Pro Puzzle</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>N-Queens Game | IV Games</title>
+<meta name="description" content="An interactive N-Queens puzzle game.">
+<link id="favicon" rel="icon" type="image/webp" href="favicon/favicon.dark.webp">
+<meta name="theme-color" id="meta-theme-color" content="#0f172a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="icons/ivgames-logo.webp">
+<link rel="preload" as="image" href="icons/ivgames-logo-light.webp">
 <style>
+  :root, [data-theme="dark"] {
+    color-scheme: dark;
+    --bg-gradient: radial-gradient(circle at 12% 6%, rgba(93, 124, 255, .27), transparent 28rem),
+                   radial-gradient(circle at 87% 90%, rgba(255, 75, 96, .18), transparent 24rem),
+                   linear-gradient(135deg, var(--page), var(--page-deep));
+    --pattern-color: rgba(148, 170, 255, .07);
+    
+    --ink: #f5f7ff;
+    --muted: #aab5d1;
+    --muted-strong: #d4dcf0;
+    --page: #071126;
+    --page-deep: #040a18;
+    --surface: rgba(14, 29, 60, .78);
+    --surface-solid: #10234a;
+    --surface-2: rgba(28, 52, 98, .58);
+    --line: rgba(164, 190, 255, .18);
+    --home-card-bg: linear-gradient(145deg, rgba(20, 43, 82, 0.88), rgba(7, 19, 40, 0.84));
+    --setup-group-bg: rgba(6, 17, 37, 0.42);
+    --choice-bg: rgba(255, 255, 255, 0.05);
+    
+    --accent: #ff4b60;
+    --accent-bright: #ff6b7c;
+    --blue: #5d7cff;
+    --blue-bright: #91a5ff;
+    --gold: #ffcf5b;
+    --success: #4cdb9b;
+    --warning: #ffb84d;
+    --danger: #ff6b6b;
+    --shadow: 0 24px 70px rgba(0, 0, 0, .34);
+    
+    --header-btn-bg: rgba(9, 22, 46, 0.78);
+    --header-btn-border: rgba(93, 124, 255, 0.3);
+    --header-btn-color: #fff;
+    --logo-filter: drop-shadow(0 4px 20px rgba(93, 124, 255, 0.5));
+    --queen-dark-color: #ffffff;
+    --queen-light-color: #1a1a1a;
+  }
+
+  [data-theme="light"] {
+    color-scheme: light;
+    --bg-gradient: linear-gradient(135deg, #ffffff 0%, #f4f7fb 50%, #e2e8f4 100%);
+    --pattern-color: rgba(59, 76, 202, 0.05);
+    
+    --ink: #0f172a;
+    --muted: #64748b;
+    --muted-strong: #334155;
+    --page: #f8fafc;
+    --page-deep: #e2e8f0;
+    --surface: rgba(255, 255, 255, 0.85);
+    --surface-solid: #ffffff;
+    --surface-2: #f1f5f9;
+    --line: rgba(59, 76, 202, 0.2);
+    --home-card-bg: rgba(255, 255, 255, 0.95);
+    --setup-group-bg: rgba(248, 250, 252, 0.8);
+    --choice-bg: #ffffff;
+    
+    --accent: #ef4444;
+    --accent-bright: #f87171;
+    --blue: #3b82f6;
+    --blue-bright: #60a5fa;
+    --gold: #f59e0b;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    
+    --header-btn-bg: #ffffff;
+    --header-btn-border: var(--blue);
+    --header-btn-color: var(--blue);
+    --logo-filter: none;
+    --queen-dark-color: #ffffff;
+    --queen-light-color: #1a1a1a;
+  }
+
+  .logo-light { display: none !important; }
+  .logo-dark { display: block !important; }
+
+  [data-theme="light"] .logo-dark { display: none !important; }
+  [data-theme="light"] .logo-light { display: block !important; }
+
+  body[data-board-theme="classic"] {
+    --board-light: #f0f0f0;
+    --board-dark: #2c2c2c;
+  }
+  body[data-board-theme="blue"] {
+    --board-light: #e9efff;
+    --board-dark: #6380ce;
+  }
+
   * { box-sizing: border-box; }
+  html { min-height: 100%; background: var(--page-deep); }
   body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    color: #e6f0ef;
-    padding: 20px;
-    margin: 0;
+    min-width: 320px;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  #wrap {
-    width: 100%;
-    max-width: 1000px;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    backdrop-filter: blur(10px);
-  }
-  h2 {
     margin: 0;
-    font-size: 28px;
-    font-weight: 600;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    color: var(--ink);
+    font-family: Outfit, system-ui, sans-serif;
+    background: var(--bg-gradient);
+    transition: background 0.3s ease, color 0.3s ease;
   }
-  .top-bar { 
-    display: flex; justify-content: space-between; align-items: center; 
-    margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: .32;
+    background-image: linear-gradient(var(--pattern-color) 1px, transparent 1px), linear-gradient(90deg, var(--pattern-color) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(to bottom, #000, transparent 78%);
   }
-  
-  .btn-back {
-    background: transparent; border: 2px solid #18a37b; color: #20d8a4; text-decoration: none;
-    padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; transition: all 0.3s ease;
+  button, select { 
+    font: inherit; 
   }
-  .btn-back:hover { background: #18a37b; color: #fff; box-shadow: 0 4px 10px rgba(24, 163, 123, 0.4); }
-  
-  .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
-  .muted { color: #b0c4de; font-size: 15px; }
-  
-  .control-wrapper {
-    display: flex; align-items: center; background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(24, 163, 123, 0.5); border-radius: 8px; padding: 6px 14px;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.3); transition: border-color 0.3s;
+  button { 
+    -webkit-tap-highlight-color: transparent; 
   }
-  .control-wrapper:focus-within { border-color: #20d8a4; }
-  .control-wrapper label { font-size: 14px; font-weight: 600; color: #b0c4de; margin-right: 10px; cursor: pointer; }
-  
-  input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { 
-    opacity: 1 !important; display: block !important; cursor: pointer; 
-  }
-  input[type="number"] {
-    background: transparent; border: none; color: #20d8a4; font-size: 16px; font-weight: bold; 
-    width: 45px; text-align: center; outline: none; padding: 0;
-  }
-  select.theme-select {
-    background: transparent; border: none; color: #20d8a4; font-size: 15px; font-weight: bold; 
-    outline: none; cursor: pointer; padding-right: 5px;
-  }
-  select.theme-select option { background: #222; color: #fff; }
-  
-  .btn {
-    background: #18a37b; color: #fff; padding: 10px 18px; font-size: 14px; font-family: inherit;
-    font-weight: 600; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-  }
-  .btn:hover { background: #1bc292; transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.3); }
-  .btn:active { transform: translateY(0); box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-
-  #status {
-    margin-top: 10px; background: rgba(0,0,0,0.3); padding: 10px 15px;
-    border-radius: 8px; border-left: 4px solid #18a37b; font-weight: 600;
+  button:focus-visible, select:focus-visible { 
+    outline: 3px solid rgba(145, 165, 255, .65); 
+    outline-offset: 3px; 
   }
 
-  
-  .board-container {
+  .app-shell { 
     position: relative; 
-    width: 100%;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    width: min(1180px, calc(100% - 32px)); 
+    margin: 0 auto; 
+    padding: 26px 0 36px; 
+  }
+
+  .screen { 
+    display: none; 
+    animation: screen-in .35s ease both; 
+  }
+
+  .screen.active { 
+    display: block; 
+  }
+  #home-screen.active { 
+    display: flex; flex-direction: column; 
+    min-height: calc(100vh - 62px); 
+  }
+  
+  #visual-screen.active {
     display: flex;
     flex-direction: column;
+    min-height: calc(100vh - 62px);
+  }
+  #visual-screen.active::before,
+  #visual-screen.active::after {
+    content: "";
+    flex-grow: 1;
   }
 
-  #win-overlay {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(4px);
-    border-radius: 12px;
-    display: none; 
-    flex-direction: column;
-    justify-content: center;
+  @keyframes screen-in { 
+    from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } 
+  }
+
+  .home-layout { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    flex: 1; 
+  }
+
+  .settings-card { 
+    width: min(100%, 720px); 
+    padding: clamp(26px, 5vw, 46px); 
+    border: 1px solid var(--line); 
+    border-radius: 30px; 
+    background: var(--home-card-bg); 
+    box-shadow: 0 26px 75px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1); 
+    backdrop-filter: blur(16px);
+    text-align: center;
+  }
+  
+  .setup-group { 
+    padding: 15px; 
+    border: 1px solid var(--line); 
+    border-radius: 16px; 
+    background: var(--setup-group-bg); 
+    text-align: left; 
+  }
+  .setup-label { 
+    display: flex; 
     align-items: center;
-    z-index: 10;
-    animation: fadeIn 0.4s ease;
-    padding: 20px;
+    gap: 6px;
+    margin-bottom: 11px; 
+    color: var(--ink); 
+    font-size: 11px; 
+    font-weight: 900; 
+    letter-spacing: 0.12em; 
+    text-transform: uppercase; 
   }
 
-  .win-text {
-    font-size: clamp(24px, 4vw, 36px); font-weight: 600; color: #4ade80;
-    text-shadow: 0 0 15px rgba(74, 222, 128, 0.6); margin-bottom: 20px; text-align: center;
-    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  .setup-label svg {
+    width: 15px;
+    height: 15px;
+    opacity: 0.75;
+    flex-shrink: 0;
+  }
+  
+  .choice-group { 
+    display: grid; 
+    gap: 8px; 
   }
 
-  #board {
-    display: grid; gap: 0; padding: 10px; border-radius: 12px; width: 100%;
-    container-type: inline-size; 
+  .size-choices { 
+    grid-template-columns: repeat(3, 1fr); 
   }
   
+  .choice {
+    min-height: 42px; 
+    padding: 7px 9px; 
+    border: 1px solid var(--line); 
+    border-radius: 10px; 
+    background: var(--choice-bg); 
+    color: var(--ink); 
+    font: inherit; 
+    font-size: 13px; 
+    font-weight: 800; 
+    cursor: pointer; 
+    transition: all 0.18s ease;
+  }
+  .choice:hover { 
+    transform: translateY(-2px); 
+    border-color: var(--blue-bright); 
+  }
+
+  .choice.selected { 
+    color: #fff; 
+    border-color: var(--blue-bright); 
+    background: linear-gradient(135deg, #7c5cff, #5c42e6); 
+    box-shadow: 0 6px 16px rgba(124, 92, 255, 0.28); 
+  }
+
+  .start-button {
+    width: 100%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 8px; 
+    border: 0; 
+    min-height: 48px; 
+    border-radius: 14px; 
+    cursor: pointer; 
+    color: #fff; 
+    font-weight: 700;
+    font-size: 15px; 
+    transition: transform .18s, filter .18s, box-shadow .18s;
+  }
+  .start-button:hover { 
+    transform: translateY(-2px); 
+    filter: brightness(1.07); 
+  }
+  .btn-continue {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+  }
+  .btn-new {
+    background: linear-gradient(135deg, #ff5264, #dc3e64 48%, #9c4cce); 
+    box-shadow: 0 10px 25px rgba(220, 62, 100, 0.3);
+  }
+  .button-icon { 
+    width: 20px;
+    height: 20px; 
+    fill: currentColor; 
+    flex: 0 0 auto; 
+  }
+
+  .home-square-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; 
+    padding: 12px 10px; 
+    background: var(--setup-group-bg); 
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    color: var(--ink);
+    font-size: 13px; 
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .home-square-btn:hover {
+    background: var(--surface-2);
+    border-color: var(--blue-bright);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(93, 124, 255, 0.15);
+  }
+
+  .home-square-btn svg {
+    width: 22px; 
+    height: 22px;
+    stroke: currentColor;
+    fill: none; 
+  }
+
+  @keyframes fadeInMenu {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .menu-view {
+    animation: fadeInMenu 0.25s ease-out forwards;
+  }
+
+  .visual-card, .completion-card {
+    border: 1px solid var(--line);
+    border-radius: 25px; 
+    background: var(--surface); 
+    box-shadow: var(--shadow); 
+    backdrop-filter: blur(18px);
+  }
+
+  .visual-top { 
+    display: flex; 
+    align-items: center; 
+    justify-content: flex-end; 
+    gap: 16px; 
+    margin-bottom: 18px; 
+  }
+
+  .top-stats { 
+    display: flex; 
+    align-items: stretch; 
+    justify-content: flex-end; 
+    gap: 8px; 
+    flex-wrap: wrap; 
+  }
+
+  .top-stat { 
+    min-width: 105px; 
+    padding: 8px 11px; 
+    border: 1px solid var(--line); 
+    border-radius: 12px; 
+    background: var(--surface); 
+    text-align: center; 
+  }
+  .top-stat span { 
+    display: block; 
+    color: var(--muted); 
+    font-size: 10px; 
+    font-weight: 700; 
+    letter-spacing: .08em; 
+    text-transform: uppercase; 
+  }
+
+  .top-stat strong { 
+    display: block; 
+    margin-top: 2px; 
+    color: var(--ink); 
+    font-family: "Space Grotesk", sans-serif; 
+    font-size: 14px; 
+    white-space: nowrap; 
+  }
   
-  .theme-classic { background: #111; border: 2px solid #2a2a2a; }
-  .theme-classic .cell.light { background: #e8ecef; color: #111; } 
-  .theme-classic .cell.dark { background: #2b2d30; color: #f0f0f0; }
+  .visual-grid { 
+    display: grid; 
+    grid-template-columns: minmax(0, 1fr) 285px; 
+    gap: 20px; 
+    align-items: start; 
+  }
+
+  .board-panel { 
+    padding: clamp(14px, 2vw, 22px); 
+  }
+
+  .board-head { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    gap: 12px; 
+    margin-bottom: 15px; 
+  }
   
-  .theme-wooden { background: #3b2313; border: 2px solid #5c3a21; }
-  .theme-wooden .cell.light { background: #eedcb5; color: #111; }
-  .theme-wooden .cell.dark { background: #b88b5e; color: #111; }
+  #placement-status { 
+    margin: 0; 
+    font-family: "Space Grotesk", sans-serif; 
+    font-size: clamp(21px, 3vw, 28px); 
+    letter-spacing: -.05em; 
+  }
   
- 
-  .cell {
-    display: flex; align-items: center; justify-content: center; user-select: none;
-    cursor: pointer; transition: background 0.2s, transform 0.1s; aspect-ratio: 1/1;
+  .live-status { 
+    color: var(--muted); 
+    font-size: 13px; 
+    font-weight: 600; 
+    text-align: right; 
+  }
+
+  .live-status.running { 
+    color: var(--blue-bright); 
+  }
+
+  .live-status.complete { 
+    color: var(--success); 
+  }
+  .live-status.warning { 
+    color: var(--warning); 
+  }
+
+  .board-wrap { 
+    position: relative; 
+    width: min(100%, 550px); 
+    margin: 0 auto; 
+    padding: 8px; 
+    border-radius: 12px; 
+    background: var(--surface-2); 
+    border: 1px solid var(--line); 
+    box-shadow: 0 16px 32px rgba(0, 0, 0, .1); 
+  }
+  
+  .cell.conflict { 
+    background-color: var(--danger) !important; 
+  }
+  .cell.conflict .queen-piece { 
+    color: white !important; 
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); 
+  }
+  .board { 
+    display: grid; 
+    overflow: hidden; 
+    border-radius: 13px; 
+    aspect-ratio: 1; 
+    border: 1px solid rgba(164, 190, 255, 0.2); 
+  }
+
+  .cell.light { 
+    background: var(--board-light); 
+  }
+
+  .cell.dark { 
+    background: var(--board-dark); 
+  }
+  
+  .cell { 
+    position: relative; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
     min-width: 0; 
     min-height: 0; 
+    user-select: none;
+    cursor: pointer; 
+    transition: background 0.2s; 
+    aspect-ratio: 1 / 1; 
     overflow: hidden; 
   }
-  .cell:hover { opacity: 0.85; }
-  .cell.conflict { background-color: #ff4d4d !important; box-shadow: inset 0 0 15px rgba(200, 0, 0, 0.8); animation: shake 0.3s; color: #fff !important; }
-  
- 
-  .queen { 
-    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
-    font-size: calc(100cqi / var(--grid-n, 8) * 0.65); 
-    line-height: 1;
+
+  .cell { 
+    container-type: inline-size; 
   }
-  
-  @supports not (container-type: inline-size) {
-    .queen { font-size: calc(60vw / var(--grid-n, 8)); }
-    @media(min-width: 900px){ .queen { font-size: calc(600px / var(--grid-n, 8) * 0.65); } }
+  .cell .queen-piece { 
+    pointer-events: none; 
+    display: block; 
+    font-size: 60cqw; 
+    line-height: 1; 
+    filter: drop-shadow(0 4px 3px rgba(0,0,0,.3)); 
+    animation: queen-in .22s cubic-bezier(.18,.89,.32,1.35) both; 
   }
 
-  @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-  @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-3px); } 50% { transform: translateX(3px); } 75% { transform: translateX(-3px); } 100% { transform: translateX(0); } }
-  @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+  .cell.light .queen-piece { color: var(--queen-light-color); }
+  .cell.dark .queen-piece { color: var(--queen-dark-color); }
+  
+  .cell.conflict .queen-piece { color: #ffffff !important; }
 
-  .queens-layout { display: flex; flex-direction: column; gap: 20px; }
-  @media(min-width: 900px){
-    .queens-layout { flex-direction: row; align-items: flex-start; }
-    .queens-layout .controls-wrapper { width: 300px; flex-shrink: 0; }
-    .queens-layout .board-container { flex: 1; max-width: 600px; margin: 0 auto; }
-    .controls { flex-direction: column; align-items: stretch; }
+  .cell.attacked::after {
+    content: '';
+    position: absolute;
+    width: 18%;
+    height: 18%;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  
+  .cell.light.attacked::after {
+    background-color: #000000;
+    opacity: 0.35;
+  }
+  
+  .cell.dark.attacked::after {
+    background-color: #ffffff;
+    opacity: 0.35;
+  }
+
+  @keyframes queen-in { 
+    from { opacity: 0; transform: scale(.35) translateY(16%); } to { opacity: 1; transform: scale(1) translateY(0); } 
+  }
+  @keyframes hint-blink { 
+    0%, 100% { filter: brightness(1); transform: scale(1); }
+    50% { filter: brightness(1.5) drop-shadow(0 0 10px var(--success)); transform: scale(1.15); }
+  }
+
+  .controls-panel { 
+    padding: 19px; 
+  }
+  .controls-panel h3 { 
+    margin: 0 0 4px; 
+    font-family: "Space Grotesk", sans-serif; 
+    font-size: 21px; 
+    letter-spacing: -.04em; 
+  }
+
+  .controls-panel > p { 
+    margin: 0 0 17px; 
+    color: var(--muted); 
+    font-size: 13px; 
+    line-height: 1.5; 
+  }
+  .controls-grid { 
+    display: grid; 
+    grid-template-columns: repeat(2, minmax(0, 1fr)); 
+    gap: 9px; 
+  }
+  
+  .action-button { 
+    min-height: 45px; 
+    padding: 9px; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 9px; border: 1px solid var(--line); 
+    border-radius: 12px; color: var(--ink); 
+    background: var(--surface-2); 
+    font-size: 13px; 
+    font-weight: 800; 
+    cursor: pointer; 
+    transition: all .18s; 
+  }
+
+  .action-button svg { 
+    width: 17px; 
+    height: 17px; 
+    fill: currentColor; 
+    flex: 0 0 auto; 
+  }
+
+  .action-button:hover:not(:disabled) { 
+    color: var(--blue-bright); 
+    border-color: rgba(145, 165, 255, .5); 
+    transform: translateY(-1px); 
+  }
+
+  .action-button.primary { 
+    color: #fff; 
+    border: 0; 
+    background: linear-gradient(135deg, var(--success), #059669); 
+    box-shadow: 0 8px 16px rgba(16, 185, 129, .22); 
+  }
+
+  .action-button.primary:hover:not(:disabled) { 
+    color: #fff;
+    transform: translateY(-2px); 
+    filter: brightness(1.1); 
+  }
+
+  .action-button:disabled { 
+    cursor: not-allowed; 
+    opacity: .42; 
+  }
+
+  .completion-layer {
+    position: fixed; 
+    z-index: 20; 
+    inset: 0; 
+    display: none; 
+    align-items: center; 
+    justify-content: center; 
+    padding: 18px; 
+    background: rgba(3, 9, 23, .7); 
+    backdrop-filter: blur(10px); 
+  }
+
+  .completion-layer.visible { 
+    display: flex; 
+    animation: overlay-in .3s ease both; 
+  }
+
+  @keyframes overlay-in { 
+    from { opacity: 0; } to { opacity: 1; } 
+  }
+
+  .completion-card { 
+    width: min(500px, 100%); 
+    padding: clamp(26px, 6vw, 42px); 
+    text-align: center; 
+  }
+
+  .completion-icon { 
+    display: grid; 
+    place-items: center; 
+    width: 72px; 
+    height: 72px; 
+    margin: 0 auto 16px; 
+    border-radius: 23px; 
+    font-size: 35px; 
+    background: linear-gradient(135deg, rgba(255,207,91,.25), rgba(255,75,96,.24)); 
+    border: 1px solid rgba(255, 207, 91, .4); 
+  }
+
+  .completion-card h2 { 
+    margin: 0; 
+    font-family: "Space Grotesk", sans-serif; 
+    font-size: clamp(29px, 6vw, 39px); 
+    letter-spacing: -.06em; 
+  }
+
+  .completion-card > p { 
+    margin: 8px 0 24px; 
+    color: var(--muted-strong); 
+  }
+
+  .completion-actions { 
+    display: flex; 
+    gap: 10px; 
+    justify-content: center; 
+  }
+
+  .mini-button { 
+    min-height: 48px; 
+    padding: 0 24px; 
+    border-radius: 13px; 
+    font-weight: 800; 
+    cursor: pointer; 
+    border: 0; 
+    transition: all 0.2s; 
+    display: inline-flex; 
+    justify-content: center; 
+    align-items: center; 
+  }
+
+  .mini-button.secondary { 
+    color: var(--ink); 
+    border: 1px solid var(--line); 
+    background: var(--surface-2); 
+  }
+
+  .mini-button.primary { 
+    color: #fff; 
+    background: linear-gradient(135deg, var(--accent), #e93550); 
+    box-shadow: 0 10px 20px rgba(228, 53, 80, .22); 
+  }
+
+  .mini-button:hover { 
+    transform: translateY(-2px); 
+    filter: brightness(1.1); 
+  }
+
+  .toggle-slider { 
+    position: absolute; 
+    cursor: pointer; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    background-color: var(--choice-bg); 
+    transition: .2s; 
+    border-radius: 24px; 
+    border: 1px solid var(--line); 
+  }
+
+  .toggle-slider:before { 
+    position: absolute; 
+    content: ""; 
+    height: 16px; 
+    width: 16px; 
+    left: 3px; 
+    bottom: 3px; 
+    background-color: var(--muted-strong); 
+    transition: .2s; 
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); 
+  }
+
+  input:checked + .toggle-slider {
+   background-color: var(--success); 
+   border-color: var(--success); 
+  }
+
+  input:checked + .toggle-slider:before { 
+    transform: translateX(20px); 
+    background-color: #fff; 
+  }
+  
+  .dashboard-link {
+    position: absolute; 
+    top: 20px; 
+    right: 20px; 
+    background: var(--header-btn-bg); 
+    color: var(--header-btn-color) !important; 
+    border: 2px solid var(--header-btn-border); 
+    padding: 10px 18px; 
+    border-radius: 10px; 
+    text-decoration: none; 
+    font-size: 14px; 
+    font-weight: 700; 
+    transition: all 0.2s ease; 
+    z-index: 30;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    cursor: pointer;
+  }
+  
+  .dashboard-link:hover {
+    background: var(--blue);
+    color: #fff !important;
+    border-color: var(--blue);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 1024px) {
+    .home-layout { 
+      grid-template-columns: 1fr; 
+      max-width: 620px; 
+      margin: 0 auto; 
+    }
+
+    .visual-grid { 
+      grid-template-columns: 1fr; 
+    }
+
+    .controls-panel { 
+      display: grid; 
+      grid-template-columns: .8fr 1.2fr; 
+      column-gap: 18px; 
+      align-items: start; 
+    }
+
+    .controls-panel h3, .controls-panel > p { 
+      grid-column: 1; 
+    }
+
+    .controls-grid { 
+      grid-column: 2; 
+      grid-row: 1 / span 2; 
+    }
+  }
+
+  @media (max-width: 660px) {
+    .app-shell { 
+      width: min(100% - 22px, 1180px); 
+      padding-top: 16px; 
+    }
+
+    .settings-card { 
+      border-radius: 20px; 
+    }
+
+    .visual-top { 
+      align-items: flex-start; 
+    }
+
+    .top-stats { 
+      display: flex; 
+      flex-direction: row;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      gap: 6px;
+      width: 100%;
+    }
+
+    #top-back-home {
+      padding: 0 10px !important;
+      font-size: 12px !important;
+      white-space: nowrap;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .top-stat { 
+      min-width: 0; 
+      padding: 6px 7px; 
+    }
+    .top-stat span { 
+      font-size: 8px; 
+    }
+    .top-stat strong { 
+      font-size: 11px; 
+    }
+    .board-panel { 
+      border-radius: 20px; 
+    }
+    .board-wrap { 
+      padding: 5px; 
+      border-radius: 14px; 
+    }
+    .board { 
+      border-radius: 10px; 
+    }
+    .controls-panel { 
+      display: block; 
+      border-radius: 20px; 
+    }
+    .controls-panel > p { 
+      margin-bottom: 14px; 
+    }
+    
+    .dashboard-link {
+        top: 12px;
+        right: 12px;
+        padding: 8px 12px;
+        font-size: 12px;
+    }
   }
 </style>
 </head>
-<body>
+<body data-board-theme="classic">
+  <main class="app-shell">
+   <section class="screen active" id="home-screen" aria-labelledby="home-title">
+    <a class="dashboard-link" href="index.html">← Exit N-Queens Puzzle</a>
 
-<div id="wrap">
-  <div class="top-bar">
-    <h2>N‑Queens Pro Puzzle</h2>
-    <a href="index.html" class="btn-back">← Back to Dashboard</a>
-  </div>
-  
-  <div class="queens-layout">
-    <div class="controls-wrapper">
-      <div class="controls">
-        <div class="control-wrapper">
-          <label for="themeSelect">Board Theme:</label>
-          <select id="themeSelect" class="theme-select">
-            <option value="theme-classic">Black & White</option>
-            <option value="theme-wooden">Wooden Chess</option>
-          </select>
-        </div>
+      <div class="home-layout">
+        <aside class="settings-card" aria-labelledby="settings-title">
+          <img src="icons/ivgames-logo.webp" alt="IV Games Logo" class="brand-logo logo-dark" style="height: 55px; width: auto; object-fit: contain; margin: 0 auto 10px; display: block;">
+          <img src="icons/ivgames-logo-light.webp" alt="IV Games Logo" class="brand-logo logo-light" style="height: 55px; width: auto; object-fit: contain; margin: 0 auto 10px; display: block;">
+          <h1 id="settings-title" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: clamp(32px, 5vw, 42px); letter-spacing: -.04em;">N-Queens Puzzle</h1>
+          
+          <div id="main-menu-view" class="menu-view">
+            <p style="margin: 10px auto 25px; color: var(--muted); font-size: 14px; max-width: 480px; line-height: 1.5;">Challenge your logic and conquer the grid.</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 12px; width: min(350px, 100%); margin: 25px auto 0;">
+              <button class="start-button btn-continue" id="continue-button" type="button" style="display: none;">
+                <svg class="button-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                Continue Game
+              </button>
+              
+              <button class="start-button btn-new" id="new-game-btn" type="button">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+              <path d="M6 12h4"></path>
+              <path d="M8 10v4"></path>
+              <path d="M15 13h.01"></path>
+              <path d="M18 11h.01"></path>
+            </svg>
+                New Game
+              </button>
+            </div>
 
-        <div class="control-wrapper">
-          <label for="nsel">Grid Size (N):</label>
-          <input id="nsel" type="number" min="4" max="14" value="8" 
-                 onkeydown="if(event.key !== 'ArrowUp' && event.key !== 'ArrowDown') event.preventDefault();">
-        </div>
+            <div style="display: flex; gap: 12px; margin-top: 20px; justify-content: center; width: min(350px, 100%); margin-left: auto; margin-right: auto;">
+              <button class="home-square-btn" id="home-stats-btn" type="button">
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                <span>Statistics</span>
+              </button>
+              <button class="home-square-btn" id="home-settings-btn" type="button">
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"></path></svg>
+                <span>Settings</span>
+              </button>
+            </div>
+          </div>
+
+         <div id="setup-menu-view" class="menu-view" style="display: none;">
+            <p style="margin: 10px auto 25px; color: var(--muted); font-size: 14px; max-width: 480px; line-height: 1.5;">Customize your board to begin.</p>
+            
+            <div class="setup-group" style="margin-bottom: 15px;">
+              <span class="setup-label">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+                Board Size
+              </span>
+              <div class="choice-group size-choices" id="size-choices" aria-label="Board size"></div>
+            </div>
+
+            <div class="setup-group">
+              <span class="setup-label">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path></svg>
+                Board Theme
+              </span>
+              <div class="choice-group" style="grid-template-columns: repeat(2, 1fr);" id="theme-choices" aria-label="Board theme">
+                <button class="choice selected" data-theme="classic" type="button">Black & White</button>
+                <button class="choice" data-theme="blue" type="button">Blue & White</button>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 25px; width: min(400px, 100%); margin-left: auto; margin-right: auto;">
+              <button class="action-button" id="cancel-setup-btn" type="button" style="flex: 0.4; justify-content: center; min-height: 48px; border-radius: 14px; font-size: 14px;">Cancel</button>
+              <button class="start-button btn-new" id="start-button" type="button" style="margin: 0; flex: 1;">
+                Start Playing
+              </button>
+            </div>
+          </div>
+
+        </aside>
+      </div>
+    </section>
+
+   <section class="screen" id="visual-screen" aria-labelledby="visual-title">
+     <header class="visual-top" style="justify-content: space-between; align-items: center;">
         
-        <button id="solve" class="btn">Auto Solve</button>
-        <button id="random" class="btn">Random Solution</button>
-        <button id="clear" class="btn" style="background: #e63946;">Clear Board</button>
-      </div>
-      <div id="status" class="muted">Click a cell to place/remove a queen.</div>
-    </div>
-    
-    <div class="board-container">
-      <div id="board" class="theme-classic" role="grid" aria-label="N-Queens board"></div>
+        <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: clamp(24px, 4vw, 32px); letter-spacing: -.04em; color: var(--ink);">N-Queens Puzzle</h1>
+
+        <div class="top-stats" style="position: relative; align-items: stretch;" aria-label="Current visualizer settings">
+          
+          <button id="top-back-home" type="button" style="background: transparent; border: 1px solid var(--line); color: var(--ink); padding: 0 16px; border-radius: 12px; font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center;">
+            ← Back to Home
+          </button>
+
+          <div class="top-stat" id="change-size-btn" title="Change Board Size" style="cursor: pointer; transition: all 0.2s ease;">
       
-      <!-- Solved Overlay with Watch Ad Button -->
-      <div id="win-overlay">
-        <div class="win-text">🎉 Puzzle Solved!</div>
-        <!-- Flex wrap added here to ensure buttons look good on smaller screens too -->
-        <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
-          <button id="play-again-btn" class="btn">Play Again</button>
-          <button id="close-overlay-btn" class="btn" style="background: #555;">View Board</button>
-          <button id="watchAd" class="btn" style="background: #f59e0b; color: #fff;">🎬 Watch Ad</button>
+            <span>Board <svg style="width:10px; height:10px; margin-left:2px; fill:currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></span>
+            <strong id="top-size">8 × 8</strong>
+          </div>
+          
+          <div id="size-dropdown" style="display: none; position: absolute; top: calc(100% + 8px); right: 120px; background: var(--surface-solid); border: 1px solid var(--line); border-radius: 12px; padding: 12px; box-shadow: 0 16px 32px rgba(0,0,0,0.2); z-index: 100; grid-template-columns: repeat(3, 1fr); gap: 6px;">
+          </div>
+
+          <div class="top-stat"><span>Time</span><strong id="top-time">00:00</strong></div>
+        </div>
+      </header>
+      
+      <div class="visual-grid">
+        <section class="visual-card board-panel">
+         <div class="board-head" style="justify-content: flex-end;">
+            <div class="live-status" id="live-status" aria-live="polite">Ready to begin</div>
+          </div>
+          <div class="board-wrap" id="board-wrap">
+            <div id="pause-overlay" style="display: none; position: absolute; inset: 0; background: var(--surface); z-index: 10; border-radius: 12px; backdrop-filter: blur(5px); align-items: center; justify-content: center; flex-direction: column;">
+              <svg style="width: 48px; height: 48px; fill: var(--ink); margin-bottom: 10px;" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+              <h2 style="color: var(--ink); margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px;">Game Paused</h2>
+            </div>
+            
+            <div id="board" class="board" role="grid" aria-label="N-Queens visualization board"></div>
+          </div>
+        </section>
+        
+        <aside class="visual-card controls-panel">
+          <h3>Game Controls</h3>
+          <p>Pause your game, use a hint if you're stuck, or restart the board.</p>
+         <div class="controls-grid">
+            <button class="action-button" id="pause-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3v14H7zm7 0h3v14h-3z"/></svg><span>Pause</span>
+            </button>
+            <button class="action-button" id="restart-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5a7 7 0 1 1-6.66 9.14 1 1 0 0 0-1.9.62A9 9 0 1 0 12 3v2Zm-1 0V1l-5 4 5 4V5Z"/></svg><span>Restart</span>
+            </button>
+            
+            <button class="action-button primary" id="hint-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A6 6 0 1 0 7.5 8.5c0 1.42.5 2.61 1.5 3.5.76.76 1.23 1.52 1.41 2.5"></path></svg>
+              <span id="hint-text">Hint (4)</span>
+            </button>
+
+            <button class="action-button" id="random-solution-btn" type="button" style="background: rgba(145, 165, 255, 0.15); border-color: var(--blue-bright); color: var(--blue-bright);">
+              <svg viewBox="0 0 24 24" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+              <span id="solution-text">Solution</span>
+            </button>
+          </div>
+          <div style="margin-top: 15px; padding: 12px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 12px; text-align: center;">
+            <h2 id="placement-status" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 18px; color: var(--ink);">Queens Placed: 0 / 8</h2>
+          </div>
+
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <div class="completion-layer" id="completion-layer" role="dialog" aria-modal="true">
+    <section class="completion-card">
+      <div class="completion-icon" style="display: flex; align-items: center; justify-content: center;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="url(#gold-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <defs>
+            <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffcf5b" />
+              <stop offset="100%" stop-color="#ff4b60" />
+            </linearGradient>
+          </defs>
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </div>
+
+      <h2 id="completion-title">Puzzle Solved!</h2>
+      <p id="completion-message">You have successfully placed all queens without conflicts.</p>
+      <p id="completion-time" style="margin-top: 10px; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600; color: var(--blue-bright);">Solved in: 00:00</p>
+  
+      <div style="display: flex; justify-content: center; gap: 15px; margin: 15px 0 25px 0;">
+        <div style="background: var(--surface-2); padding: 8px 15px; border-radius: 10px; border: 1px solid var(--line); font-size: 13px; color: var(--muted-strong);">
+          Hints Used: <strong id="completion-hints" style="color: var(--success); font-size: 16px;">0</strong>
+        </div>
+        <div style="background: var(--surface-2); padding: 8px 15px; border-radius: 10px; border: 1px solid var(--line); font-size: 13px; color: var(--muted-strong);">
+          Solutions: <strong id="completion-sols" style="color: var(--gold); font-size: 16px;">0</strong>
         </div>
       </div>
-    </div>
 
+      <div class="completion-actions" style="display: flex; gap: 10px; justify-content: center;">
+        <button class="action-button" id="completion-home"> ← Back to Home</button>
+        <button class="action-button" id="view-board-btn" style="background: var(--choice-bg); border: 1px solid var(--line);">View Board</button>
+        <button class="action-button primary" id="play-again">Play Again</button>
+      </div>
+    </section>
   </div>
-</div>
 
+  <div class="completion-layer" id="settings-layer" role="dialog">
+    <section class="completion-card">
+      <h2 style="margin-bottom: 20px; font-family: 'Space Grotesk', sans-serif;">Game Settings</h2>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; background: var(--surface-2); padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid var(--line);">
+        <span style="font-weight: 600; font-size: 15px; color: var(--ink);">Enable Hints</span>
+        <label style="position: relative; display: inline-block; width: 44px; height: 24px;">
+          <input type="checkbox" id="setting-hint-toggle" checked style="opacity: 0; width: 0; height: 0;">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; background: var(--surface-2); padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--line);">
+        <span style="font-weight: 600; font-size: 15px; color: var(--ink);">Enable Random Solution</span>
+        <label style="position: relative; display: inline-block; width: 44px; height: 24px;">
+          <input type="checkbox" id="setting-sol-toggle" checked style="opacity: 0; width: 0; height: 0;">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div style="border-top: 1px solid var(--line); padding-top: 20px; margin-bottom: 20px;">
+        <div id="reset-warning" style="display: none; color: var(--danger); font-size: 13px; margin-bottom: 15px; font-weight: 700; line-height: 1.4;">
+          Warning: This will delete all your statistics and saved game data.
+        </div>
+        <button class="action-button" id="reset-data-btn" type="button" style="width: 100%; border-color: rgba(239, 68, 68, 0.4); color: var(--danger);">Reset All Data</button>
+        
+        <div id="reset-confirm-group" style="display: none; gap: 10px; width: 100%;">
+          <button class="action-button" id="cancel-reset-btn" type="button" style="flex: 1;">Cancel</button>
+          <button class="action-button primary" id="confirm-reset-btn" type="button" style="flex: 1; background: linear-gradient(135deg, var(--danger), #b91c1c); box-shadow: none;">Confirm Delete</button>
+        </div>
+      </div>
+
+      <button class="action-button primary" id="close-settings-btn" style="width: 100%;">Save & Close</button>
+    </section>
+  </div>
+
+  <div class="completion-layer" id="stats-layer" role="dialog">
+    <section class="completion-card">
+      <h2 style="margin-bottom: 15px; font-family: 'Space Grotesk', sans-serif;">Statistics</h2>
+      
+      <div style="margin-bottom: 20px;">
+        <select id="stat-size-select" style="width: 100%; padding: 10px; background: var(--surface-2); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; font-family: 'Space Grotesk', sans-serif; font-size: 15px; cursor: pointer; outline: none;">
+          <option value="4">4x4 Grid</option>
+          <option value="5">5x5 Grid</option>
+          <option value="6">6x6 Grid</option>
+          <option value="7">7x7 Grid</option>
+          <option value="8">8x8 Grid</option>
+          <option value="9">9x9 Grid</option>
+          <option value="10">10x10 Grid</option>
+          <option value="11">11x11 Grid</option>
+          <option value="12">12x12 Grid</option>
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px;">
+        <div style="background: var(--surface-2); padding: 15px; border-radius: 12px; border: 1px solid var(--line);">
+          <span style="display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; font-weight: 800;">Games Won</span>
+          <strong id="stat-wins" style="font-size: 28px; font-family: 'Space Grotesk', sans-serif; color: var(--success);">0</strong>
+        </div>
+        <div style="background: var(--surface-2); padding: 15px; border-radius: 12px; border: 1px solid var(--line);">
+          <span style="display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; font-weight: 800;">Best Time</span>
+          <strong id="stat-time" style="font-size: 28px; font-family: 'Space Grotesk', sans-serif; color: var(--blue-bright);">--:--</strong>
+        </div>
+      </div>
+
+      <button class="action-button primary" id="close-stats-btn" style="width: 100%;">Close</button>
+    </section>
+  </div>
+          
 <script>
-(function(){
-  const nsel = document.getElementById('nsel');
-  const boardDiv = document.getElementById('board');
-  const status = document.getElementById('status');
-  const themeSelect = document.getElementById('themeSelect');
-  const winOverlay = document.getElementById('win-overlay');
-  
-  let N = parseInt(nsel.value,10);
-  let board = new Array(N).fill(-1);
+(() => {
+  "use strict";
+  function updateFavicon(theme) {
+      const favicon = document.getElementById('favicon');
+      if (favicon) {
+          favicon.href = theme === 'dark' ? 'favicon/favicon.dark.webp' : 'favicon/favicon.light.webp';
+      }
+  }
 
-  themeSelect.addEventListener('change', (e) => {
-    boardDiv.className = e.target.value;
+  const htmlElement = document.documentElement;
+  const metaThemeColor = document.getElementById('meta-theme-color');
+  const savedTheme = localStorage.getItem('ivGamesTheme') || 'dark';
+  htmlElement.setAttribute('data-theme', savedTheme);
+  updateFavicon(savedTheme);
+  
+  if (metaThemeColor) {
+      metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#0f172a' : '#f8fafc');
+  }
+  
+  window.addEventListener('storage', (event) => {
+      if (event.key === 'ivGamesTheme' || !event.key) {
+          const newTheme = localStorage.getItem('ivGamesTheme') || 'dark';
+          htmlElement.setAttribute('data-theme', newTheme);
+          
+          updateFavicon(newTheme);
+          if (metaThemeColor) {
+              metaThemeColor.setAttribute('content', newTheme === 'dark' ? '#0f172a' : '#f8fafc');
+          }
+      }
   });
 
-  function initBoard(){ 
-    N = parseInt(nsel.value,10); 
-    board = new Array(N).fill(-1); 
-    hideOverlay();
-    render(); 
+  const $ = (selector) => document.querySelector(selector);
+  
+  const topBackBtn = $("#top-back-home");
+  if(topBackBtn) {
+    topBackBtn.addEventListener("mouseover", function() {
+      this.style.color = "var(--blue)";
+      this.style.borderColor = "var(--blue-bright)";
+      this.style.background = "rgba(93, 124, 255, 0.1)";
+    });
+    topBackBtn.addEventListener("mouseout", function() {
+      this.style.color = "var(--ink)";
+      this.style.borderColor = "var(--line)";
+      this.style.background = "transparent";
+    });
   }
 
-  function hideOverlay() {
-    winOverlay.style.display = 'none';
+  const changeSizeBtn = $("#change-size-btn");
+  if(changeSizeBtn) {
+    changeSizeBtn.addEventListener("mouseover", function() {
+      this.style.borderColor = "var(--blue-bright)";
+      this.style.transform = "translateY(-2px)";
+    });
+    changeSizeBtn.addEventListener("mouseout", function() {
+      this.style.borderColor = "var(--line)";
+      this.style.transform = "none";
+    });
   }
 
-  function render(){
-    boardDiv.innerHTML = '';
-    boardDiv.style.gridTemplateColumns = `repeat(${N}, 1fr)`;
+  if (!$("#ad-overlay")) {
+    document.body.insertAdjacentHTML('beforeend', `
+      <button id="back-to-result-btn" style="display: none; position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 99999; background: var(--blue); color: #fff; border: 1px solid rgba(255,255,255,0.4); padding: 12px 24px; border-radius: 30px; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; cursor: pointer; box-shadow: 0 8px 32px rgba(0,0,0,0.2); transition: all 0.2s ease;">
+        ↑ Back to Result
+      </button>
+      <div id="ad-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 99999; flex-direction: column; justify-content: center; align-items: center;">
+        <div style="width: 50px; height: 50px; border: 5px solid rgba(93, 124, 255, 0.3); border-top-color: var(--blue); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
+        <h2 style="color: var(--ink); margin: 0 0 10px 0; font-family: 'Space Grotesk', sans-serif;">Advertisement</h2>
+        <p style="color: var(--blue-bright); font-family: sans-serif; font-size: 16px;">Please wait <strong id="ad-timer" style="font-size: 24px; color: var(--ink);">3</strong> seconds...</p>
+        <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+      </div>
+    `);
+  }
+
+  const boardEl = $("#board");
+  const homeScreen = $("#home-screen");
+  const visualScreen = $("#visual-screen");
+  const completionLayer = $("#completion-layer");
+  
+  const svgQueen = '<span class="queen-piece">♛</span>';  
+  const settings = { size: 8, boardTheme: "classic" };
+  
+  let state = { board: [], complete: false, running: false, startedAt: 0, elapsedBeforePause: 0 };
+  let elapsedTimer = null;
+  let isGamePaused = false;
+
+  let hintsLeft = 4;
+  let solutionsLeft = 2;
+  let isPreviewing = false; 
+  let hintsUsedCount = 0;
+  let solutionsUsedCount = 0;
+  let userSettings = { hintsEnabled: true, solutionsEnabled: true };
+  
+  let gameStats = JSON.parse(localStorage.getItem('nQueensStatsV2'));
+  if (!gameStats || gameStats.wins !== undefined) { 
+      gameStats = {};
+      for (let i = 4; i <= 12; i++) {
+          gameStats[i] = { wins: 0, bestTimeMs: Infinity };
+      }
+  }
+
+  function formatTime(ms) { 
+    const totalSeconds = Math.floor(Math.max(0, ms) / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+  
+  function currentElapsed() { return state.startedAt ? state.elapsedBeforePause + (state.running ? performance.now() - state.startedAt : 0) : state.elapsedBeforePause; }
+
+  function saveGameState() {
+    if (state.complete) return; 
+    let currentElapsedMs = currentElapsed();
     
-    boardDiv.style.setProperty('--grid-n', N);
+    const saveData = {
+      settings: settings,
+      state: {
+        board: state.board,
+        complete: state.complete,
+        elapsedBeforePause: currentElapsedMs 
+      },
+      hintsLeft: hintsLeft,
+      solutionsLeft: solutionsLeft,
+      hintsUsedCount: hintsUsedCount,
+      solutionsUsedCount: solutionsUsedCount,
+      isGamePaused: isGamePaused
+    };
+    localStorage.setItem('nQueensSavedGame', JSON.stringify(saveData));
+  }
 
-    for(let r=0; r<N; r++){
-      for(let c=0; c<N; c++){
-        const cell = document.createElement('div');
-        cell.className = 'cell ' + (((r+c)%2) ? 'dark' : 'light');
-        cell.dataset.r = r; cell.dataset.c = c;
-        cell.addEventListener('click', onCellClick);
+  function updateSetupButtons() {
+    document.querySelectorAll("[data-size]").forEach((b) => b.classList.toggle("selected", Number(b.dataset.size) === settings.size));
+    document.querySelectorAll("[data-theme]").forEach((b) => b.classList.toggle("selected", b.dataset.theme === settings.boardTheme));
+  }
+
+  function updateHintUI() {
+    const hintText = $("#hint-text");
+    if (hintText) {
+      hintText.textContent = hintsLeft > 0 ? `Hint (${hintsLeft})` : `Ad for Hint`;
+    }
+  }
+
+  function updateSolutionUI() {
+    const solText = $("#solution-text");
+    const solBtn = $("#random-solution-btn");
+    
+    if (solText) {
+      solText.textContent = `Solution (${solutionsLeft})`;
+    }
+    
+    if (solBtn) {
+      if (solutionsLeft <= 0) {
+        solBtn.disabled = true;
+        solBtn.style.opacity = "0.5";
+        solBtn.style.pointerEvents = "none";
+      } else {
+        solBtn.disabled = false;
+        solBtn.style.opacity = "1";
+        solBtn.style.pointerEvents = "auto";
+      }
+    }
+  }
+
+  function makeSizeChoices() {
+    const fragmentHome = document.createDocumentFragment();
+    const fragmentDrop = document.createDocumentFragment();
+    for (let size = 4; size <= 12; size += 1) {
+      const btnHome = document.createElement("button");
+      btnHome.className = "choice";
+      btnHome.type = "button";
+      btnHome.dataset.size = String(size);
+      btnHome.textContent = `${size}×${size}`;
+      fragmentHome.append(btnHome);
+
+      const btnDrop = document.createElement("button");
+      btnDrop.className = "choice drop-size-btn";
+      btnDrop.type = "button";
+      btnDrop.dataset.size = String(size);
+      btnDrop.textContent = `${size}×${size}`;
+      btnDrop.style.minHeight = "32px";
+      btnDrop.style.padding = "5px 8px";
+      btnDrop.style.fontSize = "12px";
+      btnDrop.style.color = "var(--ink)";
+      fragmentDrop.append(btnDrop);
+    }
+    $("#size-choices").append(fragmentHome);
+    $("#size-dropdown").append(fragmentDrop);
+  }
+
+  function buildBoard() {
+    boardEl.innerHTML = "";
+    boardEl.style.gridTemplateColumns = `repeat(${settings.size}, minmax(0, 1fr))`;
+    const boardFragment = document.createDocumentFragment();
+    for (let row = 0; row < settings.size; row += 1) {
+      for (let col = 0; col < settings.size; col += 1) {
+        const cell = document.createElement("div");
+        cell.className = `cell ${(row + col) % 2 ? "dark" : "light"}`;
+        cell.dataset.row = row;
+        cell.dataset.col = col;
+        boardFragment.append(cell);
+      }
+    }
+    boardEl.append(boardFragment);
+  }
+
+  function cellAt(row, col) { return boardEl.querySelector(`[data-row="${row}"][data-col="${col}"]`); }
+
+  function updateTopBar() {
+    $("#top-size").textContent = `${settings.size} × ${settings.size}`;
+    $("#top-time").textContent = formatTime(currentElapsed());
+  }
+
+  function updateStatus(message, kind = "") {
+    const status = $("#live-status");
+    status.textContent = message;
+    status.className = `live-status ${kind}`;
+  }
+
+  function highlightConflicts() {
+    boardEl.querySelectorAll('.cell.conflict').forEach(c => c.classList.remove('conflict'));
+    let hasConflict = false;
+    for (let r1 = 0; r1 < settings.size; r1++) {
+      let c1 = state.board[r1];
+      if (c1 === -1) continue;
+      for (let r2 = r1 + 1; r2 < settings.size; r2++) {
+        let c2 = state.board[r2];
+        if (c2 === -1) continue;
+        if (c1 === c2 || Math.abs(c1 - c2) === Math.abs(r1 - r2)) {
+          let cell1 = cellAt(r1, c1);
+          let cell2 = cellAt(r2, c2);
+          if (cell1) cell1.classList.add('conflict');
+          if (cell2) cell2.classList.add('conflict');
+          hasConflict = true;
+        }
+      }
+    }
+    return hasConflict;
+  }
+
+  function updateAttackedSquares() {
+    boardEl.querySelectorAll('.cell').forEach(c => c.classList.remove('attacked'));
+    
+    let queens = [];
+    for (let r = 0; r < settings.size; r++) {
+      if (state.board[r] !== -1) queens.push({ r: r, c: state.board[r] });
+    }
+
+    for (let r = 0; r < settings.size; r++) {
+      for (let c = 0; c < settings.size; c++) {
+        if (state.board[r] === c) continue; 
         
-        if(board[r] === c) {
-          cell.innerHTML = '<span class="queen">♛</span>';
+        let isAttacked = false;
+        for (let q of queens) {
+          if (q.r === r || q.c === c || Math.abs(q.r - r) === Math.abs(q.c - c)) {
+            isAttacked = true; break;
+          }
         }
-        boardDiv.appendChild(cell);
+        
+        if (isAttacked) {
+          let cell = cellAt(r, c);
+          if (cell) cell.classList.add('attacked');
+        }
       }
     }
-    updateConflicts();
   }
 
-  function onCellClick(e){
-    hideOverlay();
-    
-    const r = parseInt(e.currentTarget.dataset.r,10);
-    const c = parseInt(e.currentTarget.dataset.c,10);
-    
-    if(board[r] === c) board[r] = -1; else board[r] = c;  
-    render();
-  }
+  function checkGameWin() {
+    let placedCount = 0;
+    for (let r = 0; r < settings.size; r++) {
+      if (state.board[r] !== -1) placedCount++;
+    }
 
-  function updateConflicts(){
-    const conflicts = new Set();
-    let placedQueens = 0;
+    $("#placement-status").textContent = `Queens Placed: ${placedCount} / ${settings.size}`;
 
-    for(let r1=0; r1<N; r1++){
-      const c1 = board[r1]; 
-      if(c1 < 0) continue;
-      placedQueens++;
+    let hasConflict = highlightConflicts(); 
+    updateAttackedSquares(); 
+
+    if (placedCount === settings.size && !hasConflict) {
+      state.complete = true;
+      stopTimers();
+      localStorage.removeItem('nQueensSavedGame');
+      updateStatus("Puzzle Solved!", "complete");
+
+      let currentGrid = settings.size;
+      gameStats[currentGrid].wins++;
+      let finalMs = currentElapsed();
+      if (finalMs < gameStats[currentGrid].bestTimeMs) {
+        gameStats[currentGrid].bestTimeMs = finalMs;
+      }
+      localStorage.setItem('nQueensStatsV2', JSON.stringify(gameStats));
+
+      const sizeBtn = $("#change-size-btn");
+      if(sizeBtn) {
+        sizeBtn.style.pointerEvents = "none";
+        sizeBtn.style.opacity = "0.5";
+      }
       
-      for(let r2=r1+1; r2<N; r2++){
-        const c2 = board[r2]; 
-        if(c2 < 0) continue;
-        if(c1 === c2 || Math.abs(r1-r2) === Math.abs(c1-c2)){
-          conflicts.add(r1+','+c1); conflicts.add(r2+','+c2);
+      const finalTime = $("#top-time").textContent;
+      if($("#completion-time")) $("#completion-time").textContent = `Solved in: ${finalTime}`;
+
+      if($("#completion-hints")) $("#completion-hints").textContent = hintsUsedCount;
+      if($("#completion-sols")) $("#completion-sols").textContent = solutionsUsedCount;
+
+      $("#pause-button").disabled = true;
+      $("#hint-button").disabled = true;
+      
+      const solBtn = $("#random-solution-btn");
+      if(solBtn) {
+        solBtn.disabled = true;
+        solBtn.style.opacity = "0.5";
+        solBtn.style.pointerEvents = "none";
+      }
+    
+      const restartBtn = $("#restart-button");
+      if(restartBtn) {
+        restartBtn.disabled = true;
+        restartBtn.style.opacity = "0.5";
+        restartBtn.style.pointerEvents = "none";
+      }
+
+      const topBackBtn = $("#top-back-home");
+      if (topBackBtn) {
+        topBackBtn.style.pointerEvents = "none";
+        topBackBtn.style.opacity = "0.5";
+      }
+
+      setTimeout(() => {
+        completionLayer.classList.add("visible");
+      }, 600);
+    }
+  }
+
+  function stopTimers() {
+    if (elapsedTimer) { clearInterval(elapsedTimer); elapsedTimer = null; }
+  }
+
+  function beginElapsedClock() {
+    if (state.running) return;
+    state.startedAt = performance.now();
+    state.running = true;
+    elapsedTimer = setInterval(updateTopBar, 60);
+  }
+
+  function togglePause() {
+    if (state.complete) return;
+    isGamePaused = !isGamePaused;
+    
+    const pauseBtnSpan = $("#pause-button span");
+    const hintBtn = $("#hint-button");
+    const solBtn = $("#random-solution-btn");
+    const pauseOverlay = $("#pause-overlay");
+
+    if (isGamePaused) {
+      state.elapsedBeforePause = currentElapsed();
+      state.startedAt = 0;
+      state.running = false;
+      stopTimers();
+      
+      pauseBtnSpan.textContent = "Resume";
+      if(pauseOverlay) pauseOverlay.style.display = "flex";
+      hintBtn.disabled = true;
+      if (solBtn) solBtn.disabled = true;
+      updateStatus("Game Paused");
+    } else {
+      beginElapsedClock();
+      pauseBtnSpan.textContent = "Pause";
+      if(pauseOverlay) pauseOverlay.style.display = "none";
+      hintBtn.disabled = false;
+      if (solBtn && solutionsLeft > 0) solBtn.disabled = false;
+      updateStatus("Playing...");
+    }
+    saveGameState();
+  }
+
+  function playAdAndStart() {
+    const adOverlay = $("#ad-overlay");
+    const adTimer = $("#ad-timer");
+    
+    if (adOverlay && adTimer) {
+      adOverlay.style.display = "flex";
+      let time = 3;
+      adTimer.textContent = time;
+
+      const timer = setInterval(() => {
+        time--;
+        adTimer.textContent = time;
+        if (time <= 0) {
+          clearInterval(timer);
+          adOverlay.style.display = "none"; 
+          startRun(); 
         }
+      }, 1000);
+    } else {
+      startRun();
+    }
+  }
+
+  function playHintAd() {
+    const adOverlay = $("#ad-overlay");
+    const adTimer = $("#ad-timer");
+    
+    if (adOverlay && adTimer) {
+      adOverlay.style.display = "flex";
+      let time = 3;
+      adTimer.textContent = time;
+
+      const timer = setInterval(() => {
+        time--;
+        adTimer.textContent = time;
+        if (time <= 0) {
+          clearInterval(timer);
+          adOverlay.style.display = "none"; 
+          hintsLeft = 1; 
+          updateHintUI();
+          saveGameState();
+        }
+      }, 1000);
+    }
+  }
+
+  function startRun() {
+    localStorage.removeItem('nQueensSavedGame');
+    completionLayer.classList.remove("visible");
+    stopTimers();
+    isGamePaused = false;
+    isPreviewing = false;
+    
+    if (settings.size <= 7) {
+      hintsLeft = 2;       
+      solutionsLeft = 1;   
+    } else {
+      hintsLeft = 4;       
+      solutionsLeft = 2;   
+    }
+
+    hintsUsedCount = 0;
+    solutionsUsedCount = 0;
+
+    updateHintUI();
+    updateSolutionUI();
+
+    const hintBtnEl = $("#hint-button");
+    const solBtnEl = $("#random-solution-btn");
+    
+    if (hintBtnEl) {
+      hintBtnEl.style.display = userSettings.hintsEnabled ? "inline-flex" : "none";
+    }
+    if (solBtnEl) {
+      solBtnEl.style.display = userSettings.solutionsEnabled ? "inline-flex" : "none";
+    }
+
+    if ($("#pause-overlay")) $("#pause-overlay").style.display = "none";
+    
+    state = { board: Array(settings.size).fill(-1), complete: false, running: false, startedAt: 0, elapsedBeforePause: 0 };
+    
+    buildBoard();
+    updateTopBar();
+    $("#placement-status").textContent = `Queens Placed: 0 / ${settings.size}`;
+    updateStatus("Ready to begin");
+    $("#pause-button").disabled = false;
+    $("#hint-button").disabled = false;
+
+    const restartBtn = $("#restart-button");
+    if(restartBtn) {
+      restartBtn.disabled = false;
+      restartBtn.style.opacity = "1";
+      restartBtn.style.pointerEvents = "auto";
+    }
+ 
+    const sizeBtn = $("#change-size-btn");
+    if(sizeBtn) {
+      sizeBtn.style.pointerEvents = "auto";
+      sizeBtn.style.opacity = "1";
+    }
+
+    const topBackBtn = $("#top-back-home");
+    if (topBackBtn) {
+      topBackBtn.style.pointerEvents = "auto";
+      topBackBtn.style.opacity = "1";
+    }
+    
+    const backBtn = $("#back-to-result-btn");
+    if(backBtn) backBtn.style.display = "none";
+    
+    homeScreen.classList.remove("active");
+    visualScreen.classList.add("active");
+  }
+
+  function backHome() {
+    stopTimers();
+    state.running = false;
+    completionLayer.classList.remove("visible");
+    visualScreen.classList.remove("active");
+    homeScreen.classList.add("active");
+    
+    const mainMenu = $("#main-menu-view");
+    const setupMenu = $("#setup-menu-view");
+    if (mainMenu && setupMenu) {
+       mainMenu.style.display = "block";
+       setupMenu.style.display = "none";
+    }
+    
+    const backBtn = $("#back-to-result-btn");
+    if(backBtn) backBtn.style.display = "none";
+    
+    if (typeof checkSavedGame === "function") checkSavedGame();
+  }
+
+  function isSafeCheck(tempBoard, r, c) {
+    for (let i = 0; i < settings.size; i++) {
+      if (i === r || tempBoard[i] === -1) continue;
+      let checkCol = tempBoard[i];
+      if (checkCol === c || Math.abs(checkCol - c) === Math.abs(i - r)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function isSolvable(tempBoard, row) {
+    if (row === settings.size) return true; 
+    if (tempBoard[row] !== -1) return isSolvable(tempBoard, row + 1); 
+
+    let cols = Array.from({length: settings.size}, (_, i) => i);
+    shuffleArray(cols);
+
+    for (let c of cols) {
+      if (isSafeCheck(tempBoard, row, c)) {
+        tempBoard[row] = c;
+        if (isSolvable(tempBoard, row + 1)) {
+          return true; 
+        }
+        tempBoard[row] = -1; 
+      }
+    }
+    return false; 
+  }
+
+  function useHint() {
+    if (isGamePaused || state.complete || isPreviewing) return;
+
+    if (hintsLeft <= 0) {
+      playHintAd();
+      return;
+    }
+
+    if (highlightConflicts()) {
+      updateStatus("Fix the red conflicts first!", "warning");
+      return;
+    }
+
+    let emptyRow = -1;
+    for (let r = 0; r < settings.size; r++) {
+      if (state.board[r] === -1) { emptyRow = r; break; }
+    }
+
+    if (emptyRow === -1) return;
+
+    let perfectCol = -1;
+    let tempBoard = [...state.board];
+
+    let startCols = Array.from({length: settings.size}, (_, i) => i);
+    shuffleArray(startCols);
+
+    for (let c of startCols) {
+      if (isSafeCheck(tempBoard, emptyRow, c)) {
+        tempBoard[emptyRow] = c;
+        if (isSolvable(tempBoard, emptyRow + 1)) {
+          perfectCol = c;
+          break; 
+        }
+        tempBoard[emptyRow] = -1;
       }
     }
 
-    const cells = boardDiv.querySelectorAll('.cell');
-    cells.forEach(cell => {
-      const key = cell.dataset.r + ',' + cell.dataset.c;
-      if(conflicts.has(key)) cell.classList.add('conflict'); 
-      else cell.classList.remove('conflict');
+    if (perfectCol !== -1) {
+      hintsLeft--;
+      hintsUsedCount++;
+      updateHintUI();
+      saveGameState();
+      isPreviewing = true; 
+      
+      const cell = cellAt(emptyRow, perfectCol);
+      if (cell) {
+        cell.innerHTML = '<span class="queen-piece" style="opacity: 0.65; color: var(--success); filter: drop-shadow(0 0 10px var(--success));">♛</span>';
+      }
+      updateStatus("Hint: Place queen here!", "running");
+      
+      setTimeout(() => {
+        if (cell) cell.innerHTML = "";
+        isPreviewing = false;
+        updateStatus("Playing...");
+      }, 2000);
+      
+    } else {
+      updateStatus("No winning path from here! Try removing an old piece.", "warning");
+    }
+  }
+
+  function showRandomSolution() {
+    if (isGamePaused || state.complete || isPreviewing || solutionsLeft <= 0) return;
+
+    if (highlightConflicts()) {
+      updateStatus("Fix the red conflicts first!", "warning");
+      return;
+    }
+
+    let tempBoard = [...state.board];
+    if (isSolvable(tempBoard, 0)) {
+      solutionsLeft--;
+      solutionsUsedCount++;
+      updateSolutionUI();
+      saveGameState();
+
+      isPreviewing = true; 
+      
+      for (let r = 0; r < settings.size; r++) {
+        if (state.board[r] === -1) {
+          let c = tempBoard[r];
+          let cell = cellAt(r, c);
+          if (cell) {
+            cell.innerHTML = '<span class="queen-piece" style="opacity: 0.8; color: var(--gold); filter: drop-shadow(0 0 8px var(--gold));">♛</span>';
+          }
+        }
+      }
+      updateStatus("Showing random solution...", "running");
+
+      setTimeout(() => {
+        for (let r = 0; r < settings.size; r++) {
+          if (state.board[r] === -1) { 
+            for (let c = 0; c < settings.size; c++) {
+               let cell = cellAt(r, c);
+               if (cell) cell.innerHTML = "";
+            }
+          }
+        }
+        isPreviewing = false;
+        updateStatus("Playing...");
+      }, 4000);
+
+    } else {
+      updateStatus("No winning path from here! Try removing an old piece.", "warning");
+    }
+  }
+
+  function bindEvents() {
+    $("#size-choices").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-size]");
+      if (!button) return;
+      settings.size = Number(button.dataset.size);
+      updateSetupButtons();
+    });
+    
+    $("#theme-choices").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-theme]");
+      if (!button) return;
+      settings.boardTheme = button.dataset.theme;
+      document.body.dataset.boardTheme = settings.boardTheme;
+      updateSetupButtons();
     });
 
-    if(conflicts.size > 0) {
-      status.style.borderLeftColor = "#ff4d4d";
-      status.innerHTML = `<span style="color:#ff4d4d">Conflicts Found: ${conflicts.size/2}</span>`;
-      hideOverlay();
-    } else if (placedQueens === N) {
-      status.style.borderLeftColor = "#4ade80";
-      status.innerHTML = `<span style="color:#4ade80; font-size: 16px;">✓ Solved successfully!</span>`;
-      winOverlay.style.display = 'flex';
-    } else {
-      status.style.borderLeftColor = "#18a37b";
-      status.innerHTML = `Placed: ${placedQueens} / ${N}<br><span style="font-size:12px; opacity:0.8">No conflicts yet.</span>`;
-      hideOverlay();
-    }
-  }
+    $("#start-button").addEventListener("click", startRun);
+    
+    $("#board").addEventListener("click", (e) => {
+      if (isGamePaused || state.complete || isPreviewing) return;
+      
+      const cell = e.target.closest(".cell");
+      if (!cell) return;
 
-  function solveNBacktrack(N){
-    const out = new Array(N).fill(-1);
-    const cols = new Array(N).fill(false);
-    const d1 = new Array(2*N).fill(false);
-    const d2 = new Array(2*N).fill(false);
-    let found = null;
-    function go(r){
-      if(found) return;
-      if(r === N){ found = out.slice(); return; }
-      for(let c=0; c<N; c++){
-        if(!cols[c] && !d1[r+c] && !d2[r-c+N-1]){
-          out[r]=c; cols[c]=d1[r+c]=d2[r-c+N-1]=true; go(r+1);
-          if(found) return;
-          cols[c]=d1[r+c]=d2[r-c+N-1]=false; out[r]=-1;
+      const row = parseInt(cell.dataset.row);
+      const col = parseInt(cell.dataset.col);
+
+      if (!state.running && !state.complete) {
+         beginElapsedClock();
+         updateStatus("Playing...");
+      }
+
+      if (state.board[row] === col) {
+        state.board[row] = -1;
+        cell.classList.remove("queen-cell");
+        cell.innerHTML = "";
+      } else {
+        const oldCol = state.board[row];
+        if (oldCol !== -1) {
+          const oldCell = cellAt(row, oldCol);
+          if (oldCell) {
+            oldCell.classList.remove("queen-cell");
+            oldCell.innerHTML = "";
+          }
         }
+        state.board[row] = col;
+        cell.classList.add("queen-cell");
+        cell.innerHTML = svgQueen;
+      }
+      checkGameWin();
+      saveGameState();
+    });
+
+    $("#pause-button").addEventListener("click", togglePause);
+    
+    $("#restart-button").addEventListener("click", () => {
+      if (state.complete) return; 
+      startRun();
+    });
+    
+    $("#hint-button").addEventListener("click", useHint);
+    
+    $("#random-solution-btn").addEventListener("click", showRandomSolution);
+    
+    $("#change-size-btn").addEventListener("click", (e) => {
+      if (state.complete) return; 
+      const drop = $("#size-dropdown");
+      drop.style.display = drop.style.display === "grid" ? "none" : "grid";
+      e.stopPropagation();
+    });
+
+    document.addEventListener("click", (e) => {
+      const drop = $("#size-dropdown");
+      if (drop && drop.style.display === "grid" && !e.target.closest("#change-size-btn")) {
+        drop.style.display = "none";
+      }
+    });
+
+    $("#size-dropdown").addEventListener("click", (e) => {
+      const button = e.target.closest(".drop-size-btn");
+      if (!button) return;
+      settings.size = Number(button.dataset.size);
+      $("#size-dropdown").style.display = "none";
+      updateSetupButtons();
+      startRun(); 
+    });
+
+    $("#view-board-btn").addEventListener("click", () => {
+      completionLayer.classList.remove("visible");
+      const backBtn = $("#back-to-result-btn");
+      if(backBtn) backBtn.style.display = "block";
+    });
+
+    const backToResultBtn = $("#back-to-result-btn");
+    if(backToResultBtn) {
+      backToResultBtn.addEventListener("click", () => {
+        backToResultBtn.style.display = "none";
+        completionLayer.classList.add("visible");
+      });
+    }
+
+    $("#completion-home").addEventListener("click", backHome);
+    
+    const topBackBtn = $("#top-back-home");
+    if(topBackBtn) {
+      topBackBtn.addEventListener("click", backHome);
+    }
+    
+    $("#play-again").addEventListener("click", () => {
+      completionLayer.classList.remove("visible");
+      playAdAndStart();
+    });
+
+    $("#home-settings-btn").addEventListener("click", () => {
+      $("#setting-hint-toggle").checked = userSettings.hintsEnabled;
+      $("#setting-sol-toggle").checked = userSettings.solutionsEnabled;
+      $("#settings-layer").classList.add("visible");
+    });
+    
+    $("#close-settings-btn").addEventListener("click", () => {
+      userSettings.hintsEnabled = $("#setting-hint-toggle").checked;
+      userSettings.solutionsEnabled = $("#setting-sol-toggle").checked;
+      $("#settings-layer").classList.remove("visible");
+    });
+
+    function updateStatsUI(sizeStr) {
+      let stats = gameStats[sizeStr];
+      $("#stat-wins").textContent = stats.wins;
+      $("#stat-time").textContent = stats.bestTimeMs === Infinity ? "--:--" : formatTime(stats.bestTimeMs);
+    }
+
+    $("#home-stats-btn").addEventListener("click", () => {
+      let currentSizeStr = settings.size.toString();
+      $("#stat-size-select").value = currentSizeStr;
+      updateStatsUI(currentSizeStr);
+      $("#stats-layer").classList.add("visible");
+    });
+
+    $("#stat-size-select").addEventListener("change", (e) => {
+      updateStatsUI(e.target.value);
+    });
+
+    $("#close-stats-btn").addEventListener("click", () => {
+      $("#stats-layer").classList.remove("visible");
+    });
+
+    const mainMenu = $("#main-menu-view");
+    const setupMenu = $("#setup-menu-view");
+    
+    $("#new-game-btn")?.addEventListener("click", () => {
+      mainMenu.style.display = "none";
+      setupMenu.style.display = "block";
+    });
+
+    $("#cancel-setup-btn")?.addEventListener("click", () => {
+      setupMenu.style.display = "none";
+      mainMenu.style.display = "block";
+    });
+
+    const continueBtn = $("#continue-button");
+    
+    window.checkSavedGame = function() {
+      const savedGameStr = localStorage.getItem('nQueensSavedGame');
+      if (continueBtn) {
+        continueBtn.style.display = savedGameStr ? "flex" : "none";
       }
     }
-    go(0); return found;
-  }
+    checkSavedGame(); 
 
-  function randomBacktrack(N){
-    const out = new Array(N).fill(-1);
-    const cols = new Array(N).fill(false);
-    const d1 = new Array(2*N).fill(false);
-    const d2 = new Array(2*N).fill(false);
-    let found = null;
-    function go(r){
-      if(found) return;
-      if(r === N){ found = out.slice(); return; }
-      const order = [...Array(N).keys()];
-      for(let i=order.length-1; i>0; i--){ const j=Math.floor(Math.random()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; }
-      for(const c of order){
-        if(!cols[c] && !d1[r+c] && !d2[r-c+N-1]){
-          out[r]=c; cols[c]=d1[r+c]=d2[r-c+N-1]=true; go(r+1);
-          if(found) return;
-          cols[c]=d1[r+c]=d2[r-c+N-1]=false; out[r]=-1;
+
+    continueBtn?.addEventListener("click", () => {
+      const data = JSON.parse(localStorage.getItem('nQueensSavedGame'));
+      
+      if (data) {
+        settings.size = data.settings.size;
+        settings.boardTheme = data.settings.boardTheme;
+        
+        state.board = data.state.board;
+        state.complete = data.state.complete;
+        state.elapsedBeforePause = data.state.elapsedBeforePause;
+        state.startedAt = 0; 
+        state.running = false;
+        
+        hintsLeft = data.hintsLeft;
+        solutionsLeft = data.solutionsLeft;
+        hintsUsedCount = data.hintsUsedCount;
+        solutionsUsedCount = data.solutionsUsedCount;
+        isGamePaused = data.isGamePaused;
+
+        document.body.dataset.boardTheme = settings.boardTheme;
+        updateSetupButtons();
+        buildBoard();
+        
+        for (let r = 0; r < settings.size; r++) {
+          if (state.board[r] !== -1) {
+            let cell = cellAt(r, state.board[r]);
+            if (cell) {
+              cell.classList.add("queen-cell");
+              cell.innerHTML = svgQueen;
+            }
+          }
+        }
+
+        updateHintUI();
+        updateSolutionUI();
+        updateTopBar();
+        checkGameWin(); 
+        
+        homeScreen.classList.remove("active");
+        visualScreen.classList.add("active");
+        
+        if (isGamePaused) {
+          $("#pause-button span").textContent = "Resume";
+          $("#pause-overlay").style.display = "flex";
+          updateStatus("Game Paused");
+        } else {
+          beginElapsedClock();
+          updateStatus("Playing...");
         }
       }
-    }
-    go(0); return found;
+    });
+
+    const resetDataBtn = $("#reset-data-btn");
+    const resetWarning = $("#reset-warning");
+    const resetConfirmGroup = $("#reset-confirm-group");
+    const cancelResetBtn = $("#cancel-reset-btn");
+    const confirmResetBtn = $("#confirm-reset-btn");
+
+    resetDataBtn?.addEventListener("click", () => {
+      resetDataBtn.style.display = "none";
+      resetWarning.style.display = "block";
+      resetConfirmGroup.style.display = "flex";
+    });
+
+    cancelResetBtn?.addEventListener("click", () => {
+      resetDataBtn.style.display = "block";
+      resetWarning.style.display = "none";
+      resetConfirmGroup.style.display = "none";
+    });
+
+    confirmResetBtn?.addEventListener("click", () => {
+      localStorage.removeItem('nQueensStatsV2');
+      localStorage.removeItem('nQueensSavedGame');
+      location.reload(); 
+    });
   }
 
-  document.getElementById('solve').addEventListener('click', ()=>{
-    N = parseInt(nsel.value,10); const sol = solveNBacktrack(N); 
-    if(sol){ board = sol; render(); } else alert('No solution exists for this grid size.');
-  });
-  
-  document.getElementById('random').addEventListener('click', ()=>{
-    N = parseInt(nsel.value,10); const sol = randomBacktrack(N); 
-    if(sol){ board = sol; render(); } else alert('No solution exists for this grid size.');
-  });
-  
-  document.getElementById('clear').addEventListener('click', initBoard);
-  nsel.addEventListener('change', initBoard);
-
-  document.getElementById('play-again-btn').addEventListener('click', initBoard);
-  document.getElementById('close-overlay-btn').addEventListener('click', hideOverlay);
-  
-  document.getElementById('watchAd').addEventListener('click', () => {
-    alert('Video Ad will play here! (Integration pending after domain setup)');
-  });
-
-  initBoard();
+  makeSizeChoices();
+  bindEvents();
+  updateSetupButtons();
 })();
 </script>
 </body>

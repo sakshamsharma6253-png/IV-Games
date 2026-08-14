@@ -1,9 +1,16 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Chess — Play</title>
+  <title>Play Chess Online Free vs Computer | ITVoice Games</title>
+  <meta name="description" content="Play lightweight Chess with AI. Test your strategy, train your brain, and enjoy fast-paced local play.">
+  <link id="favicon" rel="icon" type="image/webp" href="favicon/favicon.dark.webp"> 
+  <meta name="theme-color" id="meta-theme-color" content="#0a0a0a">
+  <link rel="canonical" href="https://itvoicegames.com/chess.html">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="Informatic Computech Private Limited">
+
   <style>
     body{
       font-family: Arial, Helvetica, sans-serif;
@@ -19,16 +26,9 @@
       min-height: 100vh;
     }
 
-    /* BACKGROUND THEMES */
-    body.bg-home {
-      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('image/chess.webp');
-    }
-    body.bg-wood {
-      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('image/chess.wood.webp');
-    }
-    body.bg-bw {
-      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('image/home.webp');
-    }
+    body.bg-home { background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('image/chess.webp'); }
+    body.bg-wood { background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('image/chess.wood.webp'); }
+    body.bg-bw { background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('image/home.webp'); }
 
     .wrap {
       width: min(920px, 96%);
@@ -53,14 +53,8 @@
       transition: background 0.2s;
     }
 
-    .btn:hover { 
-      background: #1ee0a8;
-    }
-
-    .muted { 
-      color: #9fbfb3; 
-    }
-    
+    .btn:hover { background: #1ee0a8; }
+    .muted { color: #9fbfb3; }
     
     .setup-section {
       margin: 20px 0;
@@ -70,20 +64,20 @@
     }
 
     .setup-section h3 { 
-      margin-top: 0;
-       margin-bottom: 12px;
-        font-size: 16px; 
-        color: #18a37b;
+      margin-top: 0; 
+      margin-bottom: 12px; 
+      font-size: 16px; 
+      color: #18a37b; 
     }
 
-    .setup-section label {
-       cursor: pointer;
-        margin-right: 15px; 
-        font-size: 15px;
+    .setup-section label { 
+      cursor: pointer; 
+      margin-right: 15px; 
+      font-size: 15px; 
     }
 
-    .theme-option {
-       transition: all 0.2s ease;
+    .theme-option { 
+      transition: all 0.2s ease; 
     }
 
     .theme-option:hover { 
@@ -91,28 +85,16 @@
       border-color: #18a37b !important; 
     }
 
-    .mini-board {
-       display: flex;
-        justify-content: center; 
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      width: 660px; 
-      max-width: 100vw;
-      border-radius: 6px;
-      overflow: hidden;
-      border: 4px solid #1a3c36;
-      margin: 0 auto; 
+    .mini-board { 
+      display: flex; 
+      justify-content: center; 
     }
     .sq {
        width: 100%; 
        padding-top: 100%; 
-       position: relative;
-    }
-    
-    /* THEMES */
+       position: relative; 
+      }
+  
     .theme-wood .sq.light { background: #f0d9b5; }
     .theme-wood .sq.dark { background: #b58863; }
     .theme-bw .sq.light { background: #FFFFFF; }
@@ -120,608 +102,172 @@
 
     .sq .piece {
       position: absolute;
-      top: 50%; left: 50%;
+      top: 50%; 
+      left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 50px; 
       transition: transform 220ms ease, opacity 220ms ease;
       cursor: grab;
       user-select: none;
       font-family: Arial, Helvetica, sans-serif;
+      z-index: 5;
     }
 
     .sq.sel { 
-      outline: 4px solid rgba(0, 200, 120, 0.8);
-       z-index: 2;
+      outline: 4px solid rgba(0, 200, 120, 0.8); 
+      z-index: 2; 
     }
 
     .sq.last-move { 
-      box-shadow: inset 0 0 0 4px rgba(255, 255, 0, 0.4);
+      box-shadow: inset 0 0 0 4px rgba(255, 255, 0, 0.4); 
     }
-
-    .piece-move {
-       transform: translate(-50%, -50%) scale(1.15);
+    .piece-move { 
+      transform: translate(-50%, -50%) scale(1.15); 
     }
 
     .legal-move-hint { position: relative; }
-
     .legal-move-hint::after {
-      content: '';
-      position: absolute;
-      left: 50%;
-      top: 50%;
+      content: ''; 
+      position: absolute; 
+      left: 50%; 
+      top: 50%; 
       transform: translate(-50%, -50%); 
       width: 25%; 
-      height: 25%;
+      height: 25%; 
       border-radius: 50%; 
       background-color: rgba(0,0,0,0.3); 
       pointer-events: none;
     }
-    .capture-hint { position: relative; }
+    
+    .capture-hint { 
+      position: relative; 
+    }
 
     .capture-hint::after {
-      content: '';
+      content: ''; 
       position: absolute; 
-      left: 50%;
-      top: 50%;
+      left: 50%; 
+      top: 50%; 
       transform: translate(-50%, -50%); 
-      width: 85%;
+      width: 85%; 
       height: 85%;
-      border-radius: 50%;
+      border-radius: 50%; 
       border: 5px solid rgba(0,0,0,0.3);
-      box-sizing: border-box;
+      box-sizing: border-box; 
       pointer-events: none; 
       background: transparent;
     }
 
-    .theme-bw .sq.dark.legal-move-hint::after {
-       background-color: rgba(255,255,255,0.6); 
+    .theme-bw .sq.dark.legal-move-hint::after { 
+      background-color: rgba(255,255,255,0.6); 
     }
-
     .theme-bw .sq.dark.capture-hint::after { 
-      border-color: rgba(255,255,255,0.6);
+      border-color: rgba(255,255,255,0.6); 
     }
 
-    .game-header { 
-      display: flex;
-       justify-content: space-between; 
-       align-items: center; 
-       margin-bottom: 25px;
-        flex-wrap: wrap; 
-        gap: 15px; 
+    .sq.in-check::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(255, 0, 0, 0.75); 
+      box-shadow: inset 0 0 15px rgba(255, 0, 0, 1); 
+      animation: checkPulse 0.6s infinite alternate; 
+      z-index: 1;
+      pointer-events: none;
     }
 
-    /* ========================================================
-       1. IPHONE SE & SMALL PHONES (Up to 380px width)
-       ======================================================== */
-    @media only screen and (max-width: 380px) { 
-      .grid { 
-        width: 330px !important;
-         margin: 0 auto !important;
-         } 
-
-      #boardHeader { 
-        width: 330px !important; 
-        margin: 0 auto !important;
-       }
-      .sq .piece { 
-        font-size: 32px !important;
-       }
-      
-      #controlsBox { 
-        width: 240px !important; 
-        margin-top: 50px !important;
-        margin-bottom: -40px !important;
-        margin-left: 9px !important;
-       }
-      #capturedPiecesBox {
-         width: 330px !important;
-         margin-bottom: -804px !important;
-         margin-top: 450px !important;
-         }
-
-          #timerB:not(.timer-flipped) { margin-top: -10px !important; margin-right: 25px !important; }
-          #timerW:not(.timer-flipped) { margin-bottom: -10px; margin-right: 20px !important; }
-        }
-
-    
-
-    /* ========================================================
-       2. SAMSUNG GALAXY & MEDIUM PHONES (381px to 540px)
-       ======================================================== */
-    @media only screen and (min-width: 381px) and (max-width: 539px) { 
-      .grid { 
-        width: 350px !important;
-        margin: 0 auto !important;
-       } 
-
-       #boardHeader {
-         width: 350px !important; 
-         margin: 0 auto !important; 
-       }
-       
-
-       #timerB:not(.timer-flipped) { margin-top: -10px !important; margin-right: 20px !important; }
-       #timerW:not(.timer-flipped) { margin-bottom: -10px; margin-right: 20px !important; }
-
-
-      
-      
-      .sq .piece { font-size: 34px !important; }
-      .game-header { justify-content: center !important; } 
-
-      #gameInner {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-      }
-
-      #controlsBox {
-        order: 1;
-        width: 230px !important; 
-        margin-top: -100px !important;
-      }
-  
-      #capturedPiecesBox {
-        order: 2;
-        width: 300px !important; 
-        margin-top: 380px !important;
-        margin-bottom: -680px !important;
-        margin-left: -30px !important;
-      }
-    }
-
-    /*======================================================
-    ---Specially for surface duo phones (width: 540px)--
-    =======================================================*/ 
-
-    @media only screen and (width: 540px) {
-      .grid {
-        width: 350px !important;
-        margin: 0 auto !important;
-      }
-
-      .board-header {
-        width: 350px !important;
-        margin: 0 auto !important;
-      }
-
-      .sq .piece {
-        font-size: 33px !important;
-      }
-
-      .game-header {
-        justify-content: center;
-      }
-
-      #gameInner {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-      }
-
-      #controlsBox {
-        order: 2;
-        width: 280px !important;
-        height: 100px !important;
-        margin-top: 370px !important;
-        margin-bottom: -687px !important;
-      }
-
-      #capturedPiecesBox {
-        order: 2;
-        width: 230px !important;
-        margin-top: -140px !important;
-        height: 170px !important;
-      }  
-    }
-
-    /* ========================================================
-       3. IPHONE PRO MAX & SAMSUNG ULTRA (415px to 430px)
-       ======================================================== */
-    @media only screen and (min-width: 415px) and (max-width: 430px) { 
-      .grid { 
-        width: 380px !important; 
-        margin: 0 auto !important; 
-      } 
-      .sq .piece {
-         font-size: 36px !important;
-      }
-
-      .game-header { 
-        justify-content: center !important; 
-      } 
-
-      #gameInner {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-      }
-
-      #controlsBox {
-        order: 1;
-        width: 380px !important; 
-        margin-top: 15px;
-      }
-
-      #capturedPiecesBox {
-        order: 2;
-        width: 380px !important; 
-        margin-top: 15px;
-      }
-    }
-
-    /* ========================================================
-       4. NEST HUB & SMALL TABLETS  like iphone pro pads
-       ======================================================== */
-    @media only screen and (width: 1024px) and (orientation: portrait) { 
-      .grid {
-         width: 600px !important; 
-         margin: 0 auto !important;
-      }
-
-      #boardHeader {
-         width: 600px !important; 
-         margin: 0 auto !important; 
-      }
-
-       #timerB {
-        top: 0px !important;
-        right: -90px !important;
-        border-radius: 1px !important;
-        border: 2px solid #1a3c36 !important;
-        width: 80px !important;
-      }
-      
-      #timerW {
-        bottom: 0px !important;
-        right: -90px !important;
-        border-radius: 1px !important;
-        border: 2px solid #1ee0a8 !important;
-        width: 80px !important;
-      }
-
-      .sq .piece {
-         font-size: 42px !important; 
-      }
-      
-      #gameInner {
-        display: flex !important;
-        flex-direction: column !important; 
-        align-items: center !important;
-      }
-      
-      #controlsBox {
-        width: 250px !important;
-        margin-top: 20px !important;
-        margin-bottom: -82px !important;
-      }
-
-      #capturedPiecesBox {
-        width: 390px !important;
-        margin-top: 700px !important;
-        margin-bottom: -1050px !important;
-        margin-left: -130px !important;
-      }
-    }
-    
-    /*===============================================
-    ---6. ipad specific phones like air,pro,max---
-    =================================================*/
-     @media only screen and (min-width: 768px) and (max-width: 820px) { 
-       .grid {
-         width: 500px !important;
-         margin: 0 auto !important;
-       }
-
-       #boardHeader {
-         width: 500px !important; 
-         margin: 0 auto !important; 
-       }
-
-       #timerB {
-        top: 0px !important;
-        right: -90px !important;
-        border-radius: 1px !important;
-        border: 2px solid #1a3c36 !important;
-        width: 82px !important;
-      }
-      
-      #timerW {
-        bottom: 0px !important;
-        right: -90px !important;
-        border-radius: 1px !important;
-        border: 2px solid #1ee0a8 !important;
-        width: 80px !important;
-      }
-
-      .sq .piece { font-size: 40px !important; }
-      .game-header { justify-content: center !important; } 
-
-      #gameInner {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-      }
-
-      #controlsBox {
-        order: 1;
-        width: 250px !important; 
-        margin-top: -100px !important;
-        margin-left: -70px;
-      }
-
-      #capturedPiecesBox {
-        order: 2;
-        width: 300px !important; 
-        margin-top: 530px !important;
-        margin-bottom: -810px !important;
-        margin-left: -80px !important;
-      }
-    }
-
-    /*=======================================
-     7. Asus phones and surface duo phone----
-     ========================================*/
-     @media only screen and (min-width: 853px) and (max-width: 912px) { 
-      .grid { 
-        width: 550px !important;
-        margin: 0 auto !important;
-       } 
-
-      #boardHeader {
-        width: 550px !important; 
-        margin: 0 auto !important; 
-      }
-
-      #timerB {
-        top: 0px !important;
-        right: -90px !important;
-        border-radius: 1px !important;
-        border: 2px solid #1a3c36 !important;
-        width: 90px !important;
-      }
-      
-      #timerW {
-        bottom: 0px !important;
-        right: -90px !important;
-        border-radius: 1px !important;
-        border: 2px solid #1ee0a8 !important;
-        width: 80px !important;
-      }
-
-      .sq .piece { font-size: 44px !important; }
-      .game-header { justify-content: center !important; } 
-
-      #gameInner {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-      }
-
-      #controlsBox {
-        order: 1;
-        width: 280px !important; 
-        margin-top: -100px !important;
-        margin-bottom: 113px !important;
-        margin-left: -100px;
-      }
-
-      #capturedPiecesBox {
-        order: 2;
-        width: 390px !important; 
-        margin-top: 470px !important;
-        margin-bottom: -870px !important;
-        margin-left: -100px;
-      }
-    }
-
-  @media only screen and (width: 1024px) and (orientation: landscape) { 
-      .grid {
-         width: 500px !important;
-          margin: 0 auto !important; 
-        } 
-      .sq .piece { 
-        font-size: 40px !important; 
-      }
-
-      #boardHeader {
-         width: 500px !important; 
-         margin: 0 auto;
-      }
-
-      #timerB {
-        top: 0px !important;
-        right: 510px !important;
-        border-radius: 1px !important;
-        border: 2px solid #1a3c36 !important;
-        width: 82px !important;
-      }
-      
-      #timerW {
-        bottom: 0px !important;
-        right: 510px !important;
-        border-radius: 1px !important;
-        border: 2px solid #1ee0a8 !important;
-        width: 80px !important;
-      }
-      
-      #gameInner {
-         display: flex !important;
-         flex-direction: row !important;
-         align-items: flex-start !important;
-         justify-content: center !important;
-         gap: 30px; margin-top: 10px; 
-      }
-
-      #gameInner > div:first-child {
-         padding-right: 0 !important; 
-         width: 100%; max-width: 280px; order: 1;
-      }
-
-      #gameInner > div:nth-child(2) {
-        order: 2;
-      }
-      
-      #controlsBox {
-        width: 70% !important;
-        margin-top: -23px !important;
-        margin-left: 110px !important;
-      }
-
-      #capturedPiecesBox {
-        width: 90% !important;
-        margin-top: 142px !important;
-        margin-left: 40px !important;
-      }
-  }
-
-    @media only screen and (min-width: 1025px) {
-      #gameInner {
-        display: flex !important;
-        flex-direction: row !important; 
-        align-items: center !important; 
-        justify-content: center !important;
-        flex-wrap: nowrap !important; 
-        gap: 30px !important; 
-        margin-top: 20px !important;
-      }
-
-      #leftPanel {
-        display: flex !important;
-        flex-direction: column !important;
-        justify-content: center !important;
-        gap: 0px !important;
-        width: 100% !important;
-        max-width: 300px !important;
-        order: 1 !important; 
-      }
-
-      #rightPanel {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        width: max-content !important;
-        order: 2 !important; 
-      }
-
-      .grid {
-         width: 550px !important;
-         margin: 0 auto !important;
-      }
-
-      #boardHeader {
-         width: 550px !important;
-         margin: 0 auto 15px auto !important;
-      }
-
-      .sq .piece {
-        font-size: 48px !important;
-      }
-      
-      #controlsBox, #capturedPiecesBox { 
-        width: 100% !important; 
-        margin: 0 !important; 
-      } 
-      
-      #timerB { 
-        top: 10px !important;
-        right: -85px !important;
-        border-radius: 0 6px 6px 0 !important; 
-        border-bottom: 2px solid #1a3c36 !important; 
-        border-left: none !important; width: 80px !important; 
-      }
-      #timerW { bottom: 10px !important; 
-        right: -85px !important; 
-        border-radius: 0 6px 6px 0 !important; 
-        border-top: 2px solid #1a3c36 !important; 
-        border-left: none !important; 
-        width: 80px !important; 
-      }
+    @keyframes checkPulse {
+      0% { opacity: 0.2; }
+      100% { opacity: 1; }
     }
 
     #home-screen {
       background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)), url('image/chess2.webp');
-      background-size: cover;
-      background-position: center;
+      background-size: cover; 
+      background-position: center; 
       border: 1px solid #18a37b; 
     }
 
     #game-screen.wrap { 
-      background: transparent;
-      border: none; 
-      box-shadow: none;
-    }
-
-    #turn {
-      min-height: 22px;
-    }
-
-    #result{
-      min-height: 20px;
+      background: transparent; 
+      border: none; box-shadow: none; 
     }
 
     .premium-btn {
-      background: rgba(30, 215, 96, 0.1) !important;
+      background: rgba(30, 215, 96, 0.1) !important; 
       border: 2px solid #1ED760 !important;
-      color: #ffffff !important;
-      padding: 12px 24px;
-      font-size: 16px !important;
+      color: #ffffff !important; 
+      padding: 12px 24px; 
+      font-size: 16px !important; 
       font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3 ease;
+      border-radius: 8px; 
+      cursor: pointer; transition: all 0.3s ease; 
       box-shadow: 0 4px 15px rgba(30, 215, 96, 0.2);
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
       width: 100%;
     }
-
-    .premium-btn:hover {
-      background: #1ED760 !important;
-      color: #000000 !important;
-      box-shadow: 0 0 20px rgba(30, 215, 96, 0.6);
-      transform: translateY(-2px);
+    .premium-btn:hover { 
+      background: #1ED760 !important; 
+      color: #000000 !important; 
+      box-shadow: 0 0 20px rgba(30, 215, 96, 0.6); 
+      transform: translateY(-2px); 
     }
-
-    .premium-btn:active {
-      transform: translateY(1px);
-      box-shadow: 0 2px 10px rgba(30, 215, 96, 0.4);
+    .premium-btn:active { 
+      transform: translateY(1px); 
+      box-shadow: 0 2px 10px rgba(30, 215, 96, 0.4); 
     }
 
     .cancel-btn {
-      background: transparent !important;
-      border: 2px solid #557068 !important;
+      background: transparent !important; 
+      border: 2px solid #557068 !important; 
       color: #9fbfb3 !important; 
-      padding: 10px 24px;
-      font-size: 14px !important;
-      font-weight: bold;
+      padding: 10px 24px; font-size: 14px !important; 
+      font-weight: bold; 
       border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      cursor: pointer; 
+      transition: all 0.3s ease; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
       width: 100%; 
       margin-top: 20px;
     }
-
-    .cancel-btn:hover {
+    .cancel-btn:hover { 
       background: rgba(255, 76, 76, 0.1) !important; 
       border-color: #ff4c4c !important; 
       color: #ff4c4c !important; 
       box-shadow: 0 4px 15px rgba(255, 76, 76, 0.2); 
     }
-    
-    .cancel-btn:active {
-      transform: translateY(1px);
+    .cancel-btn:active { 
+      transform: translateY(1px); 
+    }
+
+    .premium-back-btn {
+      background: linear-gradient(145deg, #1e332f, #0d2622) !important; 
+      border: 2px solid #18a37b !important;
+      color: #1ee0a8 !important; 
+      padding: 10px 20px !important; 
+      font-size: 14px !important; 
+      font-weight: bold;
+      border-radius: 8px; 
+      cursor: pointer; 
+      transition: all 0.3s ease; 
+      box-shadow: 0 4px 15px rgba(24, 163, 123, 0.2);
+    }
+    .premium-back-btn:hover { 
+      background: #18a37b !important; 
+      color: #000 !important; 
+      box-shadow: 0 0 20px rgba(24, 163, 123, 0.6); 
+      transform: translateY(-2px); 
     }
 
     .modal-overlay {
       position: fixed; 
-      top: 0; left: 0; 
+      top: 0; 
+      left: 0; 
       width: 100%; 
-      height: 100%;
+      height: 100%; 
       background: rgba(0, 0, 0, 0.85); 
-      backdrop-filter: blur(5px);
+      backdrop-filter: blur(5px); 
       display: flex; 
       justify-content: center; 
       align-items: center; 
@@ -730,9 +276,9 @@
     .modal-content {
       background: #0d2622; 
       padding: 30px; 
-      border-radius: 12px;
+      border-radius: 12px; 
       border: 2px solid #18a37b; 
-      text-align: center;
+      text-align: center; 
       max-width: 400px; 
       box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     }
@@ -743,77 +289,579 @@
       margin-top: 25px; 
     }
 
+   .grid {
+      display: grid; 
+      grid-template-columns: repeat(8, 1fr); 
+      width: 100%; max-width: min(520px, 58vh); 
+      border-radius: 4px; 
+      overflow: hidden; 
+      border: 4px solid #1a3c36; 
+      margin: 0 auto; 
+    }
+
+    .player-bar {
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 12px; 
+      border-radius: 8px; 
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .player-info { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: flex-start; 
+    }
+    .player-name { 
+      font-size: 14px; 
+      font-weight: bold; 
+      color: #9fbfb3; 
+    }
+
+    .captured-pieces { 
+      display: flex; 
+      min-height: 35px; 
+      align-items: center; 
+      font-size: 26px; 
+      line-height: 1; 
+      overflow: visible; 
+      white-space: nowrap; 
+      padding-top: 5px; 
+    }
+
+    .timer-box {
+      background: rgba(0, 0, 0, 0.6);
+       padding: 8px 12px; 
+       border-radius: 6px; 
+       font-size: 18px;
+      font-weight: bold; 
+      color: #fff; 
+      border: 2px solid transparent; 
+      text-align: center; 
+      min-width: 70px; 
+      transition: all 0.3s ease;
+    }
+    .auto-timer { 
+      display: block; 
+      font-size: 10px; 
+      color: #ffeb3b; 
+      margin-top: 2px; 
+    }
+
+    .game-controls { 
+      display: flex; 
+      gap: 10px; 
+      margin-top: 8px; 
+    }
+
+    .game-controls .btn { 
+      flex: 1; font-size: 15px; 
+      padding: 12px; 
+      background: #0d2622; 
+      border: 1px solid #18a37b; color: #1ee0a8; 
+    }
+    .game-controls .btn:hover { 
+      background: #18a37b; 
+      color: #fff; 
+    }
+
+    .header-action-btn { 
+      background: #0d2622 !important; 
+      border: 1px solid #18a37b !important; 
+      color: #1ee0a8 !important; 
+      transition: 0.3s; 
+    }
+    .header-action-btn:hover { 
+      background: #18a37b !important; 
+      color: #fff !important; 
+    }
+
+    .turn-indicator {
+      background: #18a37b; 
+      color: #04221a; 
+      font-size: 10px; 
+      padding: 3px 8px; 
+      border-radius: 12px;
+      text-transform: uppercase; 
+      font-weight: bold; 
+      animation: pulseTurn 1.5s infinite;
+    }
+
+    .check-indicator {
+      background: #ff4c4c; 
+      color: #fff; font-size: 10px; 
+      padding: 3px 8px; 
+      border-radius: 12px;
+      text-transform: uppercase; 
+      font-weight: bold; 
+      animation: popIn 0.3s ease-out forwards;
+    }
+
+    @keyframes pulseTurn {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .small-btn { 
+      flex: 0 1 auto !important; 
+      padding: 8px 18px !important; 
+      font-size: 13px !important; 
+      border-radius: 20px !important; 
+      min-width: 90px; 
+    }
+
+    .coord-number, .coord-letter {
+      position: absolute; 
+      font-size: 11.5px; 
+      font-weight: 900; 
+      user-select: none; 
+      pointer-events: none; 
+      z-index: 1; 
+      display: none;
+    }
+    .coord-number { top: 3px; left: 4px; }
+    .coord-letter { bottom: 2px; right: 4px; }
+
+    .grid:not(.flipped) .sq[data-c="0"] .coord-number { display: block; }
+    .grid:not(.flipped) .sq[data-r="7"] .coord-letter { display: block; }
+
+    .grid.flipped .sq[data-c="7"] .coord-number { 
+      display: block; 
+      top: auto; 
+      left: auto; 
+      bottom: 3px; 
+      right: 4px; 
+      transform: rotate(180deg); 
+    }
+
+    .grid.flipped .sq[data-r="0"] .coord-letter { 
+      display: block; 
+      bottom: auto; 
+      right: auto; 
+      top: 3px; 
+      left: 4px; 
+      transform: rotate(180deg); 
+    }
+
+    .theme-wood .sq.light .coord-number, .theme-wood .sq.light .coord-letter { color: #b58863; }
+    .theme-wood .sq.dark .coord-number, .theme-wood .sq.dark .coord-letter { color: #f0d9b5; }
+    .theme-bw .sq.light .coord-number, .theme-bw .sq.light .coord-letter { color: #000000; }
+    .theme-bw .sq.dark .coord-number, .theme-bw .sq.dark .coord-letter { color: #ffffff; }
+
+    .win-indicator {
+      color: #ffeb3b; 
+      font-size: 13px; 
+      font-weight: bold; 
+      background: rgba(0, 0, 0, 0.6);
+      padding: 4px 10px; 
+      border-radius: 6px; 
+      border: 1px solid #ffeb3b; 
+      margin-left: 10px; 
+      animation: popIn 0.4s ease-out forwards;
+    }
+
+    #game-content-flex { 
+      display: flex; 
+      gap: 20px; 
+      align-items: stretch; 
+      justify-content: center; 
+    }
+
+    .board-col { 
+      flex: 1.6; 
+      max-width: 600px; 
+      width: 100%; 
+      display: flex; 
+      flex-direction: column; 
+    }
+    .history-col { 
+      flex: 1; 
+      width: 100%; 
+      min-width: 280px; 
+      max-width: 350px; 
+      display: flex; 
+      flex-direction: column; 
+    }
+
+    #moveList::-webkit-scrollbar { width: 6px; }
+    #moveList::-webkit-scrollbar-thumb { background: #555; border-radius: 3px; }
+    #moveList::-webkit-scrollbar-track { background: #262421; }
+    
+    .switch { 
+      position: relative; 
+      display: inline-block; 
+      width: 44px; 
+      height: 24px; 
+    }
+    .switch input { 
+      opacity: 0;
+      width: 0; 
+      height: 0; 
+    }
+    .slider { 
+      position: absolute; 
+      cursor: pointer; 
+      top: 0; 
+      left: 0; 
+      right: 0; 
+      bottom: 0; 
+      background-color: rgba(0,0,0,0.5); 
+      transition: .4s; 
+      border: 1px solid rgba(255,255,255,0.2); 
+    }
+
+    .slider:before { 
+      position: absolute; 
+      content: ""; 
+      height: 16px; 
+      width: 16px; 
+      left: 3px; 
+      bottom: 3px; 
+      background-color: #9fbfb3; transition: .4s; 
+    }
+
+    input:checked + .slider { 
+      background-color: #18a37b; 
+      border-color: #18a37b; 
+    }
+    input:checked + .slider:before { 
+      transform: translateX(20px); 
+      background-color: #04221a; 
+    }
+    .slider.round { 
+      border-radius: 24px; 
+    }
+    .slider.round:before { 
+      border-radius: 50%; 
+    }
+
+  @media only screen and (max-width: 767px) { 
+      .sq .piece { 
+        font-size: 34px !important; 
+      }
+      .timer-box { 
+        font-size: 16px; 
+        padding: 6px 10px; 
+      }
+      .player-name { 
+        font-size: 13px; 
+      }
+      .captured-pieces { 
+        font-size: 18px; 
+      }
+
+      #topHeaderRow { 
+        flex-direction: column; 
+        gap: 16px !important;
+        padding: 20px 15px !important;
+      }
+      #topHeaderRow > div { 
+        width: 100%; 
+        justify-content: center !important; 
+        gap: 20px !important;
+        flex-wrap: wrap;
+      }
+
+      #topHeaderRow .btn {
+        font-size: 20px !important;
+        padding: 10px 18px !important;
+        border-radius: 10px !important;
+        display: inline-flex !important;
+      }
+      #topHeaderRow .btn svg {
+        width: 18px !important;
+        height: 18px !important;
+      }
+     
+      
+      #middleGameRow { 
+        display: contents !important; 
+      }
+      #topPlayerBar { 
+        order: 1; 
+      }
+      #boardWrapper { 
+        order: 2; 
+        max-width: 100% !important; 
+        width: 100% !important; 
+      }
+      #bottomPlayerBar {
+        order: 3; 
+        }
+      
+      #historyBoxCol { 
+        order: 4; 
+        width: 100% !important; 
+        min-width: 100% !important; 
+        height: 180px; 
+        max-height: 30vh; 
+        margin-top: 8px; 
+      } 
+      #proMoveHistory { 
+        position: relative !important; 
+        height: 100% !important; 
+      }
+    }
+    
+  @media only screen and (min-width: 768px) { 
+      .sq .piece { font-size: 45px !important; } 
+
+      body.game-active { 
+        overflow: hidden; 
+        height: 100vh; 
+        align-items: flex-start; 
+        padding-top: 4vh; 
+        box-sizing: border-box;
+      }
+      #proMoveHistory { 
+        position: absolute !important; 
+        top: 0; 
+        bottom: 0; 
+        left: 0; 
+        right: 0; 
+        height: auto !important; 
+      }
+    }
+
+    .premium-select {
+        width: 100%;
+        padding: 12px 16px;
+        margin-top: 5px;
+        border-radius: 8px;
+        border: 2px solid #18a37b;
+        background-color: rgba(13, 38, 34, 0.9);
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        outline: none;
+        box-sizing: border-box;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231ee0a8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+        background-size: 18px;
+        
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+    }
+
+    .premium-select:hover:not(:disabled) {
+        border-color: #1ee0a8;
+        box-shadow: 0 4px 15px rgba(24, 163, 123, 0.3);
+    }
+
+    .premium-select:focus {
+        border-color: #1ee0a8;
+        box-shadow: 0 0 10px rgba(30, 224, 168, 0.5);
+    }
+
+    .premium-select:disabled {
+        border-color: #557068;
+        color: #7a9c92;
+        cursor: not-allowed;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23557068' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    }
+
+    .premium-select option {
+        background-color: #0d2622;
+        color: #ffffff;
+        font-weight: bold;
+        padding: 10px;
+    }
+
+    .premium-input {
+        width: 100%; padding: 12px 16px; margin-top: 5px; border-radius: 8px; border: 2px solid #18a37b; background: rgba(0,0,0,0.5); color: #fff; font-size: 15px; font-weight: bold; box-sizing: border-box; outline: none; transition: all 0.3s ease;
+    }
+    .premium-input:focus { border-color: #1ee0a8; box-shadow: 0 0 10px rgba(30, 224, 168, 0.3); }
+    .premium-input:disabled { border-color: #557068; color: #7a9c92; cursor: not-allowed; background: rgba(0,0,0,0.3); }
+
+    .radio-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .radio-group.left-align {
+        justify-content: flex-start;
+    }
+
+    .radio-btn {
+        flex: 1;
+        cursor: pointer;
+    }
+
+    .radio-btn input[type="radio"] {
+        display: none; 
+    }
+
+    .radio-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 10px;
+        border: 2px solid #557068;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.4);
+        color: #9fbfb3;
+        font-weight: bold;
+        font-size: 13px;
+        transition: all 0.3s ease;
+        text-align: center;
+        box-sizing: border-box;
+        white-space: nowrap !important;
+
+    }
+
+    .radio-btn:hover .radio-content {
+        border-color: #18a37b;
+        color: #ffffff;
+        background: rgba(24, 163, 123, 0.1);
+    }
+
+    .radio-btn input[type="radio"]:checked + .radio-content {
+        border-color: #1ee0a8;
+        background: rgba(30, 215, 96, 0.15);
+        color: #ffffff;
+        box-shadow: 0 4px 15px rgba(30, 215, 96, 0.2);
+        transform: translateY(-2px);
+    }
+
+    #aiLevelWrapper {
+        display: grid;
+        grid-template-rows: 0fr;
+        opacity: 0;
+        transition: grid-template-rows 0.35s ease-in-out, opacity 0.35s ease-in-out;
+    }
+    
+    #aiLevelWrapper.show-smooth {
+        grid-template-rows: 1fr;
+        opacity: 1;
+    }
+    
+    #aiLevelWrapper > div {
+        overflow: hidden;
+    }
+
   </style>
 </head>
 <body class="bg-home">
+<div id="settingsBtn" style="position: absolute; top: 20px; left: 20px; z-index: 10000; padding: 8px 12px; background-color: #0d2622; border: 1px solid #18a37b; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.3s ease;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1ee0a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </svg>
+    <span style="color: #1ee0a8; font-size: 14px; font-weight: bold; letter-spacing: 0.5px;">Settings</span>
+  </div>
 
-  <div id="resumeModal" class="modal-overlay" style="display: none;">
-    <div class="modal-content">
-        <h2 style="color: #18a37b; margin-top: 0;">Game Paused</h2>
-        <p style="color: #e6f0ef; font-size: 15px; margin-bottom: 25px;">You have an old game save. Do you want to resume from there or restart the game?</p>
-        <div class="modal-actions">
-            <button id="resumeBtn" class="btn premium-btn" style="margin: 0; padding: 10px 20px;">Resume</button>
-            <button id="restartBtn" class="btn cancel-btn" style="margin: 0; padding: 10px 20px;">Restart</button>
-        </div>
+  <div id="settingsModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="width: 320px; text-align: left;">
+      <h2 style="color: #18a37b; margin-top: 0; text-align: center; margin-bottom: 25px;">⚙️ Settings</h2>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 8px;">
+        <span style="color: #e6f0ef; font-size: 15px; font-weight: bold;">Show Moves History</span>
+        <label class="switch">
+          <input type="checkbox" id="toggleMoves">
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 8px; margin-top: 10px;">
+        <span style="color: #e6f0ef; font-size: 15px; font-weight: bold;">Show Move Hints</span>
+        <label class="switch">
+          <input type="checkbox" id="toggleHints">
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+      <button id="closeSettingsBtn" class="btn premium-btn" style="margin-top: 25px; width: 100%;">Save & Close</button>
     </div>
   </div>
 
- <div id="exit-container" style="position: absolute; top: 20px; right: 20px; z-index: 10000;">
+  <div id="exit-container" style="position: absolute; top: 20px; right: 20px; z-index: 10000;">
     <button onclick="localStorage.removeItem('chess_saved_game'); window.close(); window.location.href = 'index.html';" style="background-color: #18a37b; color: #ffffff; padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
         ✖ Exit Chess
     </button>
   </div>
 
   <div id="home-screen" class="wrap" style="text-align: center; max-width: 500px; margin-top: 60px;">
+    <img src="icons/ivgames-logo.webp" alt="IV Games Logo" style="height: 55px; width: auto; object-fit: contain; margin: 0 auto 15px; display: block; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));">
     <h1 style="margin-top: 0; color: #18a37b;">Chess Master</h1>
     <p class="muted">Setup your game</p>
-    
-    <div class="setup-section">
-      <h3>Game Mode</h3>
-      <label><input type="radio" name="gameMode" value="twoPlayer"> Two Player</label>
-      <label><input type="radio" name="gameMode" value="ai"> Play vs Computer</label>
+
+    <div id="savedGameBlock" style="display: none; background: rgba(0,0,0,0.4); border: 2px solid #18a37b; padding: 25px; border-radius: 12px; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <h2 style="color: #1ee0a8; margin-top: 0; margin-bottom: 5px;">Game in Progress</h2>
+        <p style="color: #9fbfb3; font-size: 14px; margin-bottom: 25px;">You have an unfinished game save. Do you want to resume or start a new game?</p>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            <button id="homeResumeBtn" class="btn premium-btn" style="margin: 0; width: 100%;">▶ RESUME GAME</button>
+            <button id="homeDiscardBtn" class="btn cancel-btn" style="margin: 0; width: 100%; border-color: #ffb703 !important; color: #ffb703 !important;">↻ RESTART / NEW GAME</button>
+        </div>
     </div>
 
-    <div id="twoPlayerOptions" class="setup-section" style="display: none;">
-      <h3>Player Setup</h3>
-      <p style="color: #9fbfb3; font-size: 12px; margin-top: -5px; margin-bottom: 15px;">NOTE: Leave blank to use default names</p>
-      
-      <div style="display: flex; flex-direction: column; gap: 10px; text-align: left;">
-        <div>
-          <label style="font-size: 13px; color: #9fbfb3;">Player 1 Name:</label>
-          <input type="text" id="p1Name" placeholder="Player 1" oninput="this.value=this.value.replace(/[^a-zA-Z0-9 ]/g, '')" maxlength="12" style="width: 100%; padding: 8px; margin-top: 4px; border-radius: 6px; border: 1px solid #18a37b; background: rgba(0,0,0,0.4); color: #fff; box-sizing: border-box;">
-        </div>
-        <div>
-          <label style="font-size: 13px; color: #9fbfb3;">Player 1 Token:</label>
-          <select id="p1Color" disabled style="width: 100%; padding: 8px; margin-top: 4px; border-radius: 6px; border: 1px solid #18a37b; background: rgba(0,0,0,0.4); color: #fff; box-sizing: border-box;">
-            <option value="w" id="p1OptW">Select Theme First</option>
-            <option value="b" id="p2OptB" style="display: none;"></option>
-          </select>
-        </div>
-        <div>
-          <label style="font-size: 13px; color: #9fbfb3;">Player 2 Name:</label>
-          <input type="text" id="p2Name" placeholder="Player 2" oninput="this.value=this.value.replace(/[^a-zA-Z0-9 ]/g, '')" maxlength="12" style="width: 100%; padding: 8px; margin-top: 4px; border-radius: 6px; border: 1px solid #18a37b; background: rgba(0,0,0,0.4); color: #fff; box-sizing: border-box;">
-        </div>
-        <div>
-          <label style="font-size: 13px; color: #9fbfb3;">Player 2 Token (Auto):</label>
-          <input type="text" id="p2ColorDisplay" value="Waiting for Theme..." disabled style="width: 100%; padding: 8px; margin-top: 4px; border-radius: 6px; border: 1px solid #555; background: rgba(0,0,0,0.6); color: #888; box-sizing: border-box;">
-        </div>
+    <div id="setupBlock">
+      <div class="setup-section">
+        <h3>Game Mode</h3>
+      <div class="radio-group">
+        <label class="radio-btn">
+          <input type="radio" name="gameMode" value="twoPlayer" checked>
+          <div class="radio-content">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            Two Player
+          </div>
+        </label>
+        <label class="radio-btn">
+          <input type="radio" name="gameMode" value="ai">
+          <div class="radio-content">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            Play vs Computer
+          </div>
+        </label>
       </div>
     </div>
-    
-    <div id="aiOptions" class="setup-section" style="display: none;">
-      <h3>Computer Level</h3>
-      <label><input type="radio" name="aiLevel" value="easy" checked> Easy</label>
-      <label><input type="radio" name="aiLevel" value="hard"> Hard</label>
 
-    <div style="margin-top: 15px;">
-      <label style="font-size: 13px; color: #9fbfb3;">Your Color</label>
-      <select id="aiPlayerColor" disabled style="width: 100%; padding: 8px; margin-top: 4px; border-radius: 6px; border: 1px solid #18a37b; background: rgba(0,0,0,0.4); color: #888; box-sizing: border-box; cursor: not-allowed;">
-        <option value="w" id="aiOptW">Select Theme First</option>
-        <option value="b" id="aiOptB"></option>
+   <div class="setup-section">
+      <h3>Time Control</h3>
+      <select id="timeControl" class="premium-select">
+        <option value="600|0">10 min (No Increment)</option>
+        <option value="600|5">10+5 (10 min + 5s/move)</option>
+        <option value="900|5">15+5 (15 min + 5s/move)</option>
       </select>
     </div>
-  </div>
+
+  <div id="aiLevelWrapper">
+        <div>
+            <div id="aiLevelSection" class="setup-section" style="margin: 10px 0;">
+                <h3>Computer Level</h3>
+                <div class="radio-group left-align" style="margin-top: 5px;">
+                    <label class="radio-btn">
+                        <input type="radio" name="aiLevel" value="easy" checked>
+                        <div class="radio-content">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Easy
+                        </div>
+                    </label>
+                    <label class="radio-btn">
+                        <input type="radio" name="aiLevel" value="hard">
+                        <div class="radio-content">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> Hard
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="setup-section">
       <h3>Board Theme</h3>
@@ -823,8 +871,21 @@
     <div id="themeErrorMsg" style="color: #ff4c4c; font-weight: bold; font-size: 14px; margin-bottom: 10px; display: none;">
       Please Select a Theme First!
     </div>
+    <button id="openNameModalBtn" class="btn premium-btn" style="margin-top: 10px; font-size: 18px !important;">NEXT ➔</button>
+    </div>
+  </div>
 
-    <button id="startGameBtn" class="btn premium-btn" style="margin-top: 10px;">Start Game</button>
+    <div id="name-input-modal" class="modal-overlay" style="display: none;">
+      <div class="modal-content" style="width: 320px; text-align: left; position: relative;">
+          <button id="closeNameModalBtn" style="position: absolute; top: 10px; right: 15px; background: none; border: none; color: #18a37b; font-size: 24px; font-weight: bold; cursor: pointer;">✖</button>
+          
+          <h2 style="color: #18a37b; margin-top: 0; text-align: center;">Player Setup</h2>
+          <p style="color: #9fbfb3; font-size: 12px; margin-top: -15px; margin-bottom: 20px; text-align: center;">NOTE: Leave blank to use default names</p>
+          
+          <div id="dynamic-setup-inputs" style="display: flex; flex-direction: column; gap: 10px;"></div>
+          
+          <button id="finalStartBtn" class="btn premium-btn" style="margin-top: 25px; width: 100%; font-size: 18px !important;">START MATCH</button>
+      </div>
   </div>
 
   <div id="themeModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center;">
@@ -851,76 +912,235 @@
     </div>
   </div>
 
+  <div id="game-screen" class="wrap" style="display: none; padding: 15px !important; max-width: 900px;">
 
-  <div id="game-screen" class="wrap" style="display: none;">
-    <div id="gameInner" style="display: flex; justify-content: center; align-items: flex-start; flex-wrap: wrap; gap: 40px; width: 100%;">
-      
-      <div id="leftPanel" style="display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 350px;">
+   <div id="topHeaderRow" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 10px; background: rgba(0, 0, 0, 0.6); padding: 8px 12px; border-radius: 8px; border: 1px solid #18a37b; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); flex-wrap: wrap;">     
+      <div style="display: flex; flex-direction: row; align-items: center; justify-content: flex-start; gap: 10px; white-space: nowrap;">
+        <span style="font-size: 15px; font-weight: 900; color: #18a37b; text-transform: uppercase; letter-spacing: 1px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">Chess Master</span>
         
-        <div id="capturedPiecesBox" style="display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-          <div style="text-align: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 8px; margin-bottom: 5px;">
-            <h3 style="margin: 0; color: #18a37b; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Captured Pieces</h3>
-          </div>
-          <div>
-            <div id="capWhiteLabel" style="color: #9fbfb3; font-size: 12px; margin-bottom: 4px;">White Captured:</div>
-            <div id="capByWhite" style="min-height: 35px; background: rgba(255,255,255,0.05); border-radius: 6px; padding: 6px; font-size: 28px; line-height: 1.1; display: flex; flex-wrap: nowrap; overflow: hidden;"></div>
-          </div>
-          <div>
-            <div id="capBlackLabel" style="color: #9fbfb3; font-size: 12px; margin-bottom: 4px;">Black Captured:</div>
-            <div id="capByBlack" style="min-height: 35px; background: rgba(255,255,255,0.05); border-radius: 6px; padding: 6px; font-size: 28px; line-height: 1.1; display: flex; flex-wrap: nowrap; overflow: hidden;"></div>
-          </div>
-        </div>
-
-        <div id="controlsBox" style="display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-          <div style="display: flex; gap: 10px;">
-             <button id="undoBtn" class="btn" style="margin: 0; flex: 1; font-size: 14px; padding: 10px;">Undo Move</button>
-             <button id="flipBtn" class="btn" style="margin: 0; flex: 1; font-size: 14px; padding: 10px;">Flip Board</button>
-          </div>
-          <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-            <div id="turn" style="color: #fff; font-weight: bold; font-size: 15px; margin: 0;">Turn: —</div>
-            <div id="result" style="color: #ffeb3b; font-weight: bold; margin-top: 4px; min-height: 16px; margin-bottom: 0; font-size: 13px;"></div>
-          </div>
-        </div>
-
+        <div style="height: 18px; width: 2px; background-color: #18a37b; opacity: 0.5; border-radius: 2px;"></div>
+        
+        <h2 id="gameModeTitle" style="margin: 0; font-size: 14px; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); line-height: 1; color: #1ee0a8; display: flex; align-items: center;">Local Chess</h2>
+      </div>
+      
+      <div style="display: flex; gap: 8px; justify-content: center; flex: 1;">
+        <button id="undoBtn" class="btn small-btn header-action-btn" style="margin: 0; padding: 6px 12px !important; font-size: 12px !important; min-width: auto;">↶ Undo</button>
+        <button id="flipBtn" class="btn small-btn header-action-btn" style="margin: 0; padding: 6px 12px !important; font-size: 12px !important; min-width: auto;">⇅ Flip</button>
       </div>
 
-      <div id="rightPanel" style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: max-content;">
-        
-        <div id="boardHeader" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; width: 100%; background: rgba(0,0,0,0.6); padding: 10px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;">
-          <h2 style="margin: 0; font-size: 22px; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); line-height: 1; color: #1ee0a8;">Local Chess</h2>
-          <button id="backToHomeBtn" class="btn" style="background: #3a4b48; color: white; margin:0; padding: 6px 10px; font-size: 13px;">← Back to Home</button>
-        </div>
-        
-        <div id="boardWrapper" style="position: relative; display: inline-block; margin: 0 auto; width: max-content; height: max-content;">
-          <div id="board" aria-label="Chess board"></div>
-          
-          <div id="timerB" class="side-timer" style="position: absolute; top: 10px; right: -85px; background: #333; color: #fff; padding: 8px 5px; border-radius: 0 6px 6px 0; text-align: center; font-weight: bold; border: 2px solid #1a3c36; border-left: none; width: 50px; z-index: 5;">
-            <span id="timerBLabel">Black</span><br><span id="timerBText" style="font-size: 18px;">10:00</span><br>
-            <span id="turnTimerB" style="font-size: 11px; color: #ffeb3b; display: none;">Auto: 60s</span>
-          </div>
-
-          <div id="timerW" class="side-timer" style="position: absolute; bottom: 10px; right: -85px; background: #e6c280; color: #000; padding: 8px 5px; border-radius: 0 6px 6px 0; text-align: center; font-weight: bold; box-shadow: 2px 0 10px rgba(30,224,168,0.5); border: 2px solid #1a3c36; border-left: none; width: 55px; z-index: 5;">
-            <span id="timerWLabel">White</span><br><span id="timerWText" style="font-size: 18px;">10:00</span><br>
-            <span id="turnTimerW" style="font-size: 11px; color: #d32f2f; display: block;">Auto: 60s</span>
-          </div>
-
-          <div id="gameOverOverlay" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); z-index: 10; flex-direction: column; justify-content: center; align-items: center; border-radius: 6px; border: 2px solid #1ee0a8; box-sizing: border-box;">
-            <h2 id="gameOverText" style="color: #fff; font-size: 32px; text-shadow: 2px 2px 5px #000; margin-top: 0; margin-bottom: 20px; text-align: center;">Checkmate!</h2>
-
-            <div style="display: flex; gap: 15px;">
-            <button id="overlayRestartBtn" class="btn" style="font-size: 16px; padding: 10px 20px;">↻ Restart Game</button>
-            <button id="overlayBackBtn" class="btn" style="font-size: 18px; padding: 12px 24px;">🡸 Back to Home</button>
-          </div>
-          <button id="watchAdBtn" class="btn" style="margin-top: 25px; background: #d32f2f; color: white; font-size: 15px; padding: 8px 18px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">▶ Watch Ad</button>
-        </div>
-        
+       <div style="display: flex; gap: 8px; justify-content: flex-end;">
+          <button id="pauseGameBtn" class="btn premium-btn" style="margin:0; padding: 6px 12px !important; font-size: 12px !important; width: auto; border-color: #ffb703 !important; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">⏸ Pause</button>
+          <button id="soundToggleBtn" class="btn premium-btn" style="margin:0; padding: 6px 10px !important; font-size: 14px !important; width: auto; border-color: #22c55e !important; background: transparent !important; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease;"></button>
+          <button id="backToHomeBtn" class="btn premium-btn" style="background: #3a4b48; color: white; margin:0; padding: 6px 12px !important; font-size: 12px !important; white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: 4px;">← Back to Home Screen</button>
       </div>
     </div>
 
+    <div id="pauseModal" class="modal-overlay" style="display: none;">
+      <div class="modal-content" style="width: 280px; padding: 25px;">
+          <h2 style="color: #ffb703; margin-top: 0; margin-bottom: 5px;">Game Paused</h2>
+          <p style="color: #9fbfb3; font-size: 13px; margin-bottom: 20px;">Timer is stopped.</p>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+              <button id="resumeGameBtn" class="btn premium-btn" style="margin: 0; width: 100%;">▶ Resume</button>
+              <button id="pauseRestartBtn" class="btn premium-btn" style="margin: 0; width: 100%; border-color: #0284c7 !important;">↻ Restart</button>
+              <button id="pauseHomeBtn" class="btn cancel-btn" style="margin: 0; width: 100%;">← Back to Home</button>
+          </div>
+      </div>
+    </div>
+
+    <div id="boardArea" style="display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 750px; margin: 0 auto;">
+      
+      <div class="player-bar" id="topPlayerBar">
+        <div class="player-info">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="player-name" id="top-name">Player 2 (Black)</div>
+            <span id="top-turn-badge" class="turn-indicator" style="display: none;">◀ Turn</span>
+            <span id="top-check-badge" class="check-indicator" style="display: none;">Check!</span>
+            <span id="top-win-msg" class="win-indicator" style="display: none;"></span>
+          </div>
+          <div class="captured-pieces" id="capByBlack"></div>
+        </div>
+        <div class="timer-box" id="timerB">
+          <span id="timerBText">10:00</span>
+          <span id="turnTimerB" class="auto-timer" style="display: none;">Auto: 60s</span>
+        </div>
+      </div>
+
+      <div id="middleGameRow" style="display: flex; justify-content: center; gap: 15px; align-items: stretch;">
+        <div id="boardWrapper" style="position: relative; flex: 1.6; max-width: 520px; width: 100%;">
+          <div id="board" aria-label="Chess board"></div>
+          
+          <div id="gameOverOverlay" style="display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); z-index: 10; flex-direction: column; justify-content: center; align-items: center; border-radius: 6px; border: 2px solid #1ee0a8; box-sizing: border-box;">
+            <h2 id="gameOverText" style="color: #fff; font-size: 32px; text-shadow: 2px 2px 5px #000; margin-top: 0; margin-bottom: 20px; text-align: center;">Checkmate!</h2>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+              <button id="overlayRestartBtn" class="btn" style="font-size: 14px; padding: 10px 15px;">↻ Restart</button>
+              <button id="viewBoardBtn" class="btn" style="background-color: #3b82f6; border-color: #2563eb; font-size: 14px; padding: 10px 15px; color: white;">👁 View Board</button>
+              <button id="overlayBackBtn" class="premium-back-btn">🡸 Back to Home</button>
+            </div>
+          </div>
+         <button id="backToResultBtn" style="display: none; position: fixed; bottom: 40px; top: auto; left: 50%; transform: translateX(-50%); background-color: #fbbf24; color: #121212; padding: 10px 25px; border-radius: 25px; border: 3px solid #b45309; font-weight: 900; font-size: 16px; cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.8); z-index: 10000;">
+            ⬆ Back to Result
+          </button>
+        </div>
+
+        <div id="historyBoxCol" style="position: relative; flex: 1; min-width: 250px; display: flex; flex-direction: column;">
+          <div id="proMoveHistory" style="background: #262421; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; border: 1px solid rgba(255,255,255,0.05); box-sizing: border-box; width: 100%; height: 100%;">
+              <div style="display: flex; background: #302e2b;">
+                  <div style="padding: 10px 20px; font-size: 13px; font-weight: bold; color: #fff; border-bottom: 3px solid #18a37b; cursor: default;">Moves</div>
+              </div>
+              <div id="moveList" style="flex: 1; height: 0; min-height: 0; overflow-y: auto; background: #262421;">
+              </div>
+          </div> 
+        </div>
+
+      </div>
+      
+      <div class="player-bar" id="bottomPlayerBar">
+        <div class="player-info">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div class="player-name" id="bottom-name">Player 1 (White)</div>
+            <span id="bottom-turn-badge" class="turn-indicator" style="display: none;">◀ Turn</span>
+            <span id="bottom-check-badge" class="check-indicator" style="display: none;">Check!</span>
+            <span id="bottom-win-msg" class="win-indicator" style="display: none;"></span>
+          </div>
+          <div class="captured-pieces" id="capByWhite"></div>
+        </div>
+        <div class="timer-box" id="timerW">
+          <span id="timerWText">10:00</span>
+          <span id="turnTimerW" class="auto-timer" style="display: none;">Auto: 60s</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; min-height: 20px; margin-top: 8px;">
+      <div id="result" style="color: #ffeb3b; font-weight: bold; font-size: 15px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);"></div>
+    </div>
   </div>
 
   <script>
-    // --- Global Game Settings ---
+   
+    window._isGamePaused = false;
+    window._isMuted = localStorage.getItem('chess_muted') === 'true';
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playChessSound(type) {
+        if (window._isMuted) return;
+        
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+
+       if (type === 'move') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(800, now);
+            osc.frequency.exponentialRampToValueAtTime(100, now + 0.05); 
+            gainNode.gain.setValueAtTime(1, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05); 
+            osc.start(now);
+            osc.stop(now + 0.06);
+        } 
+        else if (type === 'capture') {
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(600, now);
+            osc.frequency.exponentialRampToValueAtTime(50, now + 0.08);
+            gainNode.gain.setValueAtTime(0.8, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+            osc.start(now);
+            osc.stop(now + 0.08);
+
+            const osc2 = audioCtx.createOscillator();
+            const gain2 = audioCtx.createGain();
+            osc2.type = 'square';
+            osc2.frequency.setValueAtTime(400, now + 0.08);
+            osc2.frequency.exponentialRampToValueAtTime(50, now + 0.15);
+            gain2.gain.setValueAtTime(0.8, now + 0.08);
+            gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+            osc2.connect(gain2);
+            gain2.connect(audioCtx.destination);
+            osc2.start(now + 0.08);
+            osc2.stop(now + 0.15);
+        }
+        else if (type === 'check') {
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(400, now);
+            osc.frequency.setValueAtTime(600, now + 0.1);
+            gainNode.gain.setValueAtTime(0.15, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.3);
+            osc.start(now);
+            osc.stop(now + 0.3);
+        } 
+        else if (type === 'start') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(440, now);
+            osc.frequency.setValueAtTime(554, now + 0.1);
+            osc.frequency.setValueAtTime(659, now + 0.2);
+            gainNode.gain.setValueAtTime(0.3, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.4);
+            osc.start(now);
+            osc.stop(now + 0.4);
+        } 
+        else if (type === 'end') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(400, now);
+            osc.frequency.linearRampToValueAtTime(150, now + 0.5);
+            gainNode.gain.setValueAtTime(0.4, now);
+            gainNode.gain.linearRampToValueAtTime(0, now + 0.5);
+            osc.start(now);
+            osc.stop(now + 0.5);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const soundBtn = document.getElementById('soundToggleBtn');
+        const soundOnSVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>`;
+        const soundOffSVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>`;
+
+        if(soundBtn) {
+            soundBtn.innerHTML = window._isMuted ? soundOffSVG : soundOnSVG;
+            soundBtn.style.setProperty('color', window._isMuted ? '#ff4c4c' : '#1ee0a8', 'important');
+            soundBtn.style.setProperty('border-color', window._isMuted ? '#ff4c4c' : '#22c55e', 'important');
+
+            soundBtn.addEventListener('click', () => {
+                window._isMuted = !window._isMuted;
+                localStorage.setItem('chess_muted', window._isMuted);
+                soundBtn.innerHTML = window._isMuted ? soundOffSVG : soundOnSVG;
+                soundBtn.style.setProperty('color', window._isMuted ? '#ff4c4c' : '#1ee0a8', 'important');
+                soundBtn.style.setProperty('border-color', window._isMuted ? '#ff4c4c' : '#22c55e', 'important');
+              
+                if (!window._isMuted) playChessSound('start');
+            });
+        }
+    });
+
+    window._showMoves = localStorage.getItem('chess_showMoves') !== 'false'; 
+    window._autoTimer = localStorage.getItem('chess_autoTimer') !== 'false';
+
+    function updateFavicon(theme) {
+        const favicon = document.getElementById('favicon');
+        if (favicon) {
+            favicon.href = theme === 'dark' ? 'favicon/favicon.dark.webp' : 'favicon/favicon.light.webp';
+        }
+    }
+
+    const htmlElement = document.documentElement;
+    const savedTheme = localStorage.getItem('ivGamesTheme') || 'dark';
+    
+    htmlElement.setAttribute('data-theme', savedTheme);
+    updateFavicon(savedTheme);
+    
+    window.addEventListener('storage', (event) => {
+        if (event.key === 'ivGamesTheme' || !event.key) {
+            const newTheme = localStorage.getItem('ivGamesTheme') || 'dark';
+            htmlElement.setAttribute('data-theme', newTheme);
+            updateFavicon(newTheme);
+        }
+    });
+
     window._isAiMode = false;
     window._aiDifficulty = 'easy';
     window._selectedTheme = null;
@@ -934,9 +1154,28 @@
     window._timeB = 600;
     window._turnDuration = 0;
     window._timerInterval = null;
+    window._notationHistory = [];
+    window._moveStartTime = Date.now();
+    window._positionHistory = {};
 
-    function saveGameState() {
+    function setTopButtonsState(disabled) {
+      const btns = ['undoBtn', 'flipBtn', 'pauseGameBtn', 'backToHomeBtn'];
+      btns.forEach(id => {
+        const btn = document.getElementById(id);
+        if(btn) {
+          btn.style.pointerEvents = disabled ? 'none' : 'auto';
+          btn.style.opacity = disabled ? '0.5' : '1';
+        }
+      });
+    }
+
+  function saveGameState() {
         if (document.getElementById('game-screen').style.display === 'none') return;
+        
+        if (window._gameOver) {
+            localStorage.removeItem('chess_saved_game');
+            return;
+        }
         
         let gameState = {
             boardState: window._boardState,
@@ -945,8 +1184,12 @@
             capB: window._capB,
             timeW: window._timeW,
             timeB: window._timeB,
+            baseTime: window._baseTime,   
+            increment: window._increment,
             turnDuration: window._turnDuration,
             moveHistory: window._moveHistory,
+            notationHistory: window._notationHistory,
+            positionHistory: window._positionHistory,
             selectedTheme: window._selectedTheme,
             isAiMode: window._isAiMode,
             aiDifficulty: window._aiDifficulty,
@@ -958,14 +1201,13 @@
         localStorage.setItem('chess_saved_game', JSON.stringify(gameState));
     }
 
-
     function formatTime(secs) {
       let m = Math.floor(secs / 60);
       let s = secs % 60;
       return m + ":" + (s < 10 ? "0" : "") + s;
     }
 
-   function updateTimerDisplay() {
+  function updateTimerDisplay() {
       let wDisplay = document.getElementById('timerWText'); 
       let bDisplay = document.getElementById('timerBText'); 
       if(wDisplay) wDisplay.textContent = formatTime(window._timeW);
@@ -973,30 +1215,46 @@
 
       let wBox = document.getElementById('timerW');
       let bBox = document.getElementById('timerB');
-
+      
       let wTurn = document.getElementById('turnTimerW');
       let bTurn = document.getElementById('turnTimerB');
-      let timeLeft = 60 - window._turnDuration;
+      let moveTimeLeft = 120 - window._turnDuration;
+      let moveText = "⏱ Move: " + formatTime(moveTimeLeft);
+      
+      let moveColor = "#e6f0ef"; 
+      let moveAnimation = "none";
+      let fontWeight = "normal";
+
+      if (moveTimeLeft <= 10) {
+          moveColor = "#ff4c4c";
+          moveAnimation = "pulseTurn 1s infinite";
+          fontWeight = "bold";
+      } else if (moveTimeLeft <= 30) {
+          moveColor = "#fbbf24"; 
+          fontWeight = "bold";
+      }
+
+      let moveHtml = `<span style="background: rgba(0,0,0,0.6); color: ${moveColor}; padding: 3px 8px; border-radius: 12px; display: inline-block; font-size: 11px; animation: ${moveAnimation}; font-weight: ${fontWeight}; letter-spacing: 0.5px;">${moveText}</span>`;
 
       if(wBox && bBox) {
         if(window._turn === 'w') { 
-          wBox.style.boxShadow = '0 0 10px #1ee0a8';
-          bBox.style.boxShadow = 'none';
-
-          if(wTurn) { wTurn.style.display = 'block'; wTurn.textContent = 'Auto : ' + timeLeft + 's'; }
-          if(bTurn) bTurn.style.display = 'none';
+          wBox.style.background = '#e6c280'; wBox.style.color = '#000'; wBox.style.borderColor = '#1ee0a8';
+          bBox.style.background = 'rgba(0,0,0,0.6)'; bBox.style.color = '#fff'; bBox.style.borderColor = 'transparent';
+          
+          if(wTurn) { wTurn.style.display = 'block'; wTurn.innerHTML = moveHtml; }
+          if(bTurn) { bTurn.style.display = 'none'; }
         } else {
-          bBox.style.boxShadow = '0 0 10px #1ee0a8';
-          wBox.style.boxShadow = 'none';
-
-          if(bTurn) { bTurn.style.display = 'block'; bTurn.textContent = 'Auto : ' + timeLeft + 's'; }
-          if(wTurn) bTurn.style.display = 'none';
+          bBox.style.background = '#333'; bBox.style.color = '#fff'; bBox.style.borderColor = '#1ee0a8';
+          wBox.style.background = 'rgba(0,0,0,0.6)'; wBox.style.color = '#fff'; wBox.style.borderColor = 'transparent';
+          
+          if(bTurn) { bTurn.style.display = 'block'; bTurn.innerHTML = moveHtml; }
+          if(wTurn) { wTurn.style.display = 'none'; }
         }
       }
     }
 
-   function timerTick() {
-      if(window._gameOver) return;
+ function timerTick() {
+      if(window._gameOver || window._isGamePaused) return;
 
       if(window._turn === 'w') {
         window._timeW--;
@@ -1007,15 +1265,92 @@
       }
 
       window._turnDuration++;
-      if(window._turnDuration >= 60) {
-        forceAutoMove(window._turn);
-        return;
+      if(window._turnDuration >= 120) {
+          let winnerColor = (window._turn === 'w') ? 'b' : 'w';
+          handleTimeOut(winnerColor);
+          return;
       }
+      
       updateTimerDisplay();
       saveGameState(); 
     }
 
+    function getMoveNotation(move, piece, isCheck, isMate) {
+        if (move.castling === 'k') return isMate ? 'O-O#' : (isCheck ? 'O-O+' : 'O-O');
+        if (move.castling === 'q') return isMate ? 'O-O-O#' : (isCheck ? 'O-O-O+' : 'O-O-O');
+
+        const files = ['a','b','c','d','e','f','g','h'];
+        const fromFile = files[move.from[1]];
+        const toFile = files[move.to[1]];
+        const toRank = 8 - move.to[0];
+        const isCapture = move.capture || move.enPassant;
+        const type = piece.toLowerCase();
+        let notation = '';
+        
+        const iconStyle = 'font-size:17px; margin-right:3px; vertical-align:text-bottom; color:#b0b0b0;';
+        const iconMap = {
+            'n': `<span style="${iconStyle}">♞</span>`,
+            'b': `<span style="${iconStyle}">♝</span>`,
+            'r': `<span style="${iconStyle}">♜</span>`,
+            'q': `<span style="${iconStyle}">♛</span>`,
+            'k': `<span style="${iconStyle}">♚</span>`
+        };
+        
+        if (type === 'p') {
+            if (isCapture) notation = `${fromFile}x${toFile}${toRank}`;
+            else notation = `${toFile}${toRank}`;
+            if (move.promo) notation += `=Q`; 
+        } else {
+            notation = `${iconMap[type] || ''}${isCapture ? 'x' : ''}${toFile}${toRank}`;
+        }
+        if (isMate) notation += '#';
+        else if (isCheck) notation += '+';
+        return notation;
+    }
+
+   function renderMoveHistory() {
+        if(!window._showMoves) return;
+
+        const container = document.getElementById('moveList');
+        if (!container) return;
+        let html = '';
+        for (let i = 0; i < window._notationHistory.length; i += 2) {
+            const moveNum = (i / 2) + 1;
+            const wMoveObj = window._notationHistory[i];
+            const bMoveObj = window._notationHistory[i+1];
+            const bg = (i/2) % 2 === 1 ? 'background: #2a2825;' : 'background: transparent;';
+            
+            const renderCell = (moveObj, color) => {
+                if(!moveObj) return '<div style="flex: 1;"></div>';
+                
+                const barWidth = Math.min(35, Math.max(2, moveObj.rawTime * 1.2)); 
+                const barColor = (color === 'w') ? '#d6d6d6' : '#666666';
+
+                return `
+                <div style="flex: 1; display: flex; justify-content: space-between; align-items: center; padding-right: 15px;">
+                    <span style="color: #ddd; font-family: 'Segoe UI', sans-serif; font-size: 14px;">${moveObj.notation}</span>
+                    <div style="display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: #92a3a8;">
+                        <div style="width: 35px; display: flex; justify-content: flex-end;">
+                            <div style="height: 6px; width: ${barWidth}px; background: ${barColor}; border-radius: 3px;"></div>
+                        </div>
+                        <span style="width: 32px; text-align: left;">${moveObj.time}</span>
+                    </div>
+                </div>`;
+            };
+
+            html += `
+            <div style="display: flex; padding: 6px 15px; align-items: center; ${bg}">
+                <div style="width: 40px; color: #777; font-weight: bold; font-size: 14px;">${moveNum}.</div>
+                ${renderCell(wMoveObj, 'w')}
+                ${renderCell(bMoveObj, 'b')}
+            </div>`;
+        }
+        container.innerHTML = html;
+        container.scrollTop = container.scrollHeight;
+    }
+
     function handleTimeOut(winnerColor) {
+      playChessSound('end'); 
       window._gameOver = true;
       if(window._timerInterval) clearInterval(window._timerInterval);
 
@@ -1024,81 +1359,50 @@
       const winnerName = (window._p1Color === winnerColor) ? window._p1Name : window._p2Name;
 
       const winMsg = 'Time Out - ' + winnerName + ' wins!';
-      document.getElementById('result').textContent = winMsg; 
+      
+      if(document.getElementById('top-turn-badge')) document.getElementById('top-turn-badge').style.display = 'none';
+      if(document.getElementById('bottom-turn-badge')) document.getElementById('bottom-turn-badge').style.display = 'none';
+
+      const hourglassSvg = `<svg width="16" height="16" viewBox="0 0 24 24" fill="#ffeb3b" style="vertical-align: text-bottom; margin-right: 5px; filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.5));"><path d="M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"></path></svg>`;
+
+      if (winnerColor === 'w') {
+          document.getElementById('bottom-win-msg').innerHTML = hourglassSvg + winMsg;
+          document.getElementById('bottom-win-msg').style.display = 'inline-flex';
+          document.getElementById('bottom-win-msg').style.alignItems = 'center';
+      } else {
+          document.getElementById('top-win-msg').innerHTML = hourglassSvg + winMsg;
+          document.getElementById('top-win-msg').style.display = 'inline-flex';
+          document.getElementById('top-win-msg').style.alignItems = 'center';
+      }
+
+      document.getElementById('result').textContent = ''; 
       overlayText.textContent = winMsg; 
       overlayText.style.color = (winnerColor === 'b' ? '#ff4c4c' : '#ffffff');
+      
+      setTopButtonsState(true); 
+
       overlay.style.display = 'flex';
       saveGameState(); 
     }
 
-   function forceAutoMove(color) {
-      window._turnDuration = 0;
-      const moves = allLegalMoves(window._boardState, color);
-      if(moves.length === 0) return;
-
-      let chosen = moves[Math.floor(Math.random() * moves.length)];
-      const capturedPiece = window._boardState[chosen.to[0]][chosen.to[1]];
-
-      window._moveHistory.push({board: cloneBoard(window._boardState), turn: window._turn, capW: [...window._capW], capB: [...window._capB]});
-      if(chosen.promo) chosen.promoPiece ='q';
-
-      if(capturedPiece) {
-        if(getColorOfPiece(capturedPiece) === 'b') window._capW.push(capturedPiece); 
-        else window._capB.push(capturedPiece);
-      }
-
-      window._boardState = applyMove(window._boardState, chosen);
-      redrawBoard();
-      renderCapturedPieces();
-      highlightLastMove(chosen.from, chosen.to); 
-      animatePiece(chosen.to); 
-
-      window._turn = color === 'w' ? 'b' : 'w';
-      updateStatus();
-      updateTimerDisplay();
-      checkGameOver();
-      saveGameState(); 
-
-      const aiColor = (window._p1Color === 'w') ? 'b' : 'w';
-      if(window._isAiMode && window._turn === aiColor && !window._gameOver) {
-        setTimeout(() => makeAIMove(), 3000);
-      }
-    }
-
-    // --- Home Screen Logic ---
     document.querySelectorAll('input[name="gameMode"]').forEach(radio => {
       radio.addEventListener('change', (e) => {
+        const wrapper = document.getElementById('aiLevelWrapper');
         if (e.target.value === 'ai') {
-          document.getElementById('aiOptions').style.display = 'block';
-          document.getElementById('twoPlayerOptions').style.display = 'none';
+          wrapper.classList.add('show-smooth');
         } else {
-          document.getElementById('aiOptions').style.display = 'none';
-          document.getElementById('twoPlayerOptions').style.display = 'block';
+          wrapper.classList.remove('show-smooth');
         }
       });
     });
 
-    document.getElementById('p1Color').addEventListener('change', (e) => {
-      let wText = (window._selectedTheme === 'wood') ? 'Light Wood' : 'White';
-      let bText = (window._selectedTheme === 'wood') ? 'Dark Wood' : 'Black';
-
-      if (e.target.value === 'w') {
-        document.getElementById('p2ColorDisplay').value = bText;
-      } else {
-        document.getElementById('p2ColorDisplay').value = wText;
-      }      
-    });
-
     const themeModal = document.getElementById('themeModal');
-    
     document.getElementById('openThemeModalBtn').addEventListener('click', () => {
       themeModal.style.display = 'flex';
     });
-
     document.getElementById('closeThemeModalBtn').addEventListener('click', () => {
       themeModal.style.display = 'none';
     });
-
     document.querySelectorAll('.theme-option').forEach(option => {
       option.addEventListener('click', function() {
         window._selectedTheme = this.getAttribute('data-theme');
@@ -1106,118 +1410,146 @@
         document.getElementById('openThemeModalBtn').textContent = 'Theme: ' + themeName;
         themeModal.style.display = 'none';
         document.getElementById('themeErrorMsg').style.display = 'none';
-    
+      });
+    });
+
+   document.getElementById('openNameModalBtn').addEventListener('click', () => {
+        const modeSelected = document.querySelector('input[name="gameMode"]:checked');
+        
+        if(!modeSelected) {
+            document.getElementById('themeErrorMsg').textContent = "Please Select a Game Mode!";
+            document.getElementById('themeErrorMsg').style.display = 'block';
+            return;
+        }
+        
+        if(!window._selectedTheme) {
+            document.getElementById('themeErrorMsg').textContent = "Please Select a Theme First!";
+            document.getElementById('themeErrorMsg').style.display = 'block';
+            return;
+        }
+        
+        document.getElementById('themeErrorMsg').style.display = 'none';
+        
+        const mode = modeSelected.value;
+        const container = document.getElementById('dynamic-setup-inputs');
+        
         let wText = (window._selectedTheme === 'wood') ? 'Light Wood' : 'White';
         let bText = (window._selectedTheme === 'wood') ? 'Dark Wood' : 'Black';
 
-        const p1Select = document.getElementById('p1Color');
-        if(p1Select) {
-         p1Select.disabled = false;
-         p1Select.style.cursor = 'pointer';
-         p1Select.style.color = '#fff';
-
-         p1Select.innerHTML = '<option value="w">' + wText + '</option><option value="b">' + bText + '</option>';
-
-         if(document.getElementById('p2ColorDisplay')) {
-            document.getElementById('p2ColorDisplay').value = (p1Select.value === 'w') ? bText : wText;
+        if(mode === 'ai') {
+            container.innerHTML = `
+                <div>
+                  <label style="font-size: 13px; color: #9fbfb3;">Your Name:</label>
+                  <input type="text" id="modalPlayerName" class="premium-input" placeholder="You" oninput="this.value=this.value.replace(/[^a-zA-Z0-9 ]/g, '')" maxlength="20">
+                </div>
+                <div>
+                  <label style="font-size: 13px; color: #9fbfb3;">Select Your Token:</label>
+                  <select id="modalPlayerColor" class="premium-select">
+                    <option value="w">${wText}</option>
+                    <option value="b">${bText}</option>
+                  </select>
+                </div>
+            `;
+        } else {
+            container.innerHTML = `
+                <div>
+                  <label style="font-size: 13px; color: #9fbfb3;">Player 1 Name:</label>
+                  <input type="text" id="modalP1Name" class="premium-input" placeholder="Player 1" oninput="this.value=this.value.replace(/[^a-zA-Z0-9 ]/g, '')" maxlength="20">
+                </div>
+                <div>
+                  <label style="font-size: 13px; color: #9fbfb3;">Player 1 Token:</label>
+                  <select id="modalP1Color" class="premium-select">
+                    <option value="w">${wText}</option>
+                    <option value="b">${bText}</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="font-size: 13px; color: #9fbfb3;">Player 2 Name:</label>
+                  <input type="text" id="modalP2Name" class="premium-input" placeholder="Player 2" oninput="this.value=this.value.replace(/[^a-zA-Z0-9 ]/g, '')" maxlength="20">
+                </div>
+            `;
         }
-      }
-    
-      const aiSelect = document.getElementById('aiPlayerColor');
-      if (aiSelect) {
-         aiSelect.disabled = false;
-         aiSelect.style.cursor = 'pointer';
-         aiSelect.style.color = '#fff';
-
-         aiSelect.innerHTML = '<option value = "w">' + wText + '</option><option value = "b">' + bText + '</option>'; 
-      }
+        document.getElementById('name-input-modal').style.display = 'flex';
     });
-  }); 
-  
-    
-    document.getElementById('startGameBtn').addEventListener('click', () => {
-      const errorMsg = document.getElementById('themeErrorMsg');
 
-      const modeSelected = document.querySelector('input[name="gameMode"]:checked');
-      if(!modeSelected) {
-        errorMsg.textContent = "Please Select Game Mode First!";
-        errorMsg.style.display = "block";
-        return;
-      }
+    document.getElementById('closeNameModalBtn').addEventListener('click', () => {
+        document.getElementById('name-input-modal').style.display = 'none';
+    });
 
-      if(window._selectedTheme === null) {
-        errorMsg.textContent = "Please Select a Theme First";
-        errorMsg.style.display = "block";
-        return;
-      }
-      errorMsg.style.display = 'none';
+    document.getElementById('finalStartBtn').addEventListener('click', () => {
+        window._isAiMode = document.querySelector('input[name="gameMode"]:checked').value === 'ai';
+        
+        if (window._isAiMode) {
+            window._aiDifficulty = document.querySelector('input[name="aiLevel"]:checked').value;
+            window._p1Name = document.getElementById('modalPlayerName').value.trim() || 'You';
+            window._p2Name = 'Computer';
+            window._p1Color = document.getElementById('modalPlayerColor').value;
+        } else {
+            window._p1Name = document.getElementById('modalP1Name').value.trim() || 'Player 1';
+            window._p2Name = document.getElementById('modalP2Name').value.trim() || 'Player 2';
+            window._p1Color = document.getElementById('modalP1Color').value;
+        }
 
-      const selectedTheme = window._selectedTheme;
+        const tc = document.getElementById('timeControl').value.split('|');
+        window._baseTime = parseInt(tc[0], 10);
+        window._increment = parseInt(tc[1], 10);
 
-      document.body.classList.remove('bg-home', 'bg-game', 'bg-wood', 'bg-bw');
-      if (selectedTheme === 'wood') {
-        document.body.classList.add('bg-wood');
-      } else {
-        document.body.classList.add('bg-bw');
-      }
-      
-      const boardEl = document.getElementById('board');
-      boardEl.classList.remove('theme-wood', 'theme-bw');
-      boardEl.classList.add(selectedTheme === 'wood' ? 'theme-wood' : 'theme-bw');
+        const selectedTheme = window._selectedTheme;
+        document.body.classList.remove('bg-home', 'bg-wood', 'bg-bw');
+        if (selectedTheme === 'wood') {
+          document.body.classList.add('bg-wood');
+        } else {
+          document.body.classList.add('bg-bw');
+        }
+        
+        const boardEl = document.getElementById('board');
+        boardEl.classList.remove('theme-wood', 'theme-bw');
+        boardEl.classList.add(selectedTheme === 'wood' ? 'theme-wood' : 'theme-bw');
 
-      window._isAiMode = document.querySelector('input[name="gameMode"]:checked').value === 'ai';
-      window._aiDifficulty = document.querySelector('input[name="aiLevel"]:checked').value;
+        document.getElementById('name-input-modal').style.display = 'none';
+        document.getElementById('home-screen').style.display = 'none';
+        document.getElementById('game-screen').style.display = 'block';
+        document.getElementById('exit-container').style.display = 'none';
+        document.getElementById('settingsBtn').style.display = 'none';
+        document.body.classList.add('game-active');
 
-      if (window._isAiMode) {
-        window._p1Name = 'You';
-        window._p2Name = 'Computer';
-        window._p1Color = document.getElementById('aiPlayerColor').value;
-      } else {
-        window._p1Name = document.getElementById('p1Name').value || 'Player 1';
-        window._p2Name = document.getElementById('p2Name').value || 'Player 2';
-        window._p1Color = document.getElementById('p1Color').value;
-      }
-
-      document.getElementById('home-screen').style.display = 'none';
-      document.getElementById('game-screen').style.display = 'block';
-      document.getElementById('exit-container').style.display = 'none';
-
-      if(selectedTheme === 'wood') {
-        document.getElementById('capWhiteLabel').textContent = 'Light Wood Captured:';
-        document.getElementById('capBlackLabel').textContent = 'Dark Wood Captured:';
-        document.getElementById('timerWLabel').textContent = 'Light Wood';
-        document.getElementById('timerBLabel').textContent = 'Dark Wood';
-      } else {
-        document.getElementById('capWhiteLabel').textContent = 'Black Captured:';
-        document.getElementById('capBlackLabel').textContent = 'White Captured:';
-        document.getElementById('timerWLabel').textContent = 'White:';
-        document.getElementById('timerBLabel').textContent = 'Black:';
-      }
-
-      startNewGame();
+        startNewGame();
     });
 
     document.getElementById('backToHomeBtn').addEventListener('click', () => {
       localStorage.removeItem('chess_saved_game');
       document.body.classList.remove('bg-wood', 'bg-bw');
       document.body.classList.add('bg-home');
+      document.body.classList.remove('game-active');
       document.getElementById('game-screen').style.display = 'none';
       document.getElementById('home-screen').style.display = 'block';
       document.getElementById('exit-container').style.display = 'flex';
+      document.getElementById('settingsBtn').style.display = 'flex';
     });
 
     document.getElementById('overlayBackBtn').addEventListener('click' , () => {
       document.body.classList.remove('bg-wood', 'bg-bw');
       document.body.classList.add('bg-home');
+      document.body.classList.remove('game-active');
       document.getElementById('game-screen').style.display = 'none';
       document.getElementById('home-screen').style.display = 'block';
+      document.getElementById('settingsBtn').style.display = 'flex';
     });
 
     document.getElementById('overlayRestartBtn').addEventListener('click', () => {
       startNewGame();
     });
 
-    // --- Chess Logic ---
+    document.getElementById('viewBoardBtn').addEventListener('click', () => {
+      document.getElementById('gameOverOverlay').style.display = 'none';
+      document.getElementById('backToResultBtn').style.display = 'block';
+    });
+
+    document.getElementById('backToResultBtn').addEventListener('click', () => {
+      document.getElementById('gameOverOverlay').style.display = 'flex';
+      document.getElementById('backToResultBtn').style.display = 'none';
+    });
+
    const startFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR';
     const files = ['a','b','c','d','e','f','g','h'];
 
@@ -1251,7 +1583,6 @@
     function colorPiece(span, piece) {
       if (piece) {
         const color = getColorOfPiece(piece);
-        
         if (window._selectedTheme === 'wood') {
           if (color === 'w') {
             span.style.color = '#e6c280'; 
@@ -1274,9 +1605,9 @@
       }
     }
 
-    function renderCapturedPieces() {
+   function renderCapturedPieces() {
       const getHTML = (arr) => {
-        const vals = {q:9, r:5, b:3, n:3, p:1, Q:9, R:5, B:3, N:3, P:1};
+        const vals = {q:90, r:50, b:31, n:30, p:10, Q:90, R:50, B:31, N:30, P:10};
         let sorted = [...arr].sort((a,b) => vals[b] - vals[a]);
         
         return sorted.map(p => {
@@ -1301,7 +1632,7 @@
                 : '-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff';
           }
 
-          return `<span style="color:${cHex}; text-shadow:${shadow}; margin-right: -12px;">${uni}</span>`;
+         return `<span style="color:${cHex}; text-shadow:${shadow}; margin-right: -4px;">${uni}</span>`;
         }).join('');
       };
       
@@ -1320,11 +1651,24 @@
       
       const tbl = document.createElement('div'); 
       tbl.className = 'grid'; 
+      if (window._isFlipped) tbl.classList.add('flipped');
+      
       for(let r=0;r<8;r++) {
         for(let c=0;c<8;c++){ 
           const sq = document.createElement('div'); 
           sq.className = 'sq ' + (((r+c)%2) ? 'dark' : 'light'); 
           sq.dataset.r = r; sq.dataset.c = c; 
+
+          const num = document.createElement('span');
+          num.className = 'coord-number';
+          num.textContent = 8 - r;
+          sq.appendChild(num);
+
+          const letter = document.createElement('span');
+          letter.className = 'coord-letter';
+          letter.textContent = files[c];
+          sq.appendChild(letter);
+          
           const span = document.createElement('div'); 
           span.className = 'piece'; 
           span.textContent = pieceToUnicode(state[r][c]); 
@@ -1357,20 +1701,59 @@
       });
     }
 
-    function updateStatus(){
-      let currentPlayerName = "";
+    function updateCheckHighlight() {
+      document.querySelectorAll('#board .sq.in-check').forEach(el => el.classList.remove('in-check'));
+      
+      ['w', 'b'].forEach(color => {
+        if(isKingInCheck(window._boardState, color)) {
+          const kp = findKing(window._boardState, color); 
+          if(kp) {
+            const sq = document.querySelector(`#board .sq[data-r="${kp[0]}"][data-c="${kp[1]}"]`);
+            if(sq) sq.classList.add('in-check'); 
+          }
+        }
+      });
+    }
 
-      let lightName = (window._selectedTheme === 'wood') ? 'Light Wood' : 'White';
-      let darkName = (window._selectedTheme === 'wood') ? 'Dark Wood' : 'Black';
+    function updateStatus(){
+      let topBadge = document.getElementById('top-turn-badge'); 
+      let bottomBadge = document.getElementById('bottom-turn-badge'); 
 
       if (window._turn === 'w') {
-        currentPlayerName = (window._p1Color === 'w') ? window._p1Name : window._p2Name;
-        document.getElementById('turn').textContent = 'Turn: ' + currentPlayerName + ' (' + lightName + ')';
+        bottomBadge.style.display = 'inline-block';
+        topBadge.style.display = 'none';
       } else {
-        currentPlayerName = (window._p1Color === 'b') ? window._p1Name : window._p2Name;
-        document.getElementById('turn').textContent = 'Turn: ' + currentPlayerName + ' (' + darkName + ')';
+        topBadge.style.display = 'inline-block';
+        bottomBadge.style.display = 'none';
       }
+      
       document.getElementById('result').textContent = '';
+      updateCheckHighlight();
+    }
+
+  function showLegalMoves(r,c) { 
+      clearMoveHints(); 
+      
+      if (!window._showHints) return;
+
+      const p = window._boardState[r][c];
+      if(!p) return;
+
+      const pieceColor = getColorOfPiece(p);
+      
+      if (pieceColor !== window._turn) return;
+
+      if (window._isAiMode && window._turn !== window._p1Color) return;
+
+      const moves = allLegalMoves(window._boardState, pieceColor); 
+
+      const relevant = moves.filter(m=>m.from[0]===r && m.from[1]===c); 
+      for(const m of relevant){ 
+        const tr=m.to[0], tc=m.to[1]; 
+        const target = document.querySelector('#board .sq[data-r="'+tr+'"][data-c="'+tc+'"]'); 
+        if(!target) continue; 
+        if(m.capture || m.enPassant) target.classList.add('capture-hint'); else target.classList.add('legal-move-hint'); 
+      } 
     }
 
     function highlightLastMove(from,to) {
@@ -1380,40 +1763,62 @@
       if(f) f.classList.add('last-move'); if(t) t.classList.add('last-move');
     }
 
-    function showLegalMoves(r,c) { 
-      clearMoveHints(); 
-      const p = window._boardState[r][c];
-      if(!p) return;
+   function animatePiece(from, to) {
+      const board = document.querySelector('#board .grid');
+      const isFlipped = window._isFlipped;
+      
+      const fromSq = document.querySelector('#board .sq[data-r="'+from[0]+'"][data-c="'+from[1]+'"]');
+      const toSq = document.querySelector('#board .sq[data-r="'+to[0]+'"][data-c="'+to[1]+'"]');
 
-      const pieceColor = getColorOfPiece(p);
-      const moves = allLegalMoves(window._boardState, pieceColor); 
+      if(!fromSq || !toSq) return;
 
-      const relevant = moves.filter(m=>m.from[0]===r && m.from[1]===c); 
-      for(const m of relevant){ 
-        const tr=m.to[0], tc=m.to[1]; 
-        const target = document.querySelector('#board .sq[data-r="'+tr+'"][data-c="'+tc+'"]'); 
-        if(!target) continue; 
-        if(m.capture) target.classList.add('capture-hint'); else target.classList.add('legal-move-hint'); 
-      } 
-    }
+      const fromRect = fromSq.getBoundingClientRect();
+      const toRect = toSq.getBoundingClientRect();
+      const deltaX = fromRect.left - toRect.left;
+      const deltaY = fromRect.top - toRect.top;
 
-    function animatePiece(to) {
-      const sq = document.querySelector('#board .sq[data-r="'+to[0]+'"][data-c="'+to[1]+'"]');
-      if(!sq) return; const pc = sq.querySelector('.piece');
-       if(!pc) return;
-        pc.classList.add('piece-move'); 
-        setTimeout(()=>pc.classList.remove('piece-move'),300);
+      const piece = toSq.querySelector('.piece');
+      if(!piece || piece.textContent.trim() === '') return;
+
+      piece.style.transition = 'none';
+      
+      if (isFlipped) {
+          piece.style.transform = `translate(-50%, -50%) rotate(180deg) translate(${-deltaX}px, ${-deltaY}px)`;
+      } else {
+          piece.style.transform = `translate(-50%, -50%) rotate(0deg) translate(${deltaX}px, ${deltaY}px)`;
+      }
+
+      piece.getBoundingClientRect();
+
+      piece.style.transition = 'transform 0.2s ease-in-out';
+      piece.style.transform = isFlipped ? 'translate(-50%, -50%) rotate(180deg)' : 'translate(-50%, -50%) rotate(0deg)';
+
+      setTimeout(() => {
+          piece.style.transition = 'transform 220ms ease, opacity 220ms ease';
+      }, 200);
     }
 
     function cloneBoard(b) {
-       return b.map(r=>r.slice());
+       let nb = b.map(r=>r.slice());
+       nb._castling = JSON.parse(JSON.stringify(b._castling || {w:{k:true, q:true}, b:{k:true, q:true}}));
+       nb._ep = b._ep ? [...b._ep] : null;
+       nb._halfMove = b._halfMove || 0;
+       return nb;
+    }
+
+    function getBoardString(board, currentTurn) {
+        let s = board.map(row => row.map(p => p || '-').join('')).join('');
+        s += (board._castling.w.k ? 'K' : '') + (board._castling.w.q ? 'Q' : '') + (board._castling.b.k ? 'k' : '') + (board._castling.b.q ? 'q' : '');
+        s += board._ep ? `${board._ep[0]},${board._ep[1]}` : '-';
+        s += currentTurn; 
+        return s;
     }
 
     function inBounds(r,c) { 
       return r>=0 && r<8 && c>=0 && c<8;
     }
 
-   function generateMovesForPiece(board,r,c) {
+ function generateMovesForPiece(board,r,c) {
       const p = board[r][c]; if(!p) return [];
       const color = getColorOfPiece(p);
       const moves = [];
@@ -1421,7 +1826,9 @@
       const add = (tr,tc)=> {
          if(!inBounds(tr,tc)) return;
           const target = board[tr][tc];
-           if(!target || getColorOfPiece(target)===opp) moves.push({from:[r,c],to:[tr,tc],piece:p,capture:!!target});
+           if(!target || (getColorOfPiece(target)===opp && target.toLowerCase() !== 'k')) {
+               moves.push({from:[r,c],to:[tr,tc],piece:p,capture:!!target});
+           }
       };
 
       const type = p.toLowerCase();
@@ -1430,7 +1837,7 @@
         const dir = color==='w' ? -1 : 1;
         const nr = r+dir;
         if(inBounds(nr,c) && !board[nr][c]) {
-          moves.push({from:[r,c],to:[nr,c],piece:p,capture:false,promo:(nr===0||nr===7)});
+          moves.push({from:[r,c],to:[nr,c],piece:p,capture:false,promo:(nr===0||nr===7), promoPiece: (nr===0||nr===7)?(color==='w'?'Q':'q'):null});
 
           const startRow = color==='w' ? 6 : 1;
           const nnr = r + (dir * 2);
@@ -1441,7 +1848,12 @@
 
         for(const dc of [-1,1]){
             const nc=c+dc;
-            if(inBounds(nr,nc) && board[nr][nc] && getColorOfPiece(board[nr][nc])===opp) moves.push({from:[r,c],to:[nr,nc],piece:p,capture:true,promo:(nr===0||nr===7)});
+            if(inBounds(nr,nc) && board[nr][nc] && getColorOfPiece(board[nr][nc])===opp && board[nr][nc].toLowerCase() !== 'k') {
+                moves.push({from:[r,c],to:[nr,nc],piece:p,capture:true,promo:(nr===0||nr===7), promoPiece: (nr===0||nr===7)?(color==='w'?'Q':'q'):null});
+            }
+            if(board._ep && board._ep[0] === nr && board._ep[1] === nc) {
+                moves.push({from:[r,c], to:[nr,nc], piece:p, capture:true, enPassant:true});
+            }
         }
         return moves;
       }
@@ -1454,7 +1866,24 @@
 
       if(type==='k'){
          for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++) if(dr||dc) add(r+dr,c+dc);
-          return moves; 
+         
+         if(board._castling) {
+             const rights = board._castling[color];
+             const row = color === 'w' ? 7 : 0;
+             if(r === row && c === 4 && !isKingInCheck(board, color)) {
+                 if(rights.k && !board[row][5] && !board[row][6] && board[row][7] === (color==='w'?'R':'r')) {
+                     if(!squareAttacked(board, row, 5, opp) && !squareAttacked(board, row, 6, opp)) {
+                         moves.push({from:[r,c], to:[row, 6], piece:p, capture:false, castling: 'k'});
+                     }
+                 }
+                 if(rights.q && !board[row][3] && !board[row][2] && !board[row][1] && board[row][0] === (color==='w'?'R':'r')) {
+                     if(!squareAttacked(board, row, 3, opp) && !squareAttacked(board, row, 2, opp)) {
+                         moves.push({from:[r,c], to:[row, 2], piece:p, capture:false, castling: 'q'});
+                     }
+                 }
+             }
+         }
+         return moves; 
       }
       
       const slide = (dirs)=> {
@@ -1463,7 +1892,9 @@
            while(inBounds(tr,tc)) {
              if(!board[tr][tc]) moves.push({from:[r,c],to:[tr,tc],piece:p,capture:false});
              else { 
-                 if(getColorOfPiece(board[tr][tc])===opp) moves.push({from:[r,c],to:[tr,tc],piece:p,capture:true});
+                 if(getColorOfPiece(board[tr][tc])===opp && board[tr][tc].toLowerCase() !== 'k') {
+                     moves.push({from:[r,c],to:[tr,tc],piece:p,capture:true});
+                 }
                  break;
              } 
              tr+=dr; 
@@ -1550,78 +1981,204 @@
       return legal;
     }
 
-    function checkGameOver(){
+    function setDraw(reason) {
+      playChessSound('end'); 
+      const overlay = document.getElementById('gameOverOverlay');
+      const overlayText = document.getElementById('gameOverText');
+      document.getElementById('result').textContent = reason;
+      overlayText.textContent = reason;
+      overlayText.style.color = '#ffeb3b';
+      
+      if(document.getElementById('top-turn-badge')) document.getElementById('top-turn-badge').style.display = 'none';
+      if(document.getElementById('bottom-turn-badge')) document.getElementById('bottom-turn-badge').style.display = 'none';
+      if(document.getElementById('top-check-badge')) document.getElementById('top-check-badge').style.display = 'none';
+      if(document.getElementById('bottom-check-badge')) document.getElementById('bottom-check-badge').style.display = 'none';
+
+      window._gameOver = true;
+      setTopButtonsState(true); 
+      overlay.style.display = 'flex';
+    }
+
+  function isInsufficientMaterial(board) {
+        let pieces = { w: [], b: [] };
+        let bishopsSquares = { w: [], b: [] }; 
+        
+        for(let r=0; r<8; r++){
+            for(let c=0; c<8; c++){
+                let p = board[r][c];
+                if(p) {
+                    let type = p.toLowerCase();
+                    if(type === 'p' || type === 'r' || type === 'q') return false; 
+                    let color = getColorOfPiece(p);
+                    pieces[color].push(type);
+                    if (type === 'b') bishopsSquares[color].push((r + c) % 2);
+                }
+            }
+        }
+        const wCount = pieces.w.length;
+        const bCount = pieces.b.length;
+        if(wCount === 1 && bCount === 1) return true; 
+        if(wCount === 2 && bCount === 1 && (pieces.w.includes('b') || pieces.w.includes('n'))) return true;
+        if(bCount === 2 && wCount === 1 && (pieces.b.includes('b') || pieces.b.includes('n'))) return true; 
+        
+        if(wCount === 2 && bCount === 2 && pieces.w.includes('b') && pieces.b.includes('b')) {
+            if (bishopsSquares.w[0] === bishopsSquares.b[0]) return true;
+        }
+        return false;
+    }
+
+  function checkGameOver(){
       const opp = window._turn;
       const moves = allLegalMoves(window._boardState, opp);
       const overlay = document.getElementById('gameOverOverlay');
       const overlayText = document.getElementById('gameOverText');
 
+      if(document.getElementById('top-check-badge')) document.getElementById('top-check-badge').style.display = 'none';
+      if(document.getElementById('bottom-check-badge')) document.getElementById('bottom-check-badge').style.display = 'none';
+
       if(moves.length===0){
+        if(document.getElementById('top-turn-badge')) document.getElementById('top-turn-badge').style.display = 'none';
+        if(document.getElementById('bottom-turn-badge')) document.getElementById('bottom-turn-badge').style.display = 'none';
+
         if(isKingInCheck(window._boardState, opp)) {
           const winnerColor = (opp === 'w') ? 'b' : 'w';
           const winnerName = (window._p1Color === winnerColor) ? window._p1Name : window._p2Name;        
           
           const winMsg = 'Checkmate - ' + winnerName + ' wins!';
-          document.getElementById('result').textContent = winMsg;
+          const trophySvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="#ffeb3b" style="vertical-align: text-bottom; margin-right: 5px; filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.5));"><path d="M19 2H5c-1.66 0-3 1.34-3 3s1.34 3 3 3h1.23c.8 2.32 3.04 4 5.77 4s4.97-1.68 5.77-4H19c1.66 0 3-1.34 3-3s-1.34-3-3-3zm-14 4c-.55 0-1-.45-1-1s.45-1 1-1h1v2H5zm14 0h-1V4h1c.55 0 1 .45 1 1s-.45 1-1 1zm-8 13v-4.87c-1.73-.51-3-2.12-3-4.13V4h8v6c0 2.01-1.27 3.62-3 4.13V19H7v2h10v-2h-4z"></path></svg>`;
+
+          if (winnerColor === 'w') {
+            document.getElementById('bottom-win-msg').innerHTML = trophySvg + winMsg;
+            document.getElementById('bottom-win-msg').style.display = 'inline-flex';
+            document.getElementById('bottom-win-msg').style.alignItems = 'center';
+          } else {
+            document.getElementById('top-win-msg').innerHTML = trophySvg + winMsg;
+            document.getElementById('top-win-msg').style.display = 'inline-flex';
+            document.getElementById('top-win-msg').style.alignItems = 'center';
+          }
+          
+          document.getElementById('result').textContent = ''; 
           overlayText.textContent = winMsg; 
           overlayText.style.color = (opp === 'w' ? '#ff4c4c' : '#ffffff');
-        }else {
-          document.getElementById('result').textContent = 'Stalemate — Draw';
-          overlayText.textContent = 'Stalemate - Draw';
-          overlayText.style.color = '#ffeb3b';
+          
+          playChessSound('end'); 
+          
+          window._gameOver = true;
+          setTopButtonsState(true); 
+          overlay.style.display = 'flex';
+          return;
+        } else {
+          setDraw('Stalemate - Draw');
+          return;
         }
-        window._gameOver = true;
-        overlay.style.display = 'flex';
-      } else {
-        if(isKingInCheck(window._boardState, opp)) document.getElementById('result').textContent = 'Check!';
-        else document.getElementById('result').textContent = '';
       }
-    }
 
+      if(window._boardState._halfMove >= 100) { setDraw("Draw - 50 Move Rule"); return; }
+      if(isInsufficientMaterial(window._boardState)) { setDraw("Draw - Insufficient Material"); return; }
+      
+      let currentPosStr = getBoardString(window._boardState, window._turn);
+      window._positionHistory[currentPosStr] = (window._positionHistory[currentPosStr] || 0) + 1;
+      if(window._positionHistory[currentPosStr] >= 3) { setDraw("Draw - Threefold Repetition"); return; }
+
+      if(isKingInCheck(window._boardState, opp)) {
+         if (opp === window._p1Color) {
+            document.getElementById('bottom-check-badge').style.display = 'inline-block';
+         } else {
+            document.getElementById('top-check-badge').style.display = 'inline-block';
+         }
+      }
+      document.getElementById('result').textContent = '';
+    }
+   
     function applyMove(board,move){ 
       const b=cloneBoard(board); 
       const [fr,fc]=move.from; 
       const [tr,tc]=move.to;
-      let piece=b[fr][fc]; b[fr][fc]=''; 
-      if(move.promo){ piece = move.promoPiece || (piece.toUpperCase()===piece ? 'Q' : 'q'); }
+      let piece=b[fr][fc]; 
+
+      b._halfMove++;
+      if(piece.toLowerCase() === 'p' || move.capture) b._halfMove = 0;
+      b._ep = null;
+
+      if (move.enPassant) {
+          b[fr][tc] = '';
+      }
+  
+      if (piece.toLowerCase() === 'p' && Math.abs(tr - fr) === 2) {
+          b._ep = [tr === 4 ? 5 : 2, tc]; 
+      }
+
+      if (move.castling) {
+          if (move.castling === 'k') {
+              b[tr][tc-1] = b[tr][7]; 
+              b[tr][7] = '';
+          } else if (move.castling === 'q') {
+              b[tr][tc+1] = b[tr][0];
+              b[tr][0] = '';
+          }
+      }
+
+      if (piece === 'K') { b._castling.w.k = false; b._castling.w.q = false; }
+      if (piece === 'k') { b._castling.b.k = false; b._castling.b.q = false; }
+      if (piece === 'R' && fr === 7 && fc === 0) b._castling.w.q = false;
+      if (piece === 'R' && fr === 7 && fc === 7) b._castling.w.k = false;
+      if (piece === 'r' && fr === 0 && fc === 0) b._castling.b.q = false;
+      if (piece === 'r' && fr === 0 && fc === 7) b._castling.b.k = false;
+      if (tr===7 && tc===0) b._castling.w.q = false;
+      if (tr===7 && tc===7) b._castling.w.k = false;
+      if (tr===0 && tc===0) b._castling.b.q = false;
+      if (tr===0 && tc===7) b._castling.b.k = false;
+      b[fr][fc]=''; 
+      if(move.promo){ piece = move.promoPiece; } 
       b[tr][tc]=piece;
+
       return b; 
     }
 
-    function minimax(board,depth,maximizingColor,alpha,beta) {
-      if(depth===0) return {score: evaluateMaterial(board)};
+  function minimax(board, depth, maximizingColor, alpha, beta) {
       const moves = allLegalMoves(board, maximizingColor);
-      if(moves.length===0) return {score: evaluateMaterial(board)};
-      let bestMove=null;
-      if(maximizingColor==='w'){
-        let maxEval = -Infinity;
-        for(const m of moves){ 
-          const nb=applyMove(board,m);
-           const res = minimax(nb,depth-1,'b',alpha,beta);
-            if(res.score>maxEval){ 
-              maxEval=res.score;
-               bestMove=m;
-               } 
-            alpha = Math.max(alpha,res.score); 
-            if(beta<=alpha) break;
-           }
-        return {score:maxEval,move:bestMove};
-      }else{
-        let minEval = Infinity;
-        for(const m of moves){ 
-          const nb=applyMove(board,m); 
-          const res = minimax(nb,depth-1,'w',alpha,beta);
-           if(res.score<minEval){ minEval=res.score; bestMove=m; } 
-           beta = Math.min(beta,res.score);
-            if(beta<=alpha) break; 
+      
+      if (moves.length === 0) {
+          if (isKingInCheck(board, maximizingColor)) {
+              return { score: maximizingColor === 'w' ? -99999 : 99999 };
+          } else {
+              return { score: 0 };
           }
-        return {score:minEval,move:bestMove};
+      }
+
+      if (depth === 0) return { score: evaluateMaterial(board) };
+      
+      let bestMove = null;
+      if (maximizingColor === 'w') {
+        let maxEval = -Infinity;
+        for (const m of moves) { 
+          const nb = applyMove(board, m);
+          const res = minimax(nb, depth - 1, 'b', alpha, beta);
+          if (res.score > maxEval) { 
+            maxEval = res.score;
+            bestMove = m;
+          } 
+          alpha = Math.max(alpha, res.score); 
+          if (beta <= alpha) break;
+        }
+        return { score: maxEval, move: bestMove };
+      } else {
+        let minEval = Infinity;
+        for (const m of moves) { 
+          const nb = applyMove(board, m); 
+          const res = minimax(nb, depth - 1, 'w', alpha, beta);
+          if (res.score < minEval) { 
+              minEval = res.score; 
+              bestMove = m; 
+          } 
+          beta = Math.min(beta, res.score);
+          if (beta <= alpha) break; 
+        }
+        return { score: minEval, move: bestMove };
       }
     }
 
-    const PIECE_VALUES = {
-      p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000
-    };
+    const PIECE_VALUES = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000 };
 
     const PAWN_PST = [
       [  0,  0,  0,  0,  0,  0,  0,  0],
@@ -1725,13 +2282,23 @@
       return score;
   }
   
-   function makeAIMove() {
+  function makeAIMove() {
+    if (window._isGamePaused) {
+        let waitInterval = setInterval(() => {
+            if (!window._isGamePaused) {
+                clearInterval(waitInterval);
+                makeAIMove();
+            }
+        }, 200);
+        return;
+    }
+
     if (window._gameOver) return;
     const aiColor = (window._p1Color === 'w') ? 'b' : 'w';
     const moves = allLegalMoves(window._boardState, aiColor);
 
     if(moves.length === 0) {
-      document.getElementById('result').textContent = 'No moves for AI';
+      checkGameOver();
       return;
     }
 
@@ -1739,53 +2306,92 @@
     if(window._aiDifficulty === 'easy') {
       chosen = moves[Math.floor(Math.random() * moves.length)];
     } else {
-      const depth = 3;
+      const depth = 3; 
       let bestScore = (aiColor === 'w') ? -Infinity : Infinity;
+      let bestMoves = [];
   
       const nextColor = (aiColor === 'w') ? 'b' : 'w'; 
 
+      moves.sort((a, b) => (b.capture ? 1 : 0) - (a.capture ? 1 : 0));
+
       for(const m of moves) {
         const nb = applyMove(window._boardState, m);
-        const res = minimax(nb, depth - 1, nextColor,  -Infinity, Infinity);
+        const res = minimax(nb, depth - 1, nextColor, -Infinity, Infinity);
         let score = res.score;
 
-        const boardStr = JSON.stringify(nb);
-        let isRepetition = false;
-
-        for (let i = Math.max(0, window._moveHistory.length - 6); i < window._moveHistory.length; i++) {
-          if(JSON.stringify(window._moveHistory[i].board) === boardStr) {
-            isRepetition = true;
-            break;
-          }
+        const boardStr = getBoardString(nb, nextColor);
+        if (window._positionHistory[boardStr] >= 1) {
+          score += (aiColor === 'w') ? -1000 : 1000; 
         }
-        if (isRepetition) {
-          score += (aiColor === 'w') ? -5000: 5000;
+
+        if (isKingInCheck(nb, nextColor)) {
+            score += (aiColor === 'w') ? 50 : -50; 
         }
         
         if(aiColor === 'w') {
-          if (score > bestScore) { bestScore = score; chosen = m; }
+          if (score > bestScore) { 
+              bestScore = score; 
+              bestMoves = [m]; 
+          } else if (score === bestScore) {
+              bestMoves.push(m);
+          }
         } else {
-          if (score < bestScore) { bestScore = score; chosen = m; }
+          if (score < bestScore) { 
+              bestScore = score; 
+              bestMoves = [m]; 
+          } else if (score === bestScore) {
+              bestMoves.push(m);
+          }
         }
       }
-      if(!chosen) chosen = moves[Math.floor(Math.random() * moves.length)];
+      
+      if(bestMoves.length > 0) {
+          chosen = bestMoves[Math.floor(Math.random() * bestMoves.length)];
+      } else {
+          chosen = moves[Math.floor(Math.random() * moves.length)];
+      }
     }
 
     if(chosen) {
       const capturedPiece = window._boardState[chosen.to[0]][chosen.to[1]];
       window._moveHistory.push({board: cloneBoard(window._boardState), turn: window._turn, capW: [...window._capW],capB: [...window._capB]});
-      if(chosen.promo) chosen.promoPiece = 'q';
-
-      if(capturedPiece){
+      if(chosen.promo) chosen.promoPiece = aiColor === 'w' ? 'Q' : 'q'; 
+      if(capturedPiece && !chosen.enPassant) {
         if(getColorOfPiece(capturedPiece) === 'b') window._capW.push(capturedPiece);
         else window._capB.push(capturedPiece);
+      } else if (chosen.enPassant) {
+        const epPawn = aiColor === 'w' ? 'p' : 'P';
+        if(aiColor === 'w') window._capW.push(epPawn);
+        else window._capB.push(epPawn);
       }
 
+      const p = window._boardState[chosen.from[0]][chosen.from[1]];
       window._boardState = applyMove(window._boardState, chosen);
+      
+      const nextOpp = window._p1Color;
+      const isCheck = isKingInCheck(window._boardState, nextOpp);
+      const noMoves = allLegalMoves(window._boardState, nextOpp).length === 0;
+      const timeTaken = ((Date.now() - window._moveStartTime) / 1000).toFixed(1);
+      
+      window._notationHistory.push({
+          notation: getMoveNotation(chosen, p, isCheck && !noMoves, isCheck && noMoves),
+          time: timeTaken + 's',
+          rawTime: parseFloat(timeTaken)
+      });
+      window._moveStartTime = Date.now(); 
+
+      if (isCheck) playChessSound('check');
+      else if (capturedPiece || chosen.enPassant) playChessSound('capture');
+      else playChessSound('move');
+
+      renderMoveHistory();
       redrawBoard();
       renderCapturedPieces();
       highlightLastMove(chosen.from, chosen.to);
-      animatePiece(chosen.to);
+      animatePiece(chosen.from, chosen.to);
+
+      if(aiColor === 'w') window._timeW += window._increment || 0;
+      else window._timeB += window._increment || 0;
 
       window._turn = window._p1Color;
       window._turnDuration = 0;
@@ -1797,73 +2403,174 @@
   }
     
     function startNewGame(){ 
-      window._state = parseFEN(startFEN); 
+      window._state = parseFEN(startFEN);
+      window._state._castling = {w:{k:true, q:true}, b:{k:true, q:true}};
+      window._state._ep = null;
+      window._state._halfMove = 0; 
+      
       window._moveHistory = []; 
+      window._notationHistory = [];
+      window._positionHistory = {};
+      window._positionHistory[getBoardString(window._state, 'w')] = 1;
       window._gameOver = false;
       window._turn = 'w'; 
       window._selected = null; 
       window._capW = []; 
       window._capB = [];
+      window._isFlipped = false;
+      window._isGamePaused = false; 
+
+      if (window._showMoves) {
+          document.getElementById('historyBoxCol').style.display = 'flex';
+      } else {
+          document.getElementById('historyBoxCol').style.display = 'none';
+      }
+      
       renderCapturedPieces();
+      renderMoveHistory();
+      setTopButtonsState(false);
+
+      if(document.getElementById('top-win-msg')) document.getElementById('top-win-msg').style.display = 'none';
+      if(document.getElementById('bottom-win-msg')) document.getElementById('bottom-win-msg').style.display = 'none';
+      if(document.getElementById('backToResultBtn')) document.getElementById('backToResultBtn').style.display = 'none';
 
       buildBoardFromState(window._state); 
       document.getElementById('result').textContent=''; 
+      if(document.getElementById('top-check-badge')) document.getElementById('top-check-badge').style.display = 'none'; 
+      if(document.getElementById('bottom-check-badge')) document.getElementById('bottom-check-badge').style.display = 'none';
       document.getElementById('gameOverOverlay').style.display = 'none';
+      
+
+      let wName = window._p1Color === 'w' ? window._p1Name : window._p2Name;
+      let bName = window._p1Color === 'b' ? window._p1Name : window._p2Name;
+            
+      let wColor = window._selectedTheme === 'wood' ? '#e6c280' : '#ffffff';
+      let wBg = window._selectedTheme === 'wood' ? '#3b2413' : '#000000';
+      let wStyle = `color: ${wColor}; background: ${wBg}; font-size: 16px; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; margin-left: 8px; border: 1px solid rgba(255,255,255,0.3);`;
+            
+      let bColor = window._selectedTheme === 'wood' ? '#4a2a18' : '#000000';
+      let bBg = window._selectedTheme === 'wood' ? '#f0d9b5' : '#ffffff';
+      let bStyle = `color: ${bColor}; background: ${bBg}; font-size: 16px; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; margin-left: 8px; border: 1px solid rgba(0,0,0,0.3);`;
+
+      document.getElementById('bottom-name').innerHTML = `${wName} <span style="${wStyle}">♟</span>`;
+      document.getElementById('top-name').innerHTML = `${bName} <span style="${bStyle}">♟</span>`;
+      const modeHeader = document.getElementById('gameModeTitle');
+      if (modeHeader) {
+          const aiIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`;
+          const playerIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`;
+          modeHeader.innerHTML = window._isAiMode ? `${aiIcon} Vs Computer` : `${playerIcon} Two Player`;
+      }
       updateStatus(); 
 
-      window._timeW = 600;
-      window._timeB = 600;
+      window._timeW = window._baseTime || 600;
+      window._timeB = window._baseTime || 600;
       window._turnDuration = 0;
       updateTimerDisplay();
       saveGameState(); 
+      window._moveStartTime = Date.now();
       
       if(window._timerInterval) clearInterval(window._timerInterval);
       window._timerInterval = setInterval(timerTick, 1000);
+      playChessSound('start');
 
       const g =document.querySelector('#board .grid');
         g.style.transform = '';
         document.querySelectorAll('.piece').forEach(p => p.style.transform = 'translate(-50%, -50%) rotate(0deg)');
+        const boardArea = document.getElementById('boardArea');
+        if (boardArea) boardArea.style.flexDirection = 'column';
 
       if(window._isAiMode && window._p1Color === 'b') {
         setTimeout(() => makeAIMove(), 1000);
       }
     }
 
-    function askPromotion(color, cb){
+   function askPromotion(color, cb){
       const overlay = document.createElement('div'); 
        overlay.style.position='fixed'; 
-       overlay.style.left=0;
-       overlay.style.top=0; 
-       overlay.style.right=0;
-       overlay.style.bottom=0; 
-       overlay.style.display='flex';
-       overlay.style.alignItems='center'; 
-       overlay.style.justifyContent='center'; 
-       overlay.style.background='rgba(0,0,0,0.7)';
-       overlay.style.zIndex='1000';
+       overlay.style.left=0; overlay.style.top=0; overlay.style.right=0; overlay.style.bottom=0; 
+       overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center'; 
+       overlay.style.background='rgba(0,0,0,0.85)';
+       overlay.style.backdropFilter='blur(5px)'; 
+       overlay.style.zIndex='10000';
     
      const box = document.createElement('div');
        box.style.background='#0d2622'; 
-       box.style.padding='20px'; 
-       box.style.borderRadius='8px';
+       box.style.padding='25px 30px'; 
+       box.style.borderRadius='12px';
+       box.style.border='2px solid #18a37b';
        box.style.textAlign='center';
-       box.innerHTML='<div style="margin-bottom:15px; font-size:18px;">Promote Pawn to:</div>';
-     const choices = ['♛','♜','♝','♞'];
+       box.style.boxShadow='0 10px 30px rgba(0,0,0,0.8)';
+       box.innerHTML='<div style="margin-bottom:20px; font-size:18px; color:#1ee0a8; font-weight:bold;">Promote Pawn to:</div>';
+       
+     const btnGroup = document.createElement('div');
+       btnGroup.style.display = 'flex';
+       btnGroup.style.gap = '12px';
+       btnGroup.style.justifyContent = 'center';
 
-      choices.forEach(ch=>{ 
-        const b=document.createElement('button');
-         b.textContent=ch;
-          b.className='btn'; 
-          b.style.fontSize='20px';
-        b.onclick=()=>{ 
-          document.body.removeChild(overlay); cb(ch); 
+      const isWhite = color === 'w';
+      let pColor = isWhite ? '#ffffff' : '#000000';
+      let pShadow = isWhite ? '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0px 4px 4px rgba(0,0,0,0.5)' : '-1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff';
+
+      if (window._selectedTheme === 'wood') {
+         if (isWhite) {
+            pColor = '#e6c280'; pShadow = '-1px -1px 0 #3b2413, 1px -1px 0 #3b2413, -1px 1px 0 #3b2413, 1px 1px 0 #3b2413, 0px 4px 4px rgba(0,0,0,0.6)';
+         } else {
+            pColor = '#4a2a18'; pShadow = '-1px -1px 0 #e6c280, 1px -1px 0 #e6c280, -1px 1px 0 #e6c280, 1px 1px 0 #e6c280, 0px 4px 4px rgba(0,0,0,0.8)';
+         }
+      }
+
+    const choices = [
+        { sym: '♛', text: 'Q' },
+        { sym: '♜', text: 'R' },
+        { sym: '♝', text: 'B' },
+        { sym: '♞', text: 'N' }
+     ];
+
+      choices.forEach(choice => { 
+        const b = document.createElement('button');
+        b.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; pointer-events: none;">
+                <span style="font-size: 32px; color:${pColor}; text-shadow:${pShadow}; line-height: 1;">${choice.sym}</span>
+                <span style="font-size: 14px; font-weight: bold; color: #1ee0a8; margin-top: 4px;">${choice.text}</span>
+            </div>`;
+            
+        b.style.width = '70px';  
+        b.style.height = '75px';
+        b.style.background = 'rgba(255,255,255,0.05)';
+        b.style.border = '2px solid rgba(255,255,255,0.1)';
+        b.style.borderRadius = '10px';
+        b.style.cursor = 'pointer';
+        b.style.display = 'flex';
+        b.style.alignItems = 'center';
+        b.style.justifyContent = 'center';
+        b.style.transition = 'all 0.2s ease';
+
+        b.onmouseover = () => { b.style.background = 'rgba(24, 163, 123, 0.3)'; b.style.borderColor = '#18a37b'; b.style.transform = 'translateY(-3px)'; };
+        b.onmouseout = () => { b.style.background = 'rgba(255,255,255,0.05)'; b.style.borderColor = 'rgba(255,255,255,0.1)'; b.style.transform = 'translateY(0)'; };
+
+        b.onclick = () => { 
+          document.body.removeChild(overlay); 
+          cb(choice.sym); 
         }; 
-        box.appendChild(b); 
+        btnGroup.appendChild(b); 
       });
-      overlay.appendChild(box); document.body.appendChild(overlay);
+      
+      box.appendChild(btnGroup);
+      overlay.appendChild(box); 
+      document.body.appendChild(overlay);
     }
 
     function performPlayerMove(fr,fc,tr,tc) {
+      if (window._isGamePaused) {
+        let waitInterval = setInterval(() => {
+            if (!window._isGamePaused) {
+                clearInterval(waitInterval);
+                performPlayerMove(fr,fc,tr,tc);
+            }
+        }, 200);
+        return;
+      }
+
       if(window._gameOver) return false;
 
       const aiColor = window._p1Color === 'w' ? 'b' : 'w';
@@ -1875,10 +2582,14 @@
       
       const capturedPiece = window._boardState[tr][tc]; 
 
-      if(hit.promo){ 
+     if(hit.promo){ 
         return new Promise(res=>{
           askPromotion(getColorOfPiece(window._boardState[fr][fc]), (choice)=>{
-            hit.promoPiece = choice; 
+            const symbolMap = {'♛':'q', '♜':'r', '♝':'b', '♞':'n'};
+            let truePromoLetter = symbolMap[choice];
+            if(window._turn === 'w') truePromoLetter = truePromoLetter.toUpperCase();
+
+            hit.promoPiece = truePromoLetter; 
             
             window._moveHistory.push({board: cloneBoard(window._boardState), turn: window._turn, capW: [...window._capW], capB: [...window._capB]}); 
             if(capturedPiece){
@@ -1886,10 +2597,38 @@
               else window._capB.push(capturedPiece);
             }
 
+            const p = window._boardState[fr][fc];
             window._boardState = applyMove(window._boardState, hit); 
+            
+            const nextOpp = window._turn === 'w' ? 'b' : 'w';
+            const isCheck = isKingInCheck(window._boardState, nextOpp);
+            const noMoves = allLegalMoves(window._boardState, nextOpp).length === 0;
+            
+            const timeTaken = ((Date.now() - window._moveStartTime) / 1000).toFixed(1);
+            
+            window._notationHistory.push({
+                notation: getMoveNotation(hit, p, isCheck && !noMoves, isCheck && noMoves),
+                time: timeTaken + 's',
+                rawTime: parseFloat(timeTaken)
+            });
+            window._moveStartTime = Date.now();
+
+            if (isCheck) playChessSound('check');
+            else if (capturedPiece || hit.enPassant) playChessSound('capture');
+            else playChessSound('move');
+
+            renderMoveHistory();
             redrawBoard(); 
             renderCapturedPieces(); 
-            window._turn = window._turn==='w'?'b':'w'; updateStatus(); checkGameOver();
+
+            if(window._turn === 'w') window._timeW += window._increment || 0;
+            else window._timeB += window._increment || 0;
+            window._turnDuration = 0;
+            
+            window._turn = window._turn==='w'?'b':'w'; 
+            updateStatus(); 
+            updateTimerDisplay();
+            checkGameOver();
             saveGameState(); 
             res(true);
           });
@@ -1898,16 +2637,43 @@
       
       window._moveHistory.push({board: cloneBoard(window._boardState), turn: window._turn, capW: [...window._capW], capB: [...window._capB]});
       
-      if(capturedPiece){
+      if(capturedPiece && !hit.enPassant){
         if(getColorOfPiece(capturedPiece) === 'b') window._capW.push(capturedPiece);
         else window._capB.push(capturedPiece);
+      } else if (hit.enPassant) {
+         const epPawn = window._turn === 'w' ? 'p' : 'P';
+         if(window._turn === 'w') window._capW.push(epPawn);
+         else window._capB.push(epPawn);
       }
 
+      const p = window._boardState[fr][fc];
       window._boardState = applyMove(window._boardState, hit);
+
+      const nextOpp = window._turn === 'w' ? 'b' : 'w';
+      const isCheck = isKingInCheck(window._boardState, nextOpp);
+      const noMoves = allLegalMoves(window._boardState, nextOpp).length === 0;
+      
+      const timeTaken = ((Date.now() - window._moveStartTime) / 1000).toFixed(1);
+      
+      window._notationHistory.push({
+          notation: getMoveNotation(hit, p, isCheck && !noMoves, isCheck && noMoves),
+          time: timeTaken + 's',
+          rawTime: parseFloat(timeTaken)
+      });
+      window._moveStartTime = Date.now();
+
+      if (isCheck) playChessSound('check');
+      else if (capturedPiece || hit.enPassant) playChessSound('capture');
+      else playChessSound('move');
+
+      renderMoveHistory();
+
       redrawBoard();
       renderCapturedPieces(); 
 
-      highlightLastMove([fr,fc],[tr,tc]); animatePiece([tr,tc]);
+      highlightLastMove([fr,fc],[tr,tc]); animatePiece([fr,fc], [tr,tc]);
+      if(window._turn === 'w') window._timeW += window._increment || 0;
+      else window._timeB += window._increment || 0;
       window._turn = window._turn==='w'?'b':'w';
       window._turnDuration = 0;
       updateStatus();
@@ -2006,9 +2772,12 @@
       if(window._moveHistory && window._moveHistory.length > 0){
         if(window._isAiMode && window._moveHistory.length >= 2 && window._turn === window._p1Color) {
             window._moveHistory.pop(); 
+            window._notationHistory.pop();
         }
         
         const last = window._moveHistory.pop();
+        window._notationHistory.pop();
+        
         window._boardState = cloneBoard(last.board);
         window._turn = last.turn;
         window._capW = last.capW ? [...last.capW] : [];
@@ -2016,66 +2785,55 @@
 
         buildBoardFromState(window._boardState);
         renderCapturedPieces();
+        renderMoveHistory();
         
         updateStatus();
         clearHighlights();
         document.getElementById('gameOverOverlay').style.display = 'none';
         window._gameOver = false;
+        setTopButtonsState(false);
         saveGameState(); 
+        window._moveStartTime = Date.now();
       }
     });
 
-    document.getElementById('flipBtn').addEventListener('click', ()=> {
+   document.getElementById('flipBtn').addEventListener('click', ()=> {
       const g = document.querySelector('#board .grid');
+      const boardArea = document.getElementById('boardArea');
 
-      const isFlipped = g.style.transform === 'rotate(180deg)';
+      window._isFlipped = !window._isFlipped;
 
-      g.style.transform = isFlipped ? '' : 'rotate(180deg)';
+      if (window._isFlipped) {
+        g.classList.add('flipped');
+        g.style.transform = 'rotate(180deg)';
+      } else {
+        g.classList.remove('flipped');
+        g.style.transform = '';
+      }
+
       document.querySelectorAll('.piece').forEach(p => {
-
-      p.style.transform = isFlipped ? 'translate(-50%, -50%) rotate(0deg)' : 'translate(-50%, -50%) rotate(180deg)';
-
+        p.style.transform = window._isFlipped ? 'translate(-50%, -50%) rotate(180deg)' : 'translate(-50%, -50%) rotate(0deg)';
       });
 
-      const timerB = document.getElementById('timerB');
-      const timerW = document.getElementById('timerW');
-
-      timerB.style.height = 'fit-content';
-      timerW.style.height = 'fit-content';
-
-      const isMobile = window.innerWidth < 768;
-    
-      const desktopGap = '10px'; 
-      const mobileGap = '5px'; 
-      
-      const currentGap = isMobile ? mobileGap : desktopGap;
-
-      if(!isFlipped) {
-        timerB.style.setProperty('top', 'unset', 'important');
-        timerB.style.setProperty('bottom', '10px', 'important');
-
-        timerW.style.setProperty('bottom', 'unset', 'important');
-        timerW.style.setProperty('top', '10px', 'important');
-      } else {
-        timerB.style.setProperty('bottom', 'unset', 'important');
-        timerB.style.setProperty('top', '10px', 'important');
-
-        timerW.style.setProperty('top', 'unset', 'important');
-        timerW.style.setProperty('bottom', '10px', 'important' );
+      if(boardArea) {
+        boardArea.style.flexDirection = window._isFlipped ? 'column-reverse' : 'column';
       }
     });
 
-    const resumeModal = document.getElementById('resumeModal');
-    const resumeBtn = document.getElementById('resumeBtn');
-    const restartBtn = document.getElementById('restartBtn');
+    const savedGameBlock = document.getElementById('savedGameBlock');
+    const setupBlock = document.getElementById('setupBlock');
+    const setupSubtitle = document.getElementById('setupSubtitle');
+    const homeResumeBtn = document.getElementById('homeResumeBtn');
+    const homeDiscardBtn = document.getElementById('homeDiscardBtn');
 
     let savedData = localStorage.getItem('chess_saved_game');
     if (savedData) {
-        resumeModal.style.display = 'flex';
+        savedGameBlock.style.display = 'block';
+        setupBlock.style.display = 'none';
+        if (setupSubtitle) setupSubtitle.style.display = 'none';
     }
 
-    resumeBtn.addEventListener('click', () => {
-        resumeModal.style.display = 'none';
+    homeResumeBtn.addEventListener('click', () => {
         let data = JSON.parse(localStorage.getItem('chess_saved_game'));
         
         if (data) {
@@ -2085,8 +2843,12 @@
             window._capB = data.capB || [];
             window._timeW = data.timeW;
             window._timeB = data.timeB;
+            window._baseTime = data.baseTime || 600; 
+            window._increment = data.increment || 0;
             window._turnDuration = data.turnDuration;
             window._moveHistory = data.moveHistory || [];
+            window._notationHistory = data.notationHistory || [];
+            window._positionHistory = data.positionHistory || {};
             window._selectedTheme = data.selectedTheme || 'bw'; 
             window._isAiMode = data.isAiMode;
             window._aiDifficulty = data.aiDifficulty;
@@ -2095,6 +2857,10 @@
             window._p1Color = data.p1Color;
             window._gameOver = data.gameOver;
 
+            if(!window._boardState._castling) window._boardState._castling = {w:{k:true, q:true}, b:{k:true, q:true}};
+            if(window._boardState._ep === undefined) window._boardState._ep = null;
+            if(!window._boardState._halfMove) window._boardState._halfMove = 0;
+
             document.body.classList.remove('bg-home', 'bg-wood', 'bg-bw');
             if (window._selectedTheme === 'wood') {
                 document.body.classList.add('bg-wood');
@@ -2102,26 +2868,48 @@
                 document.body.classList.add('bg-bw');
             }
 
+            if(document.getElementById('top-win-msg')) document.getElementById('top-win-msg').style.display = 'none';
+            if(document.getElementById('bottom-win-msg')) document.getElementById('bottom-win-msg').style.display = 'none';
+
             document.getElementById('home-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'block';
             document.getElementById('exit-container').style.display = 'none';
+            document.getElementById('settingsBtn').style.display = 'none';
+            document.body.classList.add('game-active');
 
-            if (window._selectedTheme === 'wood') {
-                document.getElementById('capWhiteLabel').textContent = 'Light Wood Captured:';
-                document.getElementById('capBlackLabel').textContent = 'Dark Wood Captured:';
-                document.getElementById('timerWLabel').textContent = 'Light Wood';
-                document.getElementById('timerBLabel').textContent = 'Dark Wood';
+            if (window._showMoves) {
+                document.getElementById('historyBoxCol').style.display = 'flex';
             } else {
-                document.getElementById('capWhiteLabel').textContent = 'Black Captured:';
-                document.getElementById('capBlackLabel').textContent = 'White Captured:';
-                document.getElementById('timerWLabel').textContent = 'White:';
-                document.getElementById('timerBLabel').textContent = 'Black:';
+                document.getElementById('historyBoxCol').style.display = 'none';
             }
 
-            buildBoardFromState(window._boardState);
-            renderCapturedPieces();
-            updateStatus();
-            updateTimerDisplay();
+           let wName = window._p1Color === 'w' ? window._p1Name : window._p2Name;
+           let bName = window._p1Color === 'b' ? window._p1Name : window._p2Name;
+           
+          let wColor = window._selectedTheme === 'wood' ? '#e6c280' : '#ffffff';
+          let wBg = window._selectedTheme === 'wood' ? '#3b2413' : '#000000';
+          let wStyle = `color: ${wColor}; background: ${wBg}; font-size: 16px; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; margin-left: 8px; border: 1px solid rgba(255,255,255,0.3);`;
+           
+          let bColor = window._selectedTheme === 'wood' ? '#4a2a18' : '#000000';
+          let bBg = window._selectedTheme === 'wood' ? '#f0d9b5' : '#ffffff';
+          let bStyle = `color: ${bColor}; background: ${bBg}; font-size: 16px; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; margin-left: 8px; border: 1px solid rgba(0,0,0,0.3);`;
+
+          document.getElementById('bottom-name').innerHTML = `${wName} <span style="${wStyle}">♟</span>`;
+          document.getElementById('top-name').innerHTML = `${bName} <span style="${bStyle}">♟</span>`;
+
+          const modeHeader = document.getElementById('gameModeTitle');
+          if (modeHeader) {
+              const aiIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`;
+              const playerIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 4px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`;
+              modeHeader.innerHTML = window._isAiMode ? `${aiIcon} Vs Computer` : `${playerIcon} Two Player`;
+          }
+
+          buildBoardFromState(window._boardState);
+          renderCapturedPieces();
+          renderMoveHistory();
+          updateStatus();
+          updateTimerDisplay();
+          window._moveStartTime = Date.now();
 
             if (!window._gameOver) {
                 if (window._timerInterval) clearInterval(window._timerInterval);
@@ -2137,16 +2925,90 @@
         }
     });
 
-    restartBtn.addEventListener('click', () => {
-        resumeModal.style.display = 'none';
+    homeDiscardBtn.addEventListener('click', () => {
         localStorage.removeItem('chess_saved_game');
+        savedGameBlock.style.display = 'none';
+        setupBlock.style.display = 'block';
+        if (setupSubtitle) setupSubtitle.style.display = 'block';
     });
 
-  </script>
-  </body>
-</html>
+    const pauseModal = document.getElementById('pauseModal');
+   document.getElementById('pauseGameBtn').addEventListener('click', () => {
+      window._isGamePaused = true;
+      if (window._timerInterval) {
+        clearInterval(window._timerInterval);
+        window._timerInterval = null;
+        window._manualPauseTime = Date.now(); 
+      }
+      pauseModal.style.display = 'flex';
+    });
 
-  
+    document.getElementById('resumeGameBtn').addEventListener('click', () => {
+      window._isGamePaused = false;
+      pauseModal.style.display = 'none';
+      if (!window._gameOver) {
+        if (window._manualPauseTime && window._moveStartTime) {
+            window._moveStartTime += (Date.now() - window._manualPauseTime);
+            window._manualPauseTime = null;
+        }
+        window._timerInterval = setInterval(timerTick, 1000);
+      }
+    });
 
+    document.getElementById('pauseRestartBtn').addEventListener('click', () => {
+      window._isGamePaused = false;
+      pauseModal.style.display = 'none';
+      startNewGame();
+    });
+
+    document.getElementById('pauseHomeBtn').addEventListener('click', () => {
+      window._isGamePaused = false;
+      pauseModal.style.display = 'none';
+      localStorage.removeItem('chess_saved_game');
+      document.body.classList.remove('bg-wood', 'bg-bw');
+      document.body.classList.add('bg-home');
+      document.body.classList.remove('game-active');
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('home-screen').style.display = 'block';
+      document.getElementById('exit-container').style.display = 'flex';
+      document.getElementById('settingsBtn').style.display = 'flex';
+    });
+
+    window._showHints = localStorage.getItem('chess_showHints') !== 'false'; 
     
-  
+    document.getElementById('toggleMoves').checked = window._showMoves;
+    document.getElementById('toggleHints').checked = window._showHints;
+
+     document.getElementById('settingsBtn').addEventListener('click', () => {
+      document.getElementById('settingsModal').style.display = 'flex';
+    });
+
+     document.getElementById('closeSettingsBtn').addEventListener('click', () => {
+      window._showMoves = document.getElementById('toggleMoves').checked;
+      window._showHints = document.getElementById('toggleHints').checked;
+      
+      localStorage.setItem('chess_showMoves', window._showMoves);
+      localStorage.setItem('chess_showHints', window._showHints);
+      
+      document.getElementById('settingsModal').style.display = 'none';
+      clearHighlights();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            const gameScreenVisible = document.getElementById('game-screen').style.display === 'block';
+            if (!window._gameOver && gameScreenVisible && !window._isGamePaused) {
+                
+                window._isGamePaused = true;
+                if (window._timerInterval) {
+                    clearInterval(window._timerInterval);
+                    window._timerInterval = null;
+                    window._manualPauseTime = Date.now(); 
+                }
+                document.getElementById('pauseModal').style.display = 'flex';
+            }
+        }
+    });
+  </script>
+</body>
+</html>

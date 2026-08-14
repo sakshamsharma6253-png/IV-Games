@@ -3,616 +3,494 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us - IT Voice Games</title>
-    <link rel="stylesheet" href="styles.css"> 
-    <style>
-      
-        html, body {
-            margin: 0 !important;
-            padding: 0 !important;
-            min-height: 100vh !important;
-            height: auto !important;
-            background-color: #0f172a; 
-            color: #cbd5e1;
-            font-family: sans-serif;
-            display: flex !important;
-            flex-direction: column !important;
-            overflow-x: hidden;
-        }
-      
-        .wrap {
-            max-width: 1000px; 
-            width: 100%;
-            margin: 0 auto; 
-            padding: 20px 20px 40px 20px; 
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1 !important; 
-
-            box-sizing: border-box;
-        }
+    <title>Contact Us | IT Voice Games</title>
+    <link id="favicon" rel="icon" type="image/webp" href="favicon/favicon.dark.webp">
+    <meta name="description" content="Get in touch with ITVoice Games! Have a question, feedback, or business inquiry? Contact our team today and we will get back to you as soon as possible.">
+    <link rel="canonical" href="https://itvoicegames.com/contact.html">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Informatic Computech Private Limited">
     
-        .main-header {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            width: 100%;
-            margin-bottom: 40px;
-            gap: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.40);
-        }
+    <meta name="theme-color" id="meta-theme-color" content="#0f172a">
+    
+    <meta property="og:title" content="Contact Us | ITVoice Games">
+    <meta property="og:description" content="Get in touch with ITVoice Games! Have a question, feedback, or business inquiry? Contact our team today.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://itvoicegames.com/contact.html">
+    <meta property="og:image" content="https://itvoicegames.com/assets/og-image.jpg">
+    <meta property="og:site_name" content="ITVoice Games">
+    <meta property="og:locale" content="en_US">
+    
+    <link rel="preload" as="image" href="icons/ivgames-logo.webp">
+    <link rel="preload" as="image" href="icons/ivgames-logo-light.webp">
 
-        .logo-container img {
-            max-height: 60px;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .nav-buttons {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: -10px;
-            flex-wrap: wrap;
-        }
-
-        .btn-blue {
-            color: #4facfe !important;
-            border-color: rgba(79, 172, 254, 0.5) !important;
-            font-weight: bold;
-        }
-        .btn-blue:hover {
-            background: rgba(79, 172, 254, 0.15) !important;
-            color: #ffffff !important;
-            box-shadow: 0 0 12px rgba(79, 172, 254, 0.4);
-            border-color: #4facfe !important;
-        }
-
-        .page-title {
-            color: #ffffff;
-            margin-top: 0;
-            font-size: 50px;
-            margin-left: 290px;
-            margin-bottom: 10px;
-        }
+    <style>
+     :root, [data-theme="dark"] {
+        --bg-fallback: #0f172a;
+        --bg-image: url('image/bg.webp');
+        --bg-overlay: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.95));
+        --text-main: #cbd5e1;
+        --header-border: rgba(255, 255, 255, 0.40); 
         
-        .page-desc {
-            margin-bottom: 30px; 
-            font-size: 1.05rem;
-            color: #cbd5e1;
-        }
+        --title-color: #38bdf8;
+        --heading-color: #4facfe;
+        
+        --footer-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.3) 100%);
+        --footer-border: rgba(255, 255, 255, 0.15);
+        --footer-link: #888;
+      }
 
-        .policy-card {
-            background: linear-gradient(90deg, rgba(79,172,254,0.06) 0%, rgba(255,255,255,0.01) 100%);
-            border-left: 4px solid #4facfe; 
-            border-radius: 4px 12px 12px 4px;
-            padding: 25px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
+      [data-theme="light"] {
+        --bg-fallback: #f8fafc;
+        --bg-image: none;
+        --bg-overlay: linear-gradient(rgba(248, 250, 252, 0.9), rgba(241, 245, 249, 0.98));
+        --text-main: #334155;
+        --header-border: rgba(0, 0, 0, 0.35); 
+        
+        --title-color: #0ea5e9;
+        --heading-color: #2563eb;
+        
+        --footer-bg: #ffffff;
+        --footer-border: #e2e8f0;
+        --footer-link: #64748b;
+      }
+
+      [data-theme="dark"] .logo-light { display: none !important; }
+      [data-theme="dark"] .logo-dark { display: block !important; }
+      [data-theme="light"] .logo-dark { display: none !important; }
+      [data-theme="light"] .logo-light { display: block !important; }
+
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: 100vh !important;
+        background-color: var(--bg-fallback);
+        color: var(--text-main);
+      }
+
+      body {
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        background-image: var(--bg-overlay), var(--bg-image);
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-attachment: fixed;
+        background-size: cover;
+      }
       
-        .policy-card:hover {
-            background: linear-gradient(90deg, rgba(79,172,254,0.12) 0%, rgba(255,255,255,0.02) 100%);
-            border-left: 4px solid #00f2fe;
-            transform: translateX(6px); 
-            box-shadow: -2px 5px 15px rgba(0,0,0,0.2);
-        }
+     .wrap {
+        max-width: 1000px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 10px 20px 40px 20px !important;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; 
+        box-sizing: border-box;
+      }
 
-        .policy-title {
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 1.25rem;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    header {
+        display: flex;
+        flex-wrap: wrap !important; 
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 0 20px 0; 
+        width: 100%;
+        margin-bottom: 30px;
+        gap: 15px;
+        border-bottom: 1px solid var(--header-border); 
+        transition: border-color 0.3s ease;
+      }
 
-        .policy-title::before {
-            content: "◈"; 
-            color: #4facfe;
-            font-size: 1.2rem;
-        }
+      .logo-container a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
 
-        .contact-link {
-            color: #4facfe;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            display: inline-block;
-            margin-top: 8px;
-            word-break: break-all;
-        }
+     .header-logo {
+        height: 60px; 
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        display: block;
+        margin: 0;
+        padding: 0;
+      }
 
-        .btn-solid-blue {
-            display: inline-block;
-            padding: 10px 20px;
-            border: 1px solid rgba(79, 172, 254, 0.5);
-            background: transparent;
-            border-radius: 6px;
-            text-decoration: none;
-            color: #4facfe;
-            font-weight: bold;
-            transition: 0.3s;
-            margin-top: 12px;
-            text-align: center;
-        }
+
+      .nav-buttons {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 0;
+        flex-wrap: nowrap !important; 
+        white-space: nowrap; 
+      }
+
+      .btn-ghost {
+        box-sizing: border-box;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background: transparent;
+        color: #26f6b0 !important; 
+        border: 1px solid #26f6b0 !important; 
+        gap: 6px;
+      }
+      .btn-ghost:hover { 
+        background: #26f6b0 !important; 
+        color: #031815 !important; 
+      }
+      
+      .btn-blue {
+        box-sizing: border-box;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        background: transparent !important;
+        color: #4facfe !important; 
+        border: 1px solid #4facfe !important; 
+        gap: 6px;
+      }
+      .btn-blue:hover {
+        background: #4facfe !important; 
+        color: #ffffff !important;      
+        box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+      }
+
+      [data-theme="light"] .btn-ghost {
+        background: transparent !important; 
+        border-color: #3b82f6 !important;   
+        color: #3b82f6 !important;          
+      }
+      [data-theme="light"] .btn-ghost:hover {
+        background: #3b82f6 !important;     
+        color: #ffffff !important;          
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      [data-theme="light"] .btn-blue {
+        background: transparent !important; 
+        border-color: #3b82f6 !important;   
+        color: #3b82f6 !important;          
+      }
+      [data-theme="light"] .btn-blue:hover {
+        background: #3b82f6 !important;     
+        color: #ffffff !important;          
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      .page-title {
+        color: var(--title-color);
+        margin-top: 0;
+        font-size: 50px;
+        margin-left: 290px;
+        margin-bottom: 10px;
+        transition: color 0.3s ease;
+      }
+      
+      .page-desc {
+        margin-bottom: 30px; 
+        font-size: 1.05rem;
+        color: var(--text-main);
+        transition: color 0.3s ease;
+      }
+
+      .policy-card {
+        background: linear-gradient(90deg, rgba(79,172,254,0.06) 0%, rgba(255,255,255,0.01) 100%);
+        border-left: 4px solid var(--heading-color); 
+        border-radius: 4px 12px 12px 4px;
+        padding: 20px 25px;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+      }
+      
+      [data-theme="light"] .policy-card {
+        background: rgba(37, 99, 235, 0.05);
+        border: 1px solid rgba(0,0,0,0.05);
+        border-left: 4px solid var(--heading-color); 
+      }
+
+      .policy-card:hover {
+        transform: translateX(6px); 
+        box-shadow: -2px 5px 15px rgba(0,0,0,0.1);
+      }
+      
+      [data-theme="dark"] .policy-card:hover {
+        background: linear-gradient(90deg, rgba(79,172,254,0.12) 0%, rgba(255,255,255,0.02) 100%);
+        border-left: 4px solid #00f2fe;
+        box-shadow: -2px 5px 15px rgba(0,0,0,0.2);
+      }
+
+      .policy-title {
+        color: var(--title-color);
+        font-weight: bold;
+        font-size: 1.25rem;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: color 0.3s ease;
+      }
+
+      .policy-title::before {
+        content: "◈"; 
+        color: var(--heading-color);
+        font-size: 1.2rem;
+        transition: color 0.3s ease;
+      }
+
+      .contact-link {
+        color: var(--heading-color);
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        display: inline-block;
+        margin-top: 8px;
+        word-break: break-all;
+        transition: color 0.3s ease;
+      }
+
+      .btn-solid-blue {
+        display: inline-block;
+        padding: 10px 20px;
+        border: 1px solid var(--heading-color);
+        background: transparent;
+        border-radius: 6px;
+        text-decoration: none;
+        color: var(--heading-color);
+        font-weight: bold;
+        transition: 0.3s;
+        margin-top: 12px;
+        text-align: center;
+      }
+      .btn-solid-blue:hover {
+        background: rgba(79, 172, 254, 0.15);
+        color: #ffffff;
+        box-shadow: 0 0 12px rgba(79, 172, 254, 0.4);
+      }
+      [data-theme="light"] .btn-solid-blue:hover {
+        background: #3b82f6;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      .main-footer {
+        margin-top: auto !important; 
+        padding: 30px 20px 20px 20px;
+        width: 100%;
+        background: var(--footer-bg);
+        border-top: 1px solid var(--footer-border);
+        text-align: center;
+        box-sizing: border-box;
+        transition: background 0.3s ease, border-color 0.3s ease;
+      }
+
+      .footer-nav {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; 
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+      
+      .footer-nav a {
+        color: var(--footer-link);
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.2s;
+      }
+
+      .footer-nav a:hover,
+      .footer-nav a.active-link {
+        color: var(--heading-color) !important;
+      }
+
+      .copyright-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        color: var(--footer-link);
+        font-size: 13px;
+        margin-top: 20px;
+        transition: color 0.3s ease;
+      }
+
+      @media screen and (max-width: 412px) {
+        .page-title { margin-left: 120px; font-size: 40px; }
+      }
+
+      @media (max-width: 767px) {
+        header { flex-direction: column !important; justify-content: center !important; text-align: center; }
+        .nav-buttons { justify-content: center; }
+        .btn-ghost, .btn-blue { font-size: 13px; padding: 8px 12px; }
         
-        .btn-solid-blue:hover {
-            background: rgba(79, 172, 254, 0.15);
-            color: #ffffff;
-            box-shadow: 0 0 12px rgba(79, 172, 254, 0.4);
-            border-color: #4facfe;
+        .footer-nav { display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 15px 5px; padding: 0 5px; overflow: hidden; }
+        .footer-nav a { font-size: 11.5px !important; text-align: center; white-space: normal; line-height: 1.4; }
+        .copyright-text { flex-direction: column; gap: 10px; }
+        .copyright-divider { display: none; }
+        
+        .page-title { margin-left: 80px; font-size: 40px; }
+      }
+
+      @media (min-width: 768px) and (max-width: 830px) {
+        header { 
+          flex-direction: row !important; 
+          flex-wrap: nowrap !important;
+          justify-content: space-between !important; 
         }
-
-        .main-footer {
-            margin-top: 0px; 
-            padding: 30px 20px 20px 20px;
-            width: 100%;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.3) 100%);
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-            text-align: center;
-            box-sizing: border-box;
-            flex-shrink: 0 !important;
-            position: relative !important;
-            z-index: 10;
+        .header-logo { 
+          height: 52px;
         }
-
-        .footer-nav {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap; 
-            gap: 15px;
-            margin-bottom: 15px;
+        .nav-buttons { 
+          gap: 10px; 
+          margin-top: 0; 
+          margin-bottom: 0; 
         }
-
-        .footer-nav a {
-            font-size: 14px;
-            transition: 0.2s;
-        }
-
-        .footer-nav a:hover {
-            color: #4facfe !important;
-        }
-
-        .copyright-text {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            color: #888;
-            font-size: 13px;
-            margin-top: 30px;
-        }
-
-          @media screen and (max-width: 412px) {
-             .page-title {
-            color: #ffffff;
-            margin-top: 0;
-            font-size: 40px;
-            margin-left: 120px;
-            margin-bottom: 10px;
-        }
-            
-        }
-
-        @media (max-width: 767px) {
-
-            .wrap {
-                padding-bottom: 80px !important;
-            }
-
-            .main-header {
-                flex-direction: column !important; 
-                justify-content: center !important;
-                text-align: center;
-                gap: 20px;
-                padding-top: 25px;
-            }
-            .nav-buttons {
-                justify-content: center;
-                width: 100%;
-            }
-            .nav-buttons .btn-ghost {
-                font-size: 13px; 
-                padding: 8px 12px;
-            }
-            .policy-card {
-                padding: 15px;
-            }
-            .btn-solid-blue {
-                width: 100%;
-                box-sizing: border-box;
-            }
-
-            .main-footer {
-                margin-top: auto !important;
-                position: relative;
-                z-index: 10;
-            }
-
-            .footer-nav {
-                display: grid !important; 
-                grid-template-columns: repeat(3, 1fr); 
-                gap: 15px 5px;
-                padding: 0 5px;
-            }
-            .footer-nav a {
-                font-size: 11.5px !important; 
-                text-align: center; 
-                white-space: normal; 
-                line-height: 1.4;
-            }
-            .copyright-text {
-                flex-direction: column; 
-                gap: 10px;
-            }
-            .copyright-divider {
-                display: none; 
-            }
-
-            .page-title {
-            color: #ffffff;
-            margin-top: 0;
-            font-size: 40px;
-            margin-left: 80px;
-            margin-bottom: 10px;
-        }
-
-         .logo-container img {
-            max-height: 60px;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .nav-buttons {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 6px;
-            flex-wrap: wrap;
-        }
-        }
-
-
-        @media (min-width: 768px) and (max-width: 819px) {
-
-             header {
-          flex-direction: column !important; 
-          justify-content: center !important;
-          text-align: center;
-        }
-        .nav-buttons {
-          justify-content: center;
-          margin-top: 10px;
-          margin-bottom: 10px;
-        }
-        .nav-buttons .btn-ghost {
+        .btn-ghost, .btn-blue { 
+          height: 36px; 
+          padding: 0 12px; 
           font-size: 13px; 
-          padding: 6px 12px;
         }
-           
-
-            .page-title {
-                margin-left: -10px;
-                margin-bottom: 20px;
-                text-align: center;
-            }
-            
-            .page-desc {
-                text-align: center;
-                max-width: 650px;
-                margin: 0 auto 40px auto;
-            }
-
-          
-            .policy-card {
-                width: 100%; 
-                box-sizing: border-box;
-                margin: 0 auto 20px auto; 
-            }
+        .page-title { 
+          margin-left: 0; 
+          margin-bottom: 20px; 
+          text-align: center; 
         }
-
-        @media screen and (max-width: 380px) {
-          
-            
-            html, body {
-                display: block !important; 
-                height: auto !important;
-                min-height: 100% !important;
-            }
-            
-            .wrap {
-                display: block !important;
-                height: auto !important;
-                margin-bottom: 20px !important; 
-            }
-
-            .page-title {
-                margin-left: -10px;
-                margin-bottom: 20px;
-                text-align: center;
-            }
-            
-          
-            .main-footer {
-                position: relative !important;
-                border-top: 0px solid rgba(255, 255, 255, 0.15);
-                display: block !important;
-                margin-top: 20px !important;
-            }
-            
-            .policy-card {
-                padding: 15px !important;
-                margin-bottom: 15px !important;
-            }
-            
-           .contact-link {
-                word-break: break-all !important;
-                font-size: 1rem !important;
-            }
-            
-            .btn-solid-blue {
-                width: 100% !important;
-                padding: 10px !important;
-                font-size: 13px !important;
-            }
+        .page-desc { 
+          text-align: center; 
+          max-width: 650px; 
+          margin: 0 auto 40px auto; 
         }
+      }
 
-       
-           
-        @media screen and (min-width: 840px) and (max-width: 899px) {
-            
-            .wrap {
-                max-width: 100% !important; 
-                padding: 30px 20px !important; 
-                box-sizing: border-box;
-            }
+      @media screen and (max-width: 380px) {
+        .page-title { margin-left: -10px; margin-bottom: 20px; text-align: center; }
+        .contact-link { word-break: break-all !important; font-size: 1rem !important; }
+        .btn-solid-blue { width: 100% !important; padding: 10px !important; font-size: 13px !important; box-sizing: border-box; }
+      }
 
-           
-            .main-header {
-                display: flex !important;
-                flex-direction: row !important; 
-                justify-content: space-between !important; 
-                align-items: center !important;
-                width: 100% !important; 
-                padding-bottom: 20px !important;
-                margin-bottom: 40px !important;
-                box-sizing: border-box !important;
-            }
+      @media screen and (min-width: 840px) and (max-width: 899px) {
+        .wrap { max-width: 100% !important; padding: 30px 20px !important; }
+        .page-title { text-align: center !important; margin-left: 0; }
+        .page-desc { text-align: center !important; max-width: 650px !important; margin: 0 auto 30px auto !important; }
+      }
 
-            .logo-container  {
-            max-height: 60px;
-            margin-bottom: 15px;
-            display: block;
-        }
+      @media screen and (min-width: 900px) and (max-width: 1023px) {
+        .wrap { max-width: 850px !important; }
+        .page-title { text-align: center !important; margin-left: -100px; font-size: 40px !important; }
+        .page-desc { text-align: center !important; margin-bottom: 25px !important; }
+      }
 
-            .nav-buttons {
-                display: flex !important;
-                gap: 15px !important;
-                margin-right: 0;
-                margin-bottom: -10px;
-                padding-right: 25px !important; 
-            }
+      @media screen and (width: 1024px) and (height: 600px) {
+        .wrap { max-width: 850px !important; }
+        .page-title { text-align: center !important; margin-left: -22px; font-size: 40px !important; }
+        .page-desc { text-align: center !important; margin-bottom: 25px !important; }
+      }
 
-            .page-title {
-                text-align: center !important;
-            }
-            
-            .page-desc {
-                text-align: center !important;
-                max-width: 650px !important;
-                margin: 0 auto 30px auto !important;
-            }
-
-          
-            .policy-card {
-                width: 100% !important;
-                max-width: 750px !important; 
-                margin: 0 auto 20px auto !important;
-                box-sizing: border-box !important;
-            }
-        }
-
-       
-        @media screen and (min-width: 1024px) and (max-width: 1366px) and (min-height: 750px) {
-            
-            html, body {
-                height: 100% !important;
-                min-height: 100vh !important;
-                display: flex !important;
-                flex-direction: column !important;
-                margin: 0 !important;
-            }
-            
-            .wrap {
-              max-width: 1000px;
-              width: 100%;
-              margin: 0 auto;
-              padding: 20px 20px 0 20px !important; 
-              display: flex;
-              flex-direction: column;
-              flex-grow: 1; 
-              box-sizing: border-box;
-            }
-      
-
-              .nav-buttons {
-                justify-content: center;
-            }
-
-            .main-footer {
-                margin-top: auto !important;
-                flex-shrink: 0 !important;
-                width: 100% !important;
-                position: relative !important;
-                bottom: 80px !important;
-            }
-        }
-
-        @media screen and (min-width: 900px) and (max-width: 1023px) {
-             html, body {
-                height: auto !important;
-                min-height: 100vh !important;
-                display: flex !important;
-                flex-direction: column !important;
-                margin: 0 !important;
-            }
-            .wrap {
-                max-width: 850px !important;
-                padding: 20px !important;
-                flex: 1 0 auto !important; 
-                margin: 0 auto !important;
-            }
-          
-            .main-header {
-                margin-bottom: 20px !important;
-            }
-            .page-title {
-                text-align: center !important;
-                margin-left: -100px;
-                font-size: 40px !important;
-            }
-            .page-desc {
-                text-align: center !important;
-                margin-bottom: 25px !important;
-            }
-            .policy-card {
-                padding: 15px 20px !important; 
-                margin-bottom: 15px !important;
-            }
-            .main-footer {
-                margin-top: auto !important;
-                padding: 20px 15px !important;
-                position: relative !important;
-                bottom: 170px;
-                flex-shrink: 0 !important;
-            }
-        }
-
-       @media screen and (width: 1024px) and (height: 600px) {
-            html, body {
-                height: auto !important;
-                min-height: 100vh !important;
-                display: flex !important;
-                flex-direction: column !important;
-                margin: 0 !important;
-            }
-            .wrap {
-                max-width: 850px !important; 
-                padding: 20px !important;
-                flex: 1 0 auto !important; 
-                margin: 0 auto !important;
-            }
-            .main-header {
-                margin-bottom: 20px !important;
-            }
-            .page-title {
-                text-align: center !important;
-                margin-left: -22px;
-                font-size: 40px !important;
-            }
-            .page-desc {
-                text-align: center !important;
-                margin-bottom: 25px !important;
-            }
-            .policy-card {
-                padding: 15px 20px !important;
-                margin-bottom: 15px !important;
-            }
-            
-            .main-footer {
-                margin-top: auto !important;
-                padding: 20px 15px !important;
-                position: relative !important;
-                flex-shrink: 0 !important;
-            }
-        }
-
-        @media screen and (width: 1280px) and (height: 800px) {
-            html, body {
-                height: auto !important;
-                min-height: 100vh !important;
-                display: flex !important;
-                flex-direction: column !important;
-                margin: 0 !important;
-            }
-            .wrap {
-                max-width: 1000px !important; 
-                padding: 25px 30px !important;
-                flex: 1 0 auto !important; 
-                margin: 0 auto !important;
-            }
-            .main-header {
-                margin-bottom: 30px !important;
-            }
-            .page-title {
-                text-align: center !important;
-                margin-right: 350px;
-            }
-            .page-desc {
-                text-align: center !important;
-                margin-bottom: 30px !important;
-            }
-            .main-footer {
-                margin-top: auto !important;
-                padding: 25px 20px !important;
-                position: relative !important;
-                flex-shrink: 0 !important;
-            }
-        }
-
+      @media screen and (width: 1280px) and (height: 800px) {
+        .wrap { padding: 25px 30px !important; }
+        .page-title { text-align: center !important; margin-right: 350px; margin-left: 0; }
+        .page-desc { text-align: center !important; margin-bottom: 30px !important; }
+      }
     </style>
 </head>
 <body>
-
     <div class="wrap">
-        <header class="main-header">
-            <div class="logo-container">
-                <img src="icons/ivgames-logo.webp" alt="IV Games">
-            </div>
-            
-            <div class="nav-buttons">
-                <a class="btn-ghost" href="https://www.itvoice.in/" target="_blank"> Visit Website <span class="arrow" style="font-size: 16px;">&#x2197;</span></a>
-                <a class="btn-ghost btn-blue" href="index.html">← Back to Dashboard</a>
-            </div>
-        </header>
-
-        <h1 class="page-title">Contact Us</h1>
-        <p class="page-desc">If you have any questions, feedback, or issues regarding our games, we would love to hear from you!</p>
-
-        <div class="policy-card">
-            <div class="policy-title">Email Us Directly</div>
-            <p style="line-height: 1.6; margin-bottom: 0;">You can drop us an email anytime at: <br>
-            <a href="mailto:info@itvoice.in" class="contact-link">info@itvoice.in</a></p>
-        </div>
-
-        <div class="policy-card">
-            <div class="policy-title">Corporate & General Enquiries</div>
-            <p style="line-height: 1.6;">For official queries, partnerships, or to contact our official website (<a href="https://www.itvoice.in/" target="_blank" style="color: #4facfe; text-decoration: none;">IT Voice</a>), please visit our main contact page:</p>
-            <a href="https://www.itvoice.in/contactus" class="btn-solid-blue" target="_blank">Visit IT Voice Contact Page</a>
-        </div>
+       <header>
+          <a href="index.html" style="display: flex; align-items: center; text-decoration: none; cursor: pointer;">
+           <img src="icons/ivgames-logo.webp" alt="IV Games" class="logo-dark header-logo">
+           <img src="icons/ivgames-logo-light.webp" alt="IV Games" class="logo-light header-logo">
+        </a> 
         
+        <div class="nav-buttons">
+          <a class="btn-ghost" href="https://www.itvoice.in/" target="_blank"> Visit Website <span class="arrow" style="font-size: 16px;">&#x2197;</span></a>
+          
+          <a class="btn-blue" href="index.html" style="margin: 0;">← Back to Dashboard</a>
+        </div>
+      </header>
+
+      <h1 class="page-title">Contact Us</h1>
+      <p class="page-desc">If you have any questions, feedback, or issues regarding our games, we would love to hear from you!</p>
+
+      <div class="policy-card">
+          <div class="policy-title">Email Us Directly</div>
+          <p style="line-height: 1.6; margin-bottom: 0;">You can drop us an email anytime at: <br>
+          <a href="mailto:info@itvoice.in" class="contact-link">info@itvoice.in</a></p>
+      </div>
+
+      <div class="policy-card">
+          <div class="policy-title">Corporate & General Enquiries</div>
+          <p style="line-height: 1.6;">For official queries, partnerships, or to contact our official website (<a href="https://www.itvoice.in/" target="_blank" style="color: var(--heading-color); text-decoration: none; font-weight: bold;">IT Voice</a>), please visit our main contact page:</p>
+          <a href="https://www.itvoice.in/contactus" class="btn-solid-blue" target="_blank">Visit IT Voice Contact Page</a>
+      </div>
+
     </div>
-
+   
     <footer class="main-footer">
-        <div class="footer-nav">
-            <a href="about.html" style="color: #888; text-decoration: none;">About Us</a>
-            <a href="contact.html" style="color: #4facfe; text-decoration: none;">Contact Us</a>
-            <a href="privacy_policy.html" style="color: #888; text-decoration: none;">Privacy Policy</a>
-            <a href="terms.html" style="color: #888; text-decoration: none;">Terms & Conditions</a>
-            <a href="disclaimer.html" style="color: #888; text-decoration: none;">Disclaimer</a>
-            <a href="cookie_policy.html" style="color: #888; text-decoration: none;">Cookie Policy</a>
-        </div>
-        
-        <div class="copyright-text">
-            <span>&copy; 2026 IV Games. All rights reserved.</span>
-            <span class="copyright-divider">|</span>
-            <span>Designed and Developed by <a href="https://icpljpr.com/" target="_blank" style="color: #4facfe; text-decoration: none; font-weight: bold; transition: 0.3s;" onmouseover="this.style.textShadow='0 0 8px rgba(79, 172, 254, 0.8)'" onmouseout="this.style.textShadow='none'">ICPL</a></span>
-        </div>
+      <div class="footer-nav">
+        <a href="about.html">About Us</a>
+        <a href="contact.html" class="active-link">Contact Us</a>
+        <a href="privacy_policy.html">Privacy Policy</a>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="disclaimer.html">Disclaimer</a>
+        <a href="cookie_policy.html">Cookie Policy</a>
+      </div>
+      
+      <div class="copyright-text">
+        <span>&copy; 2026 IV Games. All rights reserved.</span>
+        <span class="copyright-divider">|</span>
+        <span>Designed and Developed by <a href="https://icpljpr.com/" target="_blank" style="color: var(--heading-color); text-decoration: none; font-weight: bold; transition: 0.3s;">ICPL</a></span>
+      </div>
     </footer>
 
+    <script>
+      function updateFavicon(theme) {
+          const favicon = document.getElementById('favicon');
+          if (favicon) {
+              favicon.href = theme === 'dark' ? 'favicon/favicon.dark.webp' : 'favicon/favicon.light.webp';
+          }
+      }
+
+      const htmlElement = document.documentElement;
+      const metaThemeColor = document.getElementById('meta-theme-color');
+
+      const savedTheme = localStorage.getItem('ivGamesTheme') || 'dark';
+      htmlElement.setAttribute('data-theme', savedTheme);
+      updateFavicon(savedTheme);
+      
+      if (metaThemeColor) {
+          metaThemeColor.setAttribute('content', savedTheme === 'dark' ? '#0f172a' : '#f8fafc');
+      }
+      
+      window.addEventListener('storage', (event) => {
+          if (event.key === 'ivGamesTheme' || !event.key) {
+              const newTheme = localStorage.getItem('ivGamesTheme') || 'dark';
+              htmlElement.setAttribute('data-theme', newTheme);
+              
+              updateFavicon(newTheme);
+              if (metaThemeColor) {
+                  metaThemeColor.setAttribute('content', newTheme === 'dark' ? '#0f172a' : '#f8fafc');
+              }
+          }
+      });
+
+    </script>
 </body>
 </html>
