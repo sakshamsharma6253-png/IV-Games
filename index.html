@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>ITVoice Games | Play Free Online Browser Games</title>
-    <link id="favicon" rel="icon" type="image/webp" href="favicon/favicon.dark.webp">
+    <link id="favicon" rel="icon" type="image/webp" href="favicon/favicon.dark.webp?v=2">
     <meta name="description" content="Welcome to ITVoice Games! Play the best free online web games like King of Ludo, Chess, Sudoku, and more directly in your browser.">
     <link rel="canonical" href="https://itvoicegames.com/">
     <meta name="robots" content="index, follow">
@@ -15,16 +15,16 @@
     <meta property="og:description" content="Play free online browser games including Chess, Ludo, Bus Runner, Tic-Tac-Toe, Mini Sudoku and N-Queens.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://itvoicegames.com/">
-    <meta property="og:image" content="https://itvoicegames.com/assets/og-image.jpg">
+    <meta property="og:image" content="https://itvoicegames.com/assets/og-image.jpg?v=2">
     <meta property="og:site_name" content="ITVoice Games">
     <meta property="og:locale" content="en_US">
    
-    <link rel="preload" as="image" href="icons/ivgames-logo.webp">
+   <link rel="preload" as="image" href="icons/ivgames-logo.webp?v=2" fetchpriority="high">
     
     <style>
       :root, [data-theme="dark"] {
         --bg: #071018;
-        --bg-image: url('image/bg.webp');
+        --bg-image: url('image/bg.webp?v=2');
         --bg-overlay: linear-gradient(rgba(4, 16, 20, 0.82), rgba(7, 16, 24, 0.9));
         --card-top: #081915;
         --card-bottom: #04221a;
@@ -112,7 +112,7 @@
         transition: background-color 0.3s ease, color 0.3s ease;
       }
        
-     .header-logo {
+      .header-logo {
         height: 80px;
         width: auto;
         max-width: 100%;
@@ -309,6 +309,7 @@
         letter-spacing: 1px;
         text-transform: uppercase;
         color: var(--text-main);
+        white-space: nowrap;
       }
 
       .catalog-title h1 span {
@@ -672,6 +673,16 @@
           display: none; 
         }
         .cookie-banner-premium { flex-direction: column; text-align: center; }
+
+        .catalog-title {
+          gap: 10px;
+        }
+        .catalog-title h1 {
+          font-size: 1.6rem; 
+        }
+        .title-line {
+          width: 30px; 
+        }
       }
 
       @media (max-width: 900px) {
@@ -722,8 +733,8 @@
       
       <header>
         <div style="display: flex; align-items: center;">
-           <img src="icons/ivgames-logo.webp" alt="IV Games" class="logo-dark header-logo">
-           <img src="icons/ivgames-logo-light.webp" alt="IV Games" class="logo-light header-logo">
+          <img src="icons/ivgames-logo.webp?v=2" alt="IV Games" class="logo-dark header-logo" fetchpriority="high" width="250" height="80">
+          <img src="icons/ivgames-logo-light.webp?v=2" alt="IV Games" class="logo-light header-logo" width="250" height="80">
         </div> 
         
         <div class="nav-buttons">
@@ -758,7 +769,7 @@
         <div class="card" data-href="tictactoe.html">
           <div class="card-top">
             <div class="card-icon">
-             <img src="icons/tictactoe-logo.webp" loading="lazy" alt="N‑Queens" style="transform: scale(1.30);"> 
+             <img src="icons/tictactoe-logo.webp?v=2" loading="lazy" alt="Tic-Tac-Toe" style="transform: scale(1.30);"> 
             </div>
             <div class="card-info">
               <h2>Tic-Tac-Toe</h2>
@@ -779,7 +790,7 @@
         <div class="card" data-href="minisudoku.html">
           <div class="card-top">
            <div class="card-icon">
-            <img src="icons/MiniSudoko-logo.webp" loading="lazy" alt="N‑Queens" style="transform: scale(1.2);"> 
+            <img src="icons/MiniSudoku-logo.webp?v=2" loading="lazy" alt="Sudoku" style="transform: scale(1.2);"> 
            </div>
             <div class="card-info">
               <h2>Sudoku</h2>
@@ -800,7 +811,7 @@
         <div class="card" data-href="queens.html">
           <div class="card-top">
              <div class="card-icon">
-            <img src="icons/NQueens-logo.webp" loading="lazy" alt="N‑Queens" style="transform: scale(1.18);"> 
+            <img src="icons/NQueens-logo.webp?v=2" loading="lazy" alt="N‑Queens" style="transform: scale(1.18);"> 
            </div>
             <div class="card-info">
               <h2>N‑Queens Puzzle</h2>
@@ -821,7 +832,7 @@
         <div class="card" data-href="chess.html">
           <div class="card-top">
             <div class="card-icon">
-            <img src="icons/chess-logo.webp" loading="lazy" alt="N‑Queens" style="transform: scale(1.25);"> 
+            <img src="icons/chess-logo.webp?v=2" loading="lazy" alt="Chess" style="transform: scale(1.25);"> 
            </div>
             <div class="card-info">
               <h2>Chess Master</h2>
@@ -842,7 +853,7 @@
         <div class="card" data-href="busRunner.html">
           <div class="card-top">
             <div class="card-icon">
-            <img src="icons/BusRunner-logo.webp" loading="lazy" alt="N‑Queens" style="transform: scale(1.20);"> 
+            <img src="icons/BusRunner-logo.webp?v=2" loading="lazy" alt="Bus-Runner" style="transform: scale(1.20);"> 
            </div>
             <div class="card-info">
               <h2>Bus Runner</h2>
@@ -863,7 +874,7 @@
        <div class="card" data-href="ludo.html">
           <div class="card-top">
            <div class="card-icon">
-            <img src="icons/ludo-logo.webp" loading="lazy" alt="N‑Queens" style="transform: scale(1.35);"> 
+            <img src="icons/ludo-logo.webp?v=2" loading="lazy" alt="Ludo" style="transform: scale(1.35);"> 
            </div>
             <div class="card-info">
               <h2>King of Ludo</h2>
@@ -906,7 +917,8 @@
       function updateFavicon(theme) {
           const favicon = document.getElementById('favicon');
           if (favicon) {
-              favicon.href = theme === 'dark' ? 'favicon/favicon.dark.webp' : 'favicon/favicon.light.webp';
+              // CACHE FIX: Javascript wale favicon me bhi ?v=2 laga diya
+              favicon.href = theme === 'dark' ? 'favicon/favicon.dark.webp?v=2' : 'favicon/favicon.light.webp?v=2';
           }
       }
 

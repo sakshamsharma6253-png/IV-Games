@@ -1981,7 +1981,7 @@
       return legal;
     }
 
-    function setDraw(reason) {
+  function setDraw(reason) {
       playChessSound('end'); 
       const overlay = document.getElementById('gameOverOverlay');
       const overlayText = document.getElementById('gameOverText');
@@ -1995,6 +1995,11 @@
       if(document.getElementById('bottom-check-badge')) document.getElementById('bottom-check-badge').style.display = 'none';
 
       window._gameOver = true;
+        if (window._timerInterval) {
+          clearInterval(window._timerInterval);
+          window._timerInterval = null;
+      }
+      
       setTopButtonsState(true); 
       overlay.style.display = 'flex';
     }
@@ -2035,11 +2040,10 @@
 
       if(document.getElementById('top-check-badge')) document.getElementById('top-check-badge').style.display = 'none';
       if(document.getElementById('bottom-check-badge')) document.getElementById('bottom-check-badge').style.display = 'none';
+      if(document.getElementById('top-turn-badge')) document.getElementById('top-turn-badge').style.display = 'none';
+      if(document.getElementById('bottom-turn-badge')) document.getElementById('bottom-turn-badge').style.display = 'none';
 
-      if(moves.length===0){
-        if(document.getElementById('top-turn-badge')) document.getElementById('top-turn-badge').style.display = 'none';
-        if(document.getElementById('bottom-turn-badge')) document.getElementById('bottom-turn-badge').style.display = 'none';
-
+      if(moves.length === 0){
         if(isKingInCheck(window._boardState, opp)) {
           const winnerColor = (opp === 'w') ? 'b' : 'w';
           const winnerName = (window._p1Color === winnerColor) ? window._p1Name : window._p2Name;        
@@ -2064,6 +2068,12 @@
           playChessSound('end'); 
           
           window._gameOver = true;
+          
+          if (window._timerInterval) {
+              clearInterval(window._timerInterval);
+              window._timerInterval = null;
+          }
+          
           setTopButtonsState(true); 
           overlay.style.display = 'flex';
           return;
@@ -2079,6 +2089,12 @@
       let currentPosStr = getBoardString(window._boardState, window._turn);
       window._positionHistory[currentPosStr] = (window._positionHistory[currentPosStr] || 0) + 1;
       if(window._positionHistory[currentPosStr] >= 3) { setDraw("Draw - Threefold Repetition"); return; }
+
+      if (opp === 'w') {
+          document.getElementById('bottom-turn-badge').style.display = 'inline-block';
+      } else {
+          document.getElementById('top-turn-badge').style.display = 'inline-block';
+      }
 
       if(isKingInCheck(window._boardState, opp)) {
          if (opp === window._p1Color) {

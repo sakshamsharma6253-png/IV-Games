@@ -780,10 +780,27 @@
         .choice-row.three { grid-template-columns: repeat(3, 1fr); }
 
         #game-screen { padding-top: 61px; }
-        .controls_row { gap: 8px; }
-        .left_control { flex: 1.2; }
-        .center_control { flex: 1; }
-        .difficulty-badge { display: block; margin-top: 3px; }
+        .controls_row { 
+          flex-wrap: wrap !important;
+          justify-content: space-between; 
+          gap: 12px; 
+        }
+        .left_control { 
+          flex: 0 0 100%; 
+          justify-content: center; 
+        }
+        .center_control { 
+          flex: 1; 
+          justify-content: flex-start; 
+        }
+        .right_control { 
+          flex: 0; 
+        }
+        .difficulty-badge { 
+          display: block; 
+          margin-top: 0; 
+          margin-right: 0; 
+        }
       }
   </style>
 </head>

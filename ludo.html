@@ -18,7 +18,7 @@
     <meta property="og:image" content="https://itvoicegames.com/assets/ludo-logo.jpg">
     <meta property="og:site_name" content="ITVoice Games">
     <meta property="og:locale" content="en_US">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
     <style>  
@@ -57,7 +57,7 @@
      width: 100%;
       }
 
-       /*===========================================
+        /*===========================================
            ----MOBILE COMPATIBLITY FOR ALL DEVICES-----
            =============================================
            --1st All tall tablets (iPad, Surface)--- 
@@ -747,7 +747,7 @@
             cursor: pointer;
         }
 
-      
+       
         @keyframes dice-spin {
             0% { transform: scale(1) rotateX(0deg) rotateY(0deg); }
             25% { transform: scale(1.1) translateY(-10px) rotateX(180deg) rotateY(90deg); }
@@ -844,8 +844,17 @@
                 0%, 100% { opacity: 1; }
                 50% { opacity: 0.78; }
             }
+
+            .premium-rank-card {
+                padding: 10px 15px !important;
+                flex-wrap: nowrap;
+            }
+            .rank-number { font-size: 20px !important; width: 25px !important; }
+            .rank-name { font-size: 14px !important; margin-left: 10px !important; }
+            .rank-score { font-size: 12px !important; }
+            .leaderboard-content { padding: 30px 20px !important; width: 90% !important; }
          }
-          
+         
         .controls {
             margin-top: 95px !important; 
             position: relative;
@@ -918,57 +927,89 @@
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
         }
 
-      
-        .rank-card {
+        .premium-rank-card {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 12px 20px;
             border-radius: 12px;
-            background: rgba( 255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.1);
             border-left: 6px solid #475569;
-            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.5), 0, 4px 6px rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.05), 0 4px 6px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s;
-        }
-        .rank-card.rank-1 {
-            background: linear-gradient(90deg, rgba(251, 191, 36, 0.1) 0%, rgba(255, 255, 255, 0.5) -100%);
-            border-left-color: #fbbf24;
-            transform: scale(1.05);
-            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1), 0 8px 15px rgba(251, 191, 36, 0.2);
+            position: relative;
+            overflow: hidden;
         }
 
-        .rank-card.rank-2{border-left-color: #94a3b8} 
-        .rank-card.rank-3{border-left-color: #b45309} 
+        .premium-rank-card.rank-1 {
+            background: linear-gradient(90deg, rgba(251, 191, 36, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-left-color: #fbbf24;
+            transform: scale(1.05);
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2), 0 8px 20px rgba(251, 191, 36, 0.25);
+            margin-bottom: 10px;
+        }
+
+        .premium-rank-card.rank-2{border-left-color: #94a3b8} 
+        .premium-rank-card.rank-3{border-left-color: #b45309} 
 
         .rank-number {
             font-size: 24px;
             font-weight: 900;
             color: #ffffff;
-            width: 30px;
+            width: 35px;
             text-align: left;
+            font-family: 'Poppins', sans-serif;
+            font-style: italic;
         }
 
         .rank-name {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             color: #e2e8f0;
             flex-grow: 1;
             text-align: left;
             margin-left: 15px;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Poppins', sans-serif;
         }
 
         .rank-score {
-            font-size: 16px;
+            font-size: 14px;
             color: #ffffff;
             font-weight: bold;
+            background: rgba(0,0,0,0.4);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .svg-crown {
+            position: absolute;
+            top: -15px;
+            left: -10px;
+            width: 35px;
+            height: 35px;
+            filter: drop-shadow(0 2px 5px rgba(251,191,36,0.8));
+            transform: rotate(-15deg);
+        }
+
+        .leaderboard-content {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            padding: 40px;
+            border-radius: 20px;
+            border: 4px solid #fbbf24;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.9), inset 0 2px 20px rgba(251,191,36, 0.3);
+            z-index: 1002;
+            width: 80%;
+            max-width: 450px;
+            position: relative;
         }
 
         .confetti-piece {
             position: absolute;
             width: 10px;
             height: 20px;
-            background-color: #f00;
             opacity: 0;
             animation: fall linear forwards;
         }
@@ -981,18 +1022,19 @@
       
         .spark {
             position: absolute;
-            width: 12px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            box-shadow: 0 0 10px 2px rgba( 255, 255, 255, 0.9);
             opacity: 0;
             z-index: 1001;
             pointer-events: none;
+            box-shadow: 0 0 15px 4px currentColor;
         }
 
         @keyframes firework-explode {
             0% { transform: translate(0, 0) scale(1); opacity: 1; }
-            100% {transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translate(var(--tx), calc(var(--ty) + 40px)) scale(0); opacity: 0; }
         }
 
         .modal-overlay {
@@ -1140,7 +1182,7 @@
         .crown-badge {
             position: absolute;
             top: -14px;
-            background: #0f172a; /* Match body background */
+            background: #0f172a;
             color: #fbbf24;
             padding: 0 10px;
             font-size: 22px;
@@ -1212,6 +1254,63 @@
                 line-height: 1.2;
             }
         }
+
+        .premium-modal-box {
+            background: linear-gradient(145deg, #0f172a, #1e293b) !important;
+            border: 2px solid #fbbf24 !important;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 0 20px rgba(251, 191, 36, 0.15) !important;
+        }
+
+        .premium-name-input {
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(15, 23, 42, 0.8) !important;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #ffffff !important;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+        }
+        
+        .premium-name-input::placeholder {
+            color: #64748b;
+            font-weight: normal;
+        }
+
+        .premium-name-input:focus {
+            background: rgba(15, 23, 42, 1) !important;
+            box-shadow: 0 0 10px currentColor, inset 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .premium-toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+        .premium-toggle input { opacity: 0; width: 0; height: 0; }
+        .premium-toggle-slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6); border: 2px solid #475569;
+            transition: .4s; border-radius: 26px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
+        }
+        .premium-toggle-slider:before {
+            position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
+            background-color: #94a3b8; transition: .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .premium-toggle input:checked + .premium-toggle-slider {
+            background-color: rgba(34, 197, 94, 0.2); border-color: #22c55e;
+        }
+        .premium-toggle input:checked + .premium-toggle-slider:before {
+            transform: translateX(24px); background-color: #22c55e; box-shadow: 0 0 10px #22c55e;
+        }
+
     </style>      
 </head>
 <body>
@@ -1382,41 +1481,45 @@
         </div>
 
 
-      <div id="name-input-modal" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); flex-direction: column; align-items: center; justify-content: center; z-index: 105; backdrop-filter: blur(5px);">
-            <div style="position: relative; background: #1e293b; padding: 30px; border-radius: 15px; border: 3px solid #fbbf24; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.8); width: 90%; max-width: 400px;">
-                <button onclick="closeNameInput()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; color: #fbbf24; font-size: 24px; font-weight: bold; cursor: pointer;">✖</button>
-                <h2 style="color: #fbbf24; margin-top: 0; font-family: 'Poppins', sans-serif;">Enter Names</h2>
-                <p style="color: #94a3b8; font-size: 13px; margin-bottom: 15px;">NOTE: Leave blank to use default names</p>
+     <div id="name-input-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content premium-modal-box" style="width: 90%; max-width: 400px; position: relative;">
+            <button onclick="closeNameInput()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; color: #fbbf24; font-size: 24px; font-weight: bold; cursor: pointer; transition: transform 0.2s;">✖</button>
+            <h2 style="color: #fbbf24; margin-top: 0; font-family: 'Poppins', sans-serif; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 2px 5px rgba(0,0,0,0.5);">Enter Names</h2>
+            <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">NOTE: Leave blank to use default names</p>
 
-                <div id="dynamic-name-inputs" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
-                </div>
+            <div id="dynamic-name-inputs" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;"></div>
 
-                <div style="margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(255, 255, 255, 0.05); padding: 10px 15px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1);">
-                    <span style="font-weight: bold; color: #e2e8f0; font-size: 13px; font-family: 'Poppins', sans-serif; text-align: left; line-height: 1.2;">Require Token Kill to enter Home</span>
-                    <input type="checkbox" id="kill-rule-toggle" onchange="updateStartBtnText()" style="width: 20px; height: 20px; cursor: pointer; accent-color: #fbbf24; flex-shrink: 0;">
-                </div>
-
-               <button id="modal-start-btn" onclick="handleInitialStart()" style="background: linear-gradient(to bottom, #22c55e, #16a34a); color: white; padding: 12px 30px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 16px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;">
-                    Start Game
-                </button>
+            <div style="margin-bottom: 25px; display: flex; align-items: center; justify-content: space-between; background: rgba(0, 0, 0, 0.3); padding: 12px 15px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);">
+                <span style="font-weight: bold; color: #e2e8f0; font-size: 14px; font-family: 'Poppins', sans-serif; text-align: left; line-height: 1.2;">Require Token Kill to enter Home</span>
+                <label class="premium-toggle">
+                    <input type="checkbox" id="kill-rule-toggle" onchange="updateStartBtnText()">
+                    <span class="premium-toggle-slider"></span>
+                </label>
             </div>
+
+            <button id="modal-start-btn" onclick="handleInitialStart()" style="background: linear-gradient(135deg, #22c55e, #15803d); color: white; padding: 14px 20px; border: 2px solid #4ade80; border-radius: 12px; font-weight: 900; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 18px; box-shadow: 0 8px 20px rgba(22, 163, 74, 0.4), inset 0 2px 4px rgba(255,255,255,0.3); width: 100%; text-transform: uppercase; letter-spacing: 1px; transition: transform 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;">
+                Start Game
+            </button>
         </div>
+    </div>
 
     </div>
   
-    <div id="leaderboard-modal" style="display: none; position: absolute; top: 0%; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); flex-direction: column; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(5px);">
+    <div id="leaderboard-modal" class="modal-overlay" style="display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(8px);">
         <div id="confetti-container" style="position: absolute; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 1001;"></div>
 
-        <div style="background: linear-gradient(145deg, #1e293b, #0f172a ); padding: 40px; border-radius: 20px; border: 4px solid #fbbf24; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.9), inset 0 2px 10px rgba(255,215,0, 0.2); z-index: 1002; width: 80%; max-width: 400px; position:relative;">
+        <div class="leaderboard-content">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 100px; height: 100px; filter: drop-shadow(0 5px 15px rgba(251,191,36,0.6)); margin-top: -90px; margin-bottom: 10px;">
+                <path fill="#fbbf24" d="M470.5 124.6c-13.1-9.7-31.5-6.2-40.4 8L361.3 248.5 282.8 91.6c-7.3-14.6-28.3-14.6-35.6 0L168.7 248.5 99.9 132.6c-8.9-14.2-27.3-17.7-40.4-8-14.4 10.6-18.4 30.6-9.1 45.6l96 156.9v10.9H365.6v-10.9l96-156.9c9.3-15 5.3-35-9.1-45.6zM64 416h384v32H64z"/>
+            </svg>
 
-            <div style="font-size: 60px; margin-top: -70px; text-shadow: 0 5px 15px rgba(251,191,36, 0.5);">👑</div>
-
-            <h2 style="color: #fbbf24; margin-top: 10px; margin-bottom: 30px; font-size: 32px; font-family: 'Poppins', sans-serif; text-transform: uppercase; letter-spacing: 2px;">Match Result</h2>
+            <h2 style="color: #fbbf24; margin-top: 0px; margin-bottom: 30px; font-size: 32px; font-family: 'Poppins', sans-serif; text-transform: uppercase; letter-spacing: 2px;">Match Result</h2>
 
             <div id="leaderboard-ranks" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;">
             </div>
           
-            <button onclick="goHome()" style="background: linear-gradient(to bottom, #fbbf24, #d97706); color: #1e293b; padding: 12px 25px; border: none; border-radius: 10px; font-weight: 900; font-size: 18px; cursor: pointer; box-shadow: 0 6px #b45309, 0 10px 15px rgba(0,0,0,0.5); transition: transform 0.1s, box-shadow 0.1s; width: 100%;">Home Menu</button>
+            <button onclick="goHome()" style="background: linear-gradient(to bottom, #fbbf24, #d97706); color: #1e293b; padding: 12px 25px; border: none; border-radius: 10px; font-weight: 900; font-family: 'Poppins', sans-serif; font-size: 18px; cursor: pointer; box-shadow: 0 6px #b45309, 0 10px 15px rgba(0,0,0,0.5); transition: transform 0.1s, box-shadow 0.1s; width: 100%; text-transform: uppercase; letter-spacing: 1px;">Home Menu</button>
         </div>
     </div>
 
@@ -1426,7 +1529,7 @@
             <h2 style="margin-bottom: -80px; font-size: 50px; color: #fba824; text-shadow: 1px 1px 2px #000; font-family: 'Poppins', sans-serif; font-weight: bold;">King of Ludo - Master</h2>
         </div>
 
-    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: flex-end; background: transparent; margin-bottom: 10px; padding-right: 20px; box-sizing: border-box; gap: 10px;">
+    <div id="game-back-btn" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: flex-end; background: transparent; margin-bottom: 10px; padding-right: 20px; box-sizing: border-box; gap: 10px;">
             <button onclick="goHome()" style="background-color: #eab308; color: #121212; padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; font-family: 'Poppins',sans-serif; white-space: nowrap; box-shadow: 0 4px 10px rgba(0,0,0,0.3);"> &#11013; Back to Home Screen</button>
         </div>
 
@@ -1464,7 +1567,6 @@
                 <div id="ludo-board" class="board"></div>
             </div> 
         </div> 
-
     </div>
 
    <script>
@@ -1834,31 +1936,27 @@
 
             if(pendingGameMode === 'PvP' || pendingGameMode === 'Pv2_HUMAN') {
                 defaultName = `Player ${humanIdx++}`;
-                nameContainer.innerHTML += `
-                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 5px 10px; border-radius: 8px; border-left: 4px solid ${colorHex};">
-                    <div class="modal-pin" style="background-color: ${colorHex} !important; transform: scale(0.6) rotate(-45deg); margin-left: -5px;"></div>
-                    <input type="text" id="input-name-${color}" placeholder="${defaultName}" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g, '')" style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.9); color: #121212; font-weight: bold; width: 70%; font-family: 'Poppins', sans-serif;" maxlength="12">
-                </div>
-                `;
             } else {
                 if(color === humanPlayerColor){
                     defaultName = 'YOU';
-                    nameContainer.innerHTML += `
-                    <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.3); padding: 5px 10px; border-radius: 8px; border-left: 4px solid ${colorHex};">
-                        <div class="modal-pin" style="background-color: ${colorHex} !important; transform: scale(0.6) rotate(-45deg); margin-left: -5px;"></div>
-                        <input type="text" id="input-name-${color}" placeholder="${defaultName}" oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g, '')" style="padding: 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.9); color: #121212; font-weight: bold; width: 70%; font-family: 'Poppins', sans-serif;" maxlength="12"> 
-                    </div>
-                    `;
                 } else {
                     playerCustomNames[color] = `Computer ${compIdx++}`;
+                    return; 
                 }
             }
+            nameContainer.innerHTML += `
+            <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.4); padding: 8px 12px; border-radius: 10px; border-left: 5px solid ${colorHex}; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                <div class="modal-pin" style="background-color: ${colorHex} !important; transform: scale(0.65) rotate(-45deg); margin-left: -5px; flex-shrink: 0; box-shadow: 0 0 10px ${colorHex}; border-color: #fff;"></div>
+                <div style="width: 75%; position: relative;">
+                    <input type="text" id="input-name-${color}" class="premium-name-input" placeholder="${defaultName}" oninput="this.value=this.value.replace(/[^a-zA-Z0-9 ]/g, '')" style="color: ${colorHex} !important; border-color: ${colorHex};" maxlength="25">
+                </div>
+            </div>
+            `;
         });
 
         updateStartBtnText();
         document.getElementById('name-input-modal').style.display = 'flex';
     }
-
 
     function confirmNames() {
         let humanIdx = 1;
@@ -2037,7 +2135,7 @@
                 else if (row === 6 && col === 7) cells[i].style.backgroundColor = '#22c55e';
                 else if (row === 7 && col === 8) cells[i].style.backgroundColor = '#eab308';
                 else if (row === 8 && col === 7) cells[i].style.backgroundColor = '#3b82f6';                 
-                else if (row === 7 && col === 7) cells[i].style.background = 'conic-gradient(from 315deg, #22c55e 0 90deg, #eab308 0 180deg, #3b82f6 0 270deg, #ef4444 0 360deg)';                                                                                                                                                                             
+                else if (row === 7 && col === 7) cells[i].style.background = 'conic-gradient(from 315deg, #22c55e 0 90deg, #eab308 0 180deg, #3b82f6 0 270deg, #ef4444 0 360deg)';                                                                                                      
                 else if (row === 6 && col === 6) cells[i].style.background = 'linear-gradient(to bottom left, #22c55e 50%, #ef4444 50%)';
                 else if (row === 6 && col === 8) cells[i].style.background = 'linear-gradient(to bottom right, #22c55e 50%, #eab308 50%)';
                 else if (row === 8 && col === 6) cells[i].style.background = 'linear-gradient(to bottom right, #ef4444 50%, #3b82f6 50%)';
@@ -2989,6 +3087,12 @@ function passTurn(isTimeout = false) {
     }
 
         function showLeaderboard() {
+            // NAYA FIX: Disable background buttons when leaderboard shows up
+            document.getElementById('game-controls').style.display = 'none';
+            document.getElementById('game-back-btn').style.display = 'none';
+            const floatingStatus = document.getElementById('floating-status');
+            if (floatingStatus) floatingStatus.remove();
+
             let playerScores = [];
             playingColors.forEach(color => {
                 let score = 0;
@@ -3023,10 +3127,20 @@ function passTurn(isTimeout = false) {
                 
                 let colorHex = playerColors[players.indexOf(p.color)];
 
+                // NAYA FIX: Premium rank cards and SVG Crown for Rank 1
+                let svgCrown = '';
+                if(rankNum === 1) {
+                    svgCrown = `
+                    <svg class="svg-crown" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="#fbbf24" d="M470.5 124.6c-13.1-9.7-31.5-6.2-40.4 8L361.3 248.5 282.8 91.6c-7.3-14.6-28.3-14.6-35.6 0L168.7 248.5 99.9 132.6c-8.9-14.2-27.3-17.7-40.4-8-14.4 10.6-18.4 30.6-9.1 45.6l96 156.9v10.9H365.6v-10.9l96-156.9c9.3-15 5.3-35-9.1-45.6zM64 416h384v32H64z"/>
+                    </svg>`;
+                }
+
                 let cardHTML = `
-                <div class="rank-card rank-${rankNum}">
+                <div class="premium-rank-card rank-${rankNum}">
+                    ${svgCrown}
                     <div class="rank-number">#${rankNum}</div>
-                    <div class="modal-pin" style="background-color: ${colorHex} !important; transform: scale(0.7) rotate(-45deg);"></div>
+                    <div class="modal-pin" style="background-color: ${colorHex} !important; transform: scale(0.65) rotate(-45deg); margin-left: 5px;"></div>
                     <div class="rank-name" style="color: ${colorHex}"> ${name}</div>
                     <div class="rank-score"> ${p.score}/4 IN</div>
                 </div>
@@ -3043,21 +3157,23 @@ function passTurn(isTimeout = false) {
             const container = document.getElementById('confetti-container');
             if(!container) return;
         
-        const colors = ['#ef4444', '#22c55e', '#eab308', '#3b82f6', '#ffffff', '#f472b6'];
-        const fireworkColor =colors[Math.floor(Math.random() * colors.length)];
+        const colors = ['#ef4444', '#22c55e', '#eab308', '#3b82f6', '#ffffff', '#f472b6', '#34d399'];
+        const fireworkColor = colors[Math.floor(Math.random() * colors.length)];
 
         const startX = 10 + Math.random() * 80;
-        const startY = 10 + Math.random() * 80;
+        const startY = 10 + Math.random() * 60; // Keep slightly higher
 
-        for(let i=0; i<65; i++) {
+        for(let i=0; i<85; i++) { // Increased particles
             let spark = document.createElement('div');
             spark.className = 'spark';
+            // NAYA FIX: Use currentColor for glow effect in CSS
+            spark.style.color = fireworkColor;
             spark.style.backgroundColor = fireworkColor;
             spark.style.left = startX + '%';
             spark.style.top = startY + '%';
         
         const angle = Math.random() * Math.PI * 2;
-        const velocity = 80 + Math.random() * 200; 
+        const velocity = 80 + Math.random() * 250; 
         const tx = Math.cos(angle) * velocity + 'px';     
         const ty = Math.sin(angle) * velocity + 'px';
         
@@ -3090,9 +3206,8 @@ function passTurn(isTimeout = false) {
             if(winCrackerInterval) clearInterval(winCrackerInterval);
 
             launchFirework();
-            setTimeout(launchFirework, 300);
-            setTimeout(launchFirework, 600);
-            setTimeout(launchFirework, 900);
+            setTimeout(launchFirework, 400);
+            setTimeout(launchFirework, 800);
 
             winCrackerInterval = setInterval(() => {
                 if (typeof winSound != 'undefined') {
@@ -3104,8 +3219,7 @@ function passTurn(isTimeout = false) {
                 setTimeout(launchFirework, 350);
                 setTimeout(launchFirework, 700);
                 setTimeout(launchFirework, 1100);
-                setTimeout(launchFirework, 1500);
-            }, 2000);
+            }, 2500);
         }  
         
         function checkWinCondition() {
