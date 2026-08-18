@@ -597,25 +597,24 @@
         box-sizing: border-box;
       }
 
-      .controls_row {
+     .controls_row {
         display: flex;
         justify-content: space-between;
         align-items: center;
         width: 100%;
         gap: 15px;
-        flex-wrap: nowrap !important;
+        flex-wrap: wrap;
       }
 
       .left_control {
-        flex: 1.1;
+        flex: 1;
         display: flex;
         justify-content: flex-start;
         min-width: 0;
-        white-space: nowrap;
       }
-     
+      
       .center_control {
-        flex: 1.2;
+        flex: 1;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -624,7 +623,7 @@
       }
 
       .right_control {
-        flex: 0.8;
+        flex: 1;
         display: flex;
         justify-content: flex-end;
         min-width: 0;
@@ -780,14 +779,15 @@
         .choice-row.three { grid-template-columns: repeat(3, 1fr); }
 
         #game-screen { padding-top: 61px; }
-        .controls_row { 
-          flex-wrap: wrap !important;
+       .controls_row { 
+          flex-wrap: wrap;
           justify-content: space-between; 
           gap: 12px; 
         }
         .left_control { 
           flex: 0 0 100%; 
-          justify-content: center; 
+          justify-content: flex-start;
+          margin-bottom: 5px;
         }
         .center_control { 
           flex: 1; 
@@ -795,6 +795,7 @@
         }
         .right_control { 
           flex: 0; 
+          justify-content: flex-end;
         }
         .difficulty-badge { 
           display: block; 

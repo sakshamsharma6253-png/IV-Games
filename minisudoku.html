@@ -622,6 +622,264 @@
       }
       .modal-box h3 { color: var(--ink); margin: 0; font-size: 20px; }
 
+      .stats-premium-box {
+        width: min(520px, 92vw);
+        background: #0b132b; 
+        border: 1px solid rgba(137, 166, 255, 0.15);
+        box-shadow: 0 25px 65px rgba(0, 0, 0, 0.5), 0 0 40px rgba(93, 124, 255, 0.1);
+        padding: 24px; 
+        border-radius: 20px; 
+        display: flex; 
+        flex-direction: column; 
+        gap: 18px; 
+        text-align: left;
+        color: #fff;
+      }
+      
+      [data-theme="light"] .stats-premium-box {
+        background: #ffffff;
+        border: 1px solid var(--line);
+        color: var(--ink);
+        box-shadow: 0 25px 65px rgba(0, 0, 0, 0.1);
+      }
+
+      .stats-header-row {
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        margin-bottom: 5px;
+      }
+      .stats-header-title {
+        display: flex; 
+        align-items: center; 
+        gap: 10px; 
+        font-size: 22px; 
+        font-weight: 900; 
+        letter-spacing: 0.5px;
+      }
+      .stats-header-title span { 
+        color: #5d7cff; 
+    }
+      
+      .stats-close-btn {
+        background: rgba(255,255,255,0.05); 
+        border: 1px solid rgba(255,255,255,0.1); 
+        border-radius: 50%;
+        width: 32px; 
+        height: 32px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        color: #a8b8d6; 
+        cursor: pointer; 
+        transition: 0.2s;
+      }
+      [data-theme="light"] .stats-close-btn { 
+        background: var(--btn-bg); 
+        border-color: var(--line); 
+        color: var(--ink); 
+     }
+      .stats-close-btn:hover { 
+        background: var(--red); 
+        color: white; 
+        border-color: var(--red); 
+        transform: scale(1.1); 
+     }
+
+      .stats-section-lbl {
+        font-size: 11px; 
+        font-weight: 800; 
+        color: #a8b8d6; 
+        letter-spacing: 1px; 
+        text-transform: uppercase; 
+        margin-bottom: -10px;
+      }
+      [data-theme="light"] .stats-section-lbl { 
+        color: var(--muted); 
+      }
+
+      .stats-tab-group {
+        display: flex; 
+        background: rgba(0,0,0,0.2); 
+        border-radius: 12px; 
+        padding: 4px; 
+        border: 1px solid rgba(137, 166, 255, 0.1);
+      }
+      [data-theme="light"] .stats-tab-group { 
+        background: var(--nav-group-bg); 
+        border-color: var(--line); 
+      }
+      
+      .stats-tab-btn {
+        flex: 1; 
+        padding: 8px 0; 
+        font-size: 13px; 
+        font-weight: bold; 
+        background: transparent; 
+        border: none;
+        color: #a8b8d6; 
+        border-radius: 8px; 
+        cursor: pointer; 
+        transition: 0.3s;
+      }
+      [data-theme="light"] .stats-tab-btn { 
+        color: var(--muted); 
+      }
+      .stats-tab-btn.is-selected {
+        background: linear-gradient(135deg, #5d7cff, #8b5cf6); 
+        color: white; 
+        box-shadow: 0 4px 12px rgba(93, 124, 255, 0.3);
+      }
+
+      .stats-grid-3 { 
+        display: grid; 
+        grid-template-columns: repeat(3, 1fr); 
+        gap: 10px; 
+      }
+      .stats-grid-2 { 
+        display: grid; 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 10px; 
+      }
+
+      .stat-card-premium {
+        background: rgba(16, 27, 68, 0.6); 
+        border: 1px solid rgba(137, 166, 255, 0.1);
+        border-radius: 14px; 
+        padding: 14px 10px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        gap: 12px; 
+        flex-direction: column;
+      }
+      [data-theme="light"] .stat-card-premium { 
+        background: var(--setup-group-bg); 
+        border-color: var(--line);
+      }
+      
+      .stat-card-premium .sc-icon { 
+        width: 32px; 
+        height: 32px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+      }
+      .stat-card-premium .sc-info { 
+        text-align: center; 
+      }
+      .stat-card-premium .sc-val { 
+        font-size: 20px; 
+        font-weight: 900; 
+        color: #fff; 
+        line-height: 1; 
+        margin-bottom: 4px; 
+      }
+      [data-theme="light"] .stat-card-premium .sc-val { 
+        color: var(--ink); 
+      }
+      .stat-card-premium .sc-lbl { 
+        font-size: 11px; 
+        color: #a8b8d6; 
+        font-weight: 600; 
+      }
+      [data-theme="light"] .stat-card-premium .sc-lbl { 
+        color: var(--muted); 
+      }
+
+      .stats-grid-2 .stat-card-premium { 
+        flex-direction: row; 
+        text-align: left; 
+        padding: 16px; 
+        justify-content: flex-start; 
+      }
+      .stats-grid-2 .sc-info { 
+        text-align: left; 
+      }
+      
+      .recent-activity-list {
+        display: flex; 
+        flex-direction: column; 
+        gap: 8px; 
+        max-height: 160px; 
+        overflow-y: auto; padding-right: 5px;
+      }
+      .recent-activity-list::-webkit-scrollbar { width: 4px; }
+      .recent-activity-list::-webkit-scrollbar-thumb { 
+        background: rgba(137, 166, 255, 0.2); border-radius: 10px; 
+    }
+      
+      .ra-item {
+        display: flex; 
+        align-items: center; 
+        justify-content: space-between; 
+        background: rgba(0,0,0,0.15); 
+        padding: 10px 12px; 
+        border-radius: 10px; 
+        border: 1px solid rgba(137, 166, 255, 0.05);
+      }
+      [data-theme="light"] 
+      .ra-item { background: var(--btn-bg); 
+        border-color: var(--line); 
+      }
+      
+      .ra-left { 
+        display: flex; 
+        align-items: center; 
+        gap: 10px; 
+        width: 35%; 
+      }
+      .ra-size { 
+        font-size: 13px; 
+        font-weight: bold; 
+        color: #a8b8d6; 
+      }
+      [data-theme="light"] .ra-size { 
+        color: var(--ink); 
+      }
+      
+      .ra-badge { 
+        font-size: 10px; 
+        font-weight: 800; 
+        padding: 3px 8px; 
+        border-radius: 6px; 
+        text-transform: uppercase; 
+        color: white;
+      }
+      .bdg-easy { background: #10b981; }
+      .bdg-medium { background: #3b82f6; }
+      .bdg-hard { background: #8b5cf6; }
+
+      .ra-time { 
+        font-size: 12px; 
+        color: #a8b8d6; 
+        display: flex; 
+        align-items: center; 
+        gap: 4px; 
+        font-weight: 600; 
+        width: 30%; 
+        justify-content: center; 
+      }
+      [data-theme="light"] .ra-time { 
+        color: var(--muted);
+      }
+      
+      .ra-status { 
+        font-size: 12px; 
+        font-weight: bold; 
+        display: flex; 
+        align-items: center; 
+        gap: 6px; 
+        width: 35%; 
+        justify-content: flex-end; 
+      }
+      .st-won { 
+        color: #10b981; 
+      }
+      .st-lost { 
+        color: #ff4d5f; 
+      }
+
       @media (max-width: 680px) {
         .screen { padding: 74px 14px 22px; justify-content: flex-start; }
         .exit-btn, .back-link { top: 12px; padding: 8px 12px; font-size: 12px; }
@@ -699,38 +957,77 @@
   </div>
 
   <div id="statsModal" class="modal-overlay">
-      <div class="modal-box" style="padding: 20px;">
-          <h3 style="color: var(--ink); font-size: 20px; margin-bottom: 10px;">Your Statistics</h3>
-          <div style="display: flex; background: var(--nav-group-bg); border-radius: 8px; padding: 4px; margin-bottom: 8px; border: 1px solid var(--line);">
-              <button class="choice-btn stat-size-btn is-selected" data-stat-size="4" style="flex: 1; min-height: 30px; font-size: 11px;">4x4</button>
-              <button class="choice-btn stat-size-btn" data-stat-size="6" style="flex: 1; min-height: 30px; font-size: 11px; border: none; background: transparent; color: var(--ink);">6x6</button>
-              <button class="choice-btn stat-size-btn" data-stat-size="9" style="flex: 1; min-height: 30px; font-size: 11px; border: none; background: transparent; color: var(--ink);">9x9</button>
+      <div class="stats-premium-box">
+          
+          <div class="stats-header-row">
+              <div class="stats-header-title">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ffd166" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+                  YOUR <span>STATISTICS</span>
+              </div>
+              <button class="stats-close-btn" onclick="document.getElementById('statsModal').style.display='none'">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+          </div>
+
+          <div class="stats-section-lbl">PUZZLE SIZE</div>
+          <div class="stats-tab-group">
+              <button class="stats-tab-btn stat-size-btn is-selected" data-stat-size="4">4x4</button>
+              <button class="stats-tab-btn stat-size-btn" data-stat-size="6">6x6</button>
+              <button class="stats-tab-btn stat-size-btn" data-stat-size="9">9x9</button>
           </div>
         
-          <div style="display: flex; background: var(--nav-group-bg); border-radius: 8px; padding: 4px; margin-bottom: 15px; border: 1px solid var(--line);">
-              <button class="choice-btn stat-tab-btn is-selected" data-stat-diff="easy" style="flex: 1; min-height: 30px; font-size: 11px;">Easy</button>
-              <button class="choice-btn stat-tab-btn" data-stat-diff="medium" style="flex: 1; min-height: 30px; font-size: 11px; border: none; background: transparent; color: var(--ink);">Medium</button>
-              <button class="choice-btn stat-tab-btn" data-stat-diff="hard" style="flex: 1; min-height: 30px; font-size: 11px; border: none; background: transparent; color: var(--ink);">Hard</button>
+          <div class="stats-section-lbl">DIFFICULTY</div>
+          <div class="stats-tab-group">
+              <button class="stats-tab-btn stat-tab-btn-diff is-selected" data-stat-diff="easy">Easy</button>
+              <button class="stats-tab-btn stat-tab-btn-diff" data-stat-diff="medium">Medium</button>
+              <button class="stats-tab-btn stat-tab-btn-diff" data-stat-diff="hard">Hard</button>
           </div>
-          <div class="setup-grid" style="grid-template-columns: 1fr 1fr; gap: 10px;">
-              <div class="setup-group" style="padding: 12px; text-align: center;">
-                  <div id="statPlayed" style="font-size: 22px; color: var(--ink); font-weight: bold;">0</div>
-                  <div style="font-size: 11px; color: var(--muted);">Games Played</div>
+
+          <div class="stats-grid-3">
+              <div class="stat-card-premium">
+                  <div class="sc-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19c-1.5 0-2.5-2-2.5-2H9s-1 2-2.5 2c-1.5 0-2-1.5-2-3l1-8c.5-2 2-3 4-3h5c2 0 3.5 1 4 3l1 8c0 1.5-.5 3-2 3Z"></path><path d="M8 11h2"></path><path d="M9 10v2"></path><line x1="15" y1="11" x2="15.01" y2="11"></line><line x1="16" y1="10" x2="16.01" y2="10"></line></svg></div>
+                  <div class="sc-info">
+                      <div class="sc-val" id="statPlayed">0</div>
+                      <div class="sc-lbl">Games Played</div>
+                  </div>
               </div>
-              <div class="setup-group" style="padding: 12px; text-align: center;">
-                  <div id="statWon" style="font-size: 22px; color: var(--ink); font-weight: bold;">0</div>
-                  <div style="font-size: 11px; color: var(--muted);">Games Won</div>
+              <div class="stat-card-premium">
+                  <div class="sc-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg></div>
+                  <div class="sc-info">
+                      <div class="sc-val" id="statWon">0</div>
+                      <div class="sc-lbl">Games Won</div>
+                  </div>
               </div>
-              <div class="setup-group" style="padding: 12px; text-align: center;">
-                  <div id="statBest" style="font-size: 18px; color: var(--gold); font-weight: bold;">--:--</div>
-                  <div style="font-size: 11px; color: var(--muted);">Best Time</div>
-              </div>
-              <div class="setup-group" style="padding: 12px; text-align: center;">
-                  <div id="statAvg" style="font-size: 18px; color: var(--gold); font-weight: bold;">--:--</div>
-                  <div style="font-size: 11px; color: var(--muted);">Average Time</div>
+              <div class="stat-card-premium">
+                  <div class="sc-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+                  <div class="sc-info">
+                      <div class="sc-val" id="statWinPct">0%</div>
+                      <div class="sc-lbl">Win Rate</div>
+                  </div>
               </div>
           </div>
-        <button class="control_btn" onclick="document.getElementById('statsModal').style.display='none'" style="margin-top: 20px; font-size: 20px; height: 45px; width: 100%; border-radius: 12px; letter-spacing: 0.5px;">Close</button>
+
+          <div class="stats-grid-2">
+              <div class="stat-card-premium">
+                  <div class="sc-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M10 2h4"></path><path d="M12 2v2"></path></svg></div>
+                  <div class="sc-info">
+                      <div class="sc-val" id="statBest">--:--</div>
+                      <div class="sc-lbl">Best Time</div>
+                  </div>
+              </div>
+              <div class="stat-card-premium">
+                  <div class="sc-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+                  <div class="sc-info">
+                      <div class="sc-val" id="statAvg">--:--</div>
+                      <div class="sc-lbl">Average Time</div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="stats-section-lbl" style="margin-top: 5px;">RECENT ACTIVITY</div>
+          <div class="recent-activity-list" id="recentActivityList">
+          </div>
+
       </div>
   </div>
 
@@ -823,7 +1120,7 @@
               Settings
             </button>
           </div>
-          </div>
+        </div>
 
         <div id="new-game-setup" style="display: none; margin-top: 25px;">
           <div class="setup-grid">
@@ -1084,7 +1381,21 @@
     let hintsLeft = 3;
     let hintsUsed = 0;
     let mistakes = 0;
+    let totalMistakes = 0;
     let revivesUsed = 0;
+    
+    let gameHistory = JSON.parse(localStorage.getItem('itvoice_sudoku_history')) || [];
+    let hasRecordedThisGame = false;
+    
+    function addHistory(status) {
+        if (hasRecordedThisGame) return; 
+        hasRecordedThisGame = true;
+        
+        let entry = { size: currentSize, diff: currentDifficulty, time: secondsElapsed, status: status };
+        gameHistory.unshift(entry);
+        if (gameHistory.length > 20) gameHistory.pop(); 
+        localStorage.setItem('itvoice_sudoku_history', JSON.stringify(gameHistory));
+    }
     
     const homeScreen = document.getElementById('home-screen');
     const gameScreen = document.getElementById('game-screen');
@@ -1119,6 +1430,7 @@
     }
 
   function triggerGameOver() {
+        if (!isGameWon) addHistory('Lost');
         isGameWon = true; 
         document.querySelectorAll('.num-btn, .action-btn').forEach(btn => btn.disabled = true);
         document.querySelector('.match-meta').style.pointerEvents = 'none';
@@ -1202,10 +1514,12 @@
             hintsLeft = savedData.hints !== undefined ? savedData.hints : 3;
             hintsUsed = savedData.hintsUsed || 0;
             mistakes = savedData.mistakes || 0;
+            totalMistakes = savedData.totalMistakes || mistakes;
             revivesUsed = savedData.revivesUsed || 0;
             undoStack = savedData.undo || [];
             redoStack = savedData.redo || [];
             isGameWon = false;
+            hasRecordedThisGame = false;
             
             document.getElementById('hintText').innerText = hintsLeft > 0 ? `Hint (${hintsLeft})` : `Hint`;
             document.getElementById('adBadge').style.display = hintsLeft === 0 ? 'flex' : 'none';
@@ -1240,27 +1554,24 @@
         }, 300);
     });
 
-    document.getElementById('loserNewGameBtn').addEventListener('click', () => {
-        document.getElementById('loser-overlay').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('loser-overlay').style.display = 'none';
-            currentPuzzleNum++;
-            if (typeof randomSeedOffset !== 'undefined') randomSeedOffset = Math.floor(Math.random() * 100000);
-            startGame();
-        }, 300);
-    });
-
     document.getElementById('reviveAdBtn').addEventListener('click', function() {
         const btn = this;
-        btn.innerText = " Playing Ad...";
+        btn.innerText = "⏳ Playing Ad...";
         btn.disabled = true;
         
         setTimeout(() => {
+            btn.innerText = "▶ Watch Ad";
             btn.disabled = false;
+            
+            if (gameHistory.length > 0 && gameHistory[0].status === 'Lost') {
+                gameHistory.shift(); 
+                localStorage.setItem('itvoice_sudoku_history', JSON.stringify(gameHistory));
+            }
             
             revivesUsed++;
             mistakes = 0;
             isGameWon = false; 
+            hasRecordedThisGame = false;
             
             updateMistakesDisplay();
             
@@ -1314,7 +1625,6 @@
             document.getElementById('puzzleId').innerText = "#" + currentPuzzleNum;
             document.getElementById('navGroup').style.visibility = 'visible'; 
         }
-        
 
         document.getElementById('timerDisplay').style.opacity = userSettings.timer ? '1' : '0';
         
@@ -1501,10 +1811,13 @@
             userStats[currentSize][currentDifficulty].played++;
             localStorage.setItem(statsKey, JSON.stringify(userStats));
         }
+        hintsLeft = 3;
         hintsUsed = 0;
         mistakes = 0;
+        totalMistakes = 0;
         revivesUsed = 0;
         isGameWon = false; 
+        hasRecordedThisGame = false;
 
         document.querySelectorAll('.num-btn, .action-btn').forEach(btn => btn.disabled = false);
         
@@ -1576,6 +1889,12 @@
                         return;
                     }
 
+                    if (fixedCells[r][c] || td.classList.contains('completed-set')) {
+                        document.querySelectorAll('td').forEach(cell => cell.classList.remove('selected'));
+                        selectedCell = null;
+                        return; 
+                    }
+
                     document.querySelectorAll('td').forEach(cell => cell.classList.remove('selected'));
                     td.classList.add('selected');
                     selectedCell = td;
@@ -1629,8 +1948,16 @@
         }
     }
 
-    function updateCell(r, c, val, isUndoRedo = false) {
+  function updateCell(r, c, val, isUndoRedo = false) {
         if (!fixedCells[r][c]) {
+            const td = table.rows[r].cells[c];
+            
+            if (!isUndoRedo && td.classList.contains('completed-set')) {
+                td.classList.remove('selected'); 
+                if (selectedCell === td) selectedCell = null;
+                return; 
+            }
+            
             let oldVal = curPuzzle[r][c];
             
             if (!isUndoRedo && oldVal !== val) {
@@ -1639,7 +1966,6 @@
             }
 
             curPuzzle[r][c] = val;
-            const td = table.rows[r].cells[c];
             td.textContent = val ? val : "\u200B";
             
             if(val) td.classList.add('user-input');
@@ -1647,6 +1973,7 @@
             
             if (val !== 0 && val !== solution[r][c] && oldVal !== val && !isUndoRedo) {
                 mistakes++;
+                totalMistakes++;
                 updateMistakesDisplay();
                 
                 if (userSettings.limit && mistakes >= getMistakeLimit()) {
@@ -1678,15 +2005,21 @@
         }
         
         if (isFull && isCorrect) {
+            if (!isGameWon) addHistory('Won');
             isGameWon = true;
             document.querySelectorAll('.num-btn, .action-btn').forEach(btn => btn.disabled = true);
             document.querySelector('.match-meta').style.pointerEvents = 'none'; 
             localStorage.removeItem(storageKey);
             clearInterval(timerInterval);
 
-            if (!isDailyChallenge) {
+           if (!isDailyChallenge) {
                 let dStats = userStats[currentSize][currentDifficulty];
                 dStats.won++; 
+                
+                if (dStats.played < dStats.won) {
+                    dStats.played = dStats.won; 
+                }
+                
                 dStats.time += secondsElapsed;
                 if (dStats.best === null || secondsElapsed < dStats.best) {
                     dStats.best = secondsElapsed;
@@ -1713,12 +2046,10 @@
 
             document.getElementById('winTime').innerText = formatTime(secondsElapsed);
             document.getElementById('winHints').innerText = `${hintsUsed}`;
-            document.getElementById('winMistakes').innerText = `${mistakes}`;
+            document.getElementById('winMistakes').innerText = `${totalMistakes}`;
             document.getElementById('winTotalTime').innerText = formatTime(totalSecs);
             document.getElementById('winBestTime').innerText = formatTime(parseInt(bestTime));
             document.getElementById('winAvgTime').innerText = formatTime(avgSecs);
-            
-
             
             setTimeout(() => {
                 const overlay = document.getElementById('winner-overlay');
@@ -1848,13 +2179,24 @@
         }
     }
 
-    function provideHint() {
+  function provideHint() {
         let targetCell = null;
-        for (let r=0; r < currentSize; r++) {
-            for (let c=0; c < currentSize; c++) {
-                if(curPuzzle[r][c] === 0) { targetCell = table.rows[r].cells[c]; break; }
+
+        if (selectedCell) {
+            let sr = selectedCell.dataset.r;
+            let sc = selectedCell.dataset.c;
+            if (curPuzzle[sr][sc] === 0) {
+                targetCell = selectedCell;
             }
-            if (targetCell) break;
+        }
+
+        if (!targetCell) {
+            for (let r=0; r < currentSize; r++) {
+                for (let c=0; c < currentSize; c++) {
+                    if(curPuzzle[r][c] === 0) { targetCell = table.rows[r].cells[c]; break; }
+                }
+                if (targetCell) break;
+            }
         }
 
         if (targetCell) {
@@ -1909,6 +2251,7 @@
             hintsUsed: hintsUsed,
             mistakes: mistakes,
             revivesUsed: revivesUsed, 
+            totalMistakes: totalMistakes,
             undo: undoStack,
             redo: redoStack,
             puzzleNum: currentPuzzleNum,
@@ -1972,16 +2315,16 @@
     document.getElementById('pauseBtn').addEventListener('click', togglePauseGame);
     document.getElementById('resumeBoardBtn').addEventListener('click', togglePauseGame);
 
-    document.getElementById('prevBtn').addEventListener('click', function() {
+   document.getElementById('prevBtn').addEventListener('click', function() {
         if (currentPuzzleNum > 1) {
             currentPuzzleNum--;
-            newPuzzle(); 
+            newPuzzle(true); 
         }
     });
 
     document.getElementById('nextBtn').addEventListener('click', function() {
         currentPuzzleNum++;
-        newPuzzle(); 
+        newPuzzle(true);
     });
 
     document.getElementById('headerTitle').addEventListener('click', () => {
@@ -2004,7 +2347,7 @@
         this.classList.add('is-selected');
     }));
 
-    document.getElementById('quickRestartBtn').addEventListener('click', () => {
+   document.getElementById('quickRestartBtn').addEventListener('click', () => {
         const selectedSize = parseInt(document.querySelector('.quick-size-btn.is-selected').dataset.size);
         const selectedDiff = document.querySelector('.quick-diff-btn.is-selected').dataset.diff;
         
@@ -2019,7 +2362,7 @@
         localStorage.removeItem(storageKey);
         
         prepareBoardScreen();
-        newPuzzle(); 
+        newPuzzle(true);
     });
 
     window.startGame = function() {
@@ -2075,6 +2418,7 @@
       localStorage.removeItem(statsKey);
       localStorage.removeItem(storageKey);
       localStorage.removeItem(settingsKey);
+      localStorage.removeItem('itvoice_sudoku_history');
       
       const sizes = [4, 6, 9];
       const diffs = ['easy', 'medium', 'hard'];
@@ -2095,27 +2439,32 @@
         currentStatDiff = currentDifficulty;
 
         document.querySelectorAll('.stat-size-btn').forEach(b => {
-            b.classList.remove('is-selected'); b.style.background = "transparent";
-            if (parseInt(b.dataset.statSize) === currentStatSize) {
-                b.classList.add('is-selected'); b.style.background = "linear-gradient(135deg, #4968e8, #7d55e8)";
-            }
+            b.classList.remove('is-selected'); 
+            if (parseInt(b.dataset.statSize) === currentStatSize) b.classList.add('is-selected');
         });
 
-        document.querySelectorAll('.stat-tab-btn').forEach(b => {
-            b.classList.remove('is-selected'); b.style.background = "transparent";
-            if (b.dataset.statDiff === currentStatDiff) {
-                b.classList.add('is-selected'); b.style.background = "linear-gradient(135deg, #4968e8, #7d55e8)";
-            }
+        document.querySelectorAll('.stat-tab-btn-diff').forEach(b => {
+            b.classList.remove('is-selected'); 
+            if (b.dataset.statDiff === currentStatDiff) b.classList.add('is-selected');
         });
 
         updateStatsUI();
         document.getElementById('statsModal').style.display = 'flex';
     };
 
-    function updateStatsUI() {
+   function updateStatsUI() {
         let s = userStats[currentStatSize][currentStatDiff];
+        
+        if (s.won > s.played) {
+            s.played = s.won;
+            localStorage.setItem(statsKey, JSON.stringify(userStats));
+        }
+        
         document.getElementById('statPlayed').innerText = s.played || 0;
         document.getElementById('statWon').innerText = s.won || 0;
+        
+        let winPct = s.played > 0 ? Math.round((s.won / s.played) * 100) : 0;
+        document.getElementById('statWinPct').innerText = winPct + '%';
         
         const formatTime = (secs) => { 
             let m = Math.floor(secs / 60); let sec = secs % 60; 
@@ -2126,18 +2475,49 @@
         
         let avg = s.won > 0 ? Math.floor(s.time / s.won) : 0;
         document.getElementById('statAvg').innerText = (s.won === 0 || avg === 0) ? '--:--' : formatTime(avg);
+
+        const historyList = document.getElementById('recentActivityList');
+        historyList.innerHTML = '';
+        
+        let filteredHistory = gameHistory.filter(h => h.size === currentStatSize).slice(0, 5);
+        
+        if (filteredHistory.length === 0) {
+            historyList.innerHTML = '<div style="text-align:center; color: #a8b8d6; padding: 15px; font-size: 13px;">No recent games in this size</div>';
+        } else {
+            filteredHistory.forEach(h => {
+                let diffClass = h.diff === 'hard' ? 'bdg-hard' : (h.diff === 'medium' ? 'bdg-medium' : 'bdg-easy');
+                let statusClass = h.status === 'Won' ? 'st-won' : 'st-lost';
+                let icon = h.status === 'Won' 
+                    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>'
+                    : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
+                
+                historyList.innerHTML += `
+                    <div class="ra-item">
+                        <div class="ra-left">
+                            <span class="ra-size">${h.size}x${h.size}</span>
+                            <span class="ra-badge ${diffClass}">${h.diff}</span>
+                        </div>
+                        <div class="ra-time">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            ${formatTime(h.time)}
+                        </div>
+                        <div class="ra-status ${statusClass}">${h.status} ${icon}</div>
+                    </div>
+                `;
+            });
+        }
     }
 
     document.querySelectorAll('.stat-size-btn').forEach(btn => btn.addEventListener('click', function() {
-        document.querySelectorAll('.stat-size-btn').forEach(b => { b.classList.remove('is-selected'); b.style.background = "transparent"; });
-        this.classList.add('is-selected'); this.style.background = "linear-gradient(135deg, #4968e8, #7d55e8)";
+        document.querySelectorAll('.stat-size-btn').forEach(b => { b.classList.remove('is-selected'); });
+        this.classList.add('is-selected'); 
         currentStatSize = parseInt(this.dataset.statSize);
         updateStatsUI();
     }));
 
-    document.querySelectorAll('.stat-tab-btn').forEach(btn => btn.addEventListener('click', function() {
-        document.querySelectorAll('.stat-tab-btn').forEach(b => { b.classList.remove('is-selected'); b.style.background = "transparent"; });
-        this.classList.add('is-selected'); this.style.background = "linear-gradient(135deg, #4968e8, #7d55e8)";
+    document.querySelectorAll('.stat-tab-btn-diff').forEach(btn => btn.addEventListener('click', function() {
+        document.querySelectorAll('.stat-tab-btn-diff').forEach(b => { b.classList.remove('is-selected'); });
+        this.classList.add('is-selected');
         currentStatDiff = this.dataset.statDiff;
         updateStatsUI();
     }));

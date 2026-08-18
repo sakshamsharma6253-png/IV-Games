@@ -724,6 +724,105 @@
     transform: translateY(-2px);
   }
 
+  .stats-premium-box {
+    width: min(700px, 95vw);
+    background: #0b132b; 
+    border: 1px solid rgba(137, 166, 255, 0.15);
+    box-shadow: 0 25px 65px rgba(0, 0, 0, 0.5), 0 0 40px rgba(93, 124, 255, 0.1);
+    padding: 24px; 
+    border-radius: 20px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 18px; 
+    text-align: left;
+    color: #fff;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  [data-theme="light"] .stats-premium-box {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    box-shadow: 0 25px 65px rgba(0, 0, 0, 0.1);
+  }
+
+  .stats-header-row {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;
+  }
+  .stats-header-title {
+    display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 900; letter-spacing: 0.5px;
+  }
+  .stats-header-title span { color: #91a5ff; }
+  
+  .stats-close-btn {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50%;
+    width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+    color: #a8b8d6; cursor: pointer; transition: 0.2s;
+  }
+  [data-theme="light"] .stats-close-btn { background: var(--choice-bg); border-color: var(--line); color: var(--ink); }
+  .stats-close-btn:hover { background: var(--danger); color: white; border-color: var(--danger); transform: scale(1.1); }
+
+  .stats-section-lbl {
+    font-size: 11px; font-weight: 800; color: #aab5d1; letter-spacing: 1px; text-transform: uppercase; margin-bottom: -10px;
+  }
+  [data-theme="light"] .stats-section-lbl { color: var(--muted); }
+
+  .stats-tab-group {
+    display: flex; gap: 4px; overflow-x: auto; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 4px; border: 1px solid rgba(137, 166, 255, 0.1);
+    scrollbar-width: none; 
+  }
+  .stats-tab-group::-webkit-scrollbar { display: none; }
+  [data-theme="light"] .stats-tab-group { background: var(--surface-2); border-color: var(--line); }
+  
+  .stats-tab-btn {
+    flex: 1; min-width: 60px; padding: 8px 10px; font-size: 13px; font-weight: bold; background: transparent; border: none;
+    color: #aab5d1; border-radius: 8px; cursor: pointer; transition: 0.3s;
+  }
+  [data-theme="light"] .stats-tab-btn { color: var(--muted); }
+  .stats-tab-btn.is-selected {
+    background: linear-gradient(135deg, #7c5cff, #5c42e6); color: white; box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
+  }
+
+  .stats-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+
+  .stat-card-premium {
+    background: rgba(16, 27, 68, 0.6); border: 1px solid rgba(137, 166, 255, 0.1);
+    border-radius: 14px; padding: 16px 10px; display: flex; align-items: center; justify-content: center; gap: 12px; flex-direction: column;
+  }
+  [data-theme="light"] .stat-card-premium { background: var(--setup-group-bg); border-color: var(--line); }
+  
+  .stat-card-premium .sc-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+  .stat-card-premium .sc-info { text-align: center; }
+  .stat-card-premium .sc-val { font-size: 22px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 5px; }
+  [data-theme="light"] .stat-card-premium .sc-val { color: var(--ink); }
+  .stat-card-premium .sc-lbl { font-size: 11px; color: #aab5d1; font-weight: 600; }
+  [data-theme="light"] .stat-card-premium .sc-lbl { color: var(--muted); }
+  
+  .recent-activity-list {
+    display: flex; flex-direction: column; gap: 8px; max-height: 180px; overflow-y: auto; padding-right: 5px;
+  }
+  .recent-activity-list::-webkit-scrollbar { width: 4px; }
+  .recent-activity-list::-webkit-scrollbar-thumb { background: rgba(137, 166, 255, 0.2); border-radius: 10px; }
+  
+  .ra-item {
+    display: flex; align-items: center; justify-content: space-between; 
+    background: rgba(0,0,0,0.15); padding: 12px; border-radius: 10px; border: 1px solid rgba(137, 166, 255, 0.05);
+  }
+  [data-theme="light"] .ra-item { background: var(--choice-bg); border-color: var(--line); }
+  
+  .ra-left { display: flex; align-items: center; gap: 10px; width: 25%; }
+  .ra-size { font-size: 11px; font-weight: bold; background: rgba(139, 92, 246, 0.15); color: #a78bfa; padding: 3px 8px; border-radius: 6px; }
+  
+  .ra-badge { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; text-transform: uppercase;}
+
+  .ra-time { font-size: 12px; color: #aab5d1; display: flex; align-items: center; gap: 6px; font-weight: 600; justify-content: flex-start; }
+  [data-theme="light"] .ra-time { color: var(--muted-strong); }
+  
+  .ra-status { font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+  .st-won { color: #4cdb9b; }
+  .st-lost { color: #ff6b6b; }
+
   @media (max-width: 1024px) {
     .home-layout { 
       grid-template-columns: 1fr; 
@@ -752,7 +851,12 @@
     }
   }
 
-  @media (max-width: 660px) {
+  @media (max-width: 680px) {
+    .stats-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .ra-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .ra-left, .ra-time, .ra-status { width: 100% !important; justify-content: flex-start !important; }
+    .ra-status { justify-content: flex-start !important; }
+
     .app-shell { 
       width: min(100% - 22px, 1180px); 
       padding-top: 16px; 
@@ -900,7 +1004,7 @@
 
    <section class="screen" id="visual-screen" aria-labelledby="visual-title">
      <header class="visual-top" style="justify-content: space-between; align-items: center;">
-        
+       
         <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: clamp(24px, 4vw, 32px); letter-spacing: -.04em; color: var(--ink);">N-Queens Puzzle</h1>
 
         <div class="top-stats" style="position: relative; align-items: stretch;" aria-label="Current visualizer settings">
@@ -910,7 +1014,7 @@
           </button>
 
           <div class="top-stat" id="change-size-btn" title="Change Board Size" style="cursor: pointer; transition: all 0.2s ease;">
-      
+       
             <span>Board <svg style="width:10px; height:10px; margin-left:2px; fill:currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></span>
             <strong id="top-size">8 × 8</strong>
           </div>
@@ -967,7 +1071,7 @@
     </section>
   </main>
 
-  <div class="completion-layer" id="completion-layer" role="dialog" aria-modal="true">
+ <div class="completion-layer" id="completion-layer" role="dialog" aria-modal="true">
     <section class="completion-card">
       <div class="completion-icon" style="display: flex; align-items: center; justify-content: center;">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="url(#gold-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -982,15 +1086,18 @@
       </div>
 
       <h2 id="completion-title">Puzzle Solved!</h2>
-      <p id="completion-message">You have successfully placed all queens without conflicts.</p>
+      <p id="completion-message">You have successfully found the correct positions for all queens!</p>
       <p id="completion-time" style="margin-top: 10px; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600; color: var(--blue-bright);">Solved in: 00:00</p>
   
-      <div style="display: flex; justify-content: center; gap: 15px; margin: 15px 0 25px 0;">
-        <div style="background: var(--surface-2); padding: 8px 15px; border-radius: 10px; border: 1px solid var(--line); font-size: 13px; color: var(--muted-strong);">
-          Hints Used: <strong id="completion-hints" style="color: var(--success); font-size: 16px;">0</strong>
+      <div style="display: flex; justify-content: center; gap: 10px; margin: 15px 0 25px 0; flex-wrap: wrap;">
+        <div style="background: var(--surface-2); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); font-size: 13px; color: var(--muted-strong);">
+          Hints: <strong id="completion-hints" style="color: var(--success); font-size: 16px;">0</strong>
         </div>
-        <div style="background: var(--surface-2); padding: 8px 15px; border-radius: 10px; border: 1px solid var(--line); font-size: 13px; color: var(--muted-strong);">
+        <div style="background: var(--surface-2); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); font-size: 13px; color: var(--muted-strong);">
           Solutions: <strong id="completion-sols" style="color: var(--gold); font-size: 16px;">0</strong>
+        </div>
+        <div style="background: var(--surface-2); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--line); font-size: 13px; color: var(--muted-strong);">
+          Conflicts: <strong id="completion-conflicts" style="color: var(--danger); font-size: 16px;">0</strong>
         </div>
       </div>
 
@@ -1039,36 +1146,60 @@
   </div>
 
   <div class="completion-layer" id="stats-layer" role="dialog">
-    <section class="completion-card">
-      <h2 style="margin-bottom: 15px; font-family: 'Space Grotesk', sans-serif;">Statistics</h2>
-      
-      <div style="margin-bottom: 20px;">
-        <select id="stat-size-select" style="width: 100%; padding: 10px; background: var(--surface-2); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; font-family: 'Space Grotesk', sans-serif; font-size: 15px; cursor: pointer; outline: none;">
-          <option value="4">4x4 Grid</option>
-          <option value="5">5x5 Grid</option>
-          <option value="6">6x6 Grid</option>
-          <option value="7">7x7 Grid</option>
-          <option value="8">8x8 Grid</option>
-          <option value="9">9x9 Grid</option>
-          <option value="10">10x10 Grid</option>
-          <option value="11">11x11 Grid</option>
-          <option value="12">12x12 Grid</option>
-        </select>
-      </div>
-
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px;">
-        <div style="background: var(--surface-2); padding: 15px; border-radius: 12px; border: 1px solid var(--line);">
-          <span style="display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; font-weight: 800;">Games Won</span>
-          <strong id="stat-wins" style="font-size: 28px; font-family: 'Space Grotesk', sans-serif; color: var(--success);">0</strong>
+    <div class="stats-premium-box">
+       <div class="stats-header-row">
+            <div class="stats-header-title">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#91a5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="2 4 6 16 18 16 22 4 16 11 12 4 8 11 2 4"></polygon>
+                    <line x1="4" y1="20" x2="20" y2="20"></line>
+                </svg>
+                N-QUEENS <span>STATISTICS</span>
+            </div>
+            <button class="stats-close-btn" id="close-stats-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
         </div>
-        <div style="background: var(--surface-2); padding: 15px; border-radius: 12px; border: 1px solid var(--line);">
-          <span style="display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; font-weight: 800;">Best Time</span>
-          <strong id="stat-time" style="font-size: 28px; font-family: 'Space Grotesk', sans-serif; color: var(--blue-bright);">--:--</strong>
-        </div>
-      </div>
+        <div style="font-size:13px; color:var(--muted); margin-top:-15px; margin-bottom: 5px;">Track your puzzle solving performance</div>
 
-      <button class="action-button primary" id="close-stats-btn" style="width: 100%;">Close</button>
-    </section>
+        <div class="stats-section-lbl">BOARD SIZE</div>
+        <div class="stats-tab-group" id="stats-size-tabs">
+        </div>
+
+        <div class="stats-grid-4">
+            <div class="stat-card-premium">
+                <div class="sc-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg></div>
+                <div class="sc-info">
+                    <div class="sc-val" id="statPlayed">0</div>
+                    <div class="sc-lbl">Games Played</div>
+                </div>
+            </div>
+            <div class="stat-card-premium">
+                <div class="sc-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+                <div class="sc-info">
+                    <div class="sc-val" id="statWon">0</div>
+                    <div class="sc-lbl">Solved</div>
+                </div>
+            </div>
+            <div class="stat-card-premium">
+                <div class="sc-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div>
+                <div class="sc-info">
+                    <div class="sc-val" id="statWinPct">0%</div>
+                    <div class="sc-lbl">Success Rate</div>
+                </div>
+            </div>
+            <div class="stat-card-premium">
+                <div class="sc-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M10 2h4"></path><path d="M12 2v2"></path></svg></div>
+                <div class="sc-info">
+                    <div class="sc-val" id="statBest">--:--</div>
+                    <div class="sc-lbl">Best Time</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-section-lbl" style="margin-top: 5px;">RECENT ACTIVITY</div>
+        <div class="recent-activity-list" id="recentActivityList">
+        </div>
+    </div>
   </div>
           
 <script>
@@ -1162,14 +1293,35 @@
   let isPreviewing = false; 
   let hintsUsedCount = 0;
   let solutionsUsedCount = 0;
+  let conflictsMade = 0; 
   let userSettings = { hintsEnabled: true, solutionsEnabled: true };
   
-  let gameStats = JSON.parse(localStorage.getItem('nQueensStatsV2'));
-  if (!gameStats || gameStats.wins !== undefined) { 
+  let gameStats = JSON.parse(localStorage.getItem('nQueensStatsV3'));
+  if (!gameStats) {
       gameStats = {};
+      let oldStats = JSON.parse(localStorage.getItem('nQueensStatsV2')); 
       for (let i = 4; i <= 12; i++) {
-          gameStats[i] = { wins: 0, bestTimeMs: Infinity };
+          let w = oldStats && oldStats[i] ? oldStats[i].wins || 0 : 0;
+          let b = oldStats && oldStats[i] ? oldStats[i].bestTimeMs || Infinity : Infinity;
+          gameStats[i] = { played: w, wins: w, bestTimeMs: b };
       }
+      localStorage.setItem('nQueensStatsV3', JSON.stringify(gameStats));
+  }
+
+  let gameHistory = JSON.parse(localStorage.getItem('nQueensHistory')) || [];
+  let currentRunLogged = false;
+
+  function addHistory(size, timeMs, status) {
+      let entry = { size: size, time: timeMs, status: status, date: Date.now() };
+      gameHistory.unshift(entry);
+      if (gameHistory.length > 25) gameHistory.pop();
+      localStorage.setItem('nQueensHistory', JSON.stringify(gameHistory));
+  }
+
+  function formatDateTime(ms) {
+      let d = new Date(ms);
+      let opts = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+      return d.toLocaleDateString('en-GB', opts);
   }
 
   function formatTime(ms) { 
@@ -1196,7 +1348,9 @@
       solutionsLeft: solutionsLeft,
       hintsUsedCount: hintsUsedCount,
       solutionsUsedCount: solutionsUsedCount,
-      isGamePaused: isGamePaused
+      conflictsMade: conflictsMade,
+      isGamePaused: isGamePaused,
+      currentRunLogged: currentRunLogged 
     };
     localStorage.setItem('nQueensSavedGame', JSON.stringify(saveData));
   }
@@ -1349,18 +1503,26 @@
     updateAttackedSquares(); 
 
     if (placedCount === settings.size && !hasConflict) {
+      if(!currentRunLogged) {
+          let currentGrid = settings.size;
+          gameStats[currentGrid].wins++;
+          if(gameStats[currentGrid].played < gameStats[currentGrid].wins) {
+              gameStats[currentGrid].played = gameStats[currentGrid].wins;
+          }
+
+          let finalMs = currentElapsed();
+          if (!gameStats[currentGrid].bestTimeMs || gameStats[currentGrid].bestTimeMs === Infinity || finalMs < gameStats[currentGrid].bestTimeMs) {
+            gameStats[currentGrid].bestTimeMs = finalMs;
+          }
+          localStorage.setItem('nQueensStatsV3', JSON.stringify(gameStats));
+          addHistory(currentGrid, finalMs, 'Solved');
+          currentRunLogged = true;
+      }
+
       state.complete = true;
       stopTimers();
       localStorage.removeItem('nQueensSavedGame');
       updateStatus("Puzzle Solved!", "complete");
-
-      let currentGrid = settings.size;
-      gameStats[currentGrid].wins++;
-      let finalMs = currentElapsed();
-      if (finalMs < gameStats[currentGrid].bestTimeMs) {
-        gameStats[currentGrid].bestTimeMs = finalMs;
-      }
-      localStorage.setItem('nQueensStatsV2', JSON.stringify(gameStats));
 
       const sizeBtn = $("#change-size-btn");
       if(sizeBtn) {
@@ -1370,9 +1532,9 @@
       
       const finalTime = $("#top-time").textContent;
       if($("#completion-time")) $("#completion-time").textContent = `Solved in: ${finalTime}`;
-
       if($("#completion-hints")) $("#completion-hints").textContent = hintsUsedCount;
       if($("#completion-sols")) $("#completion-sols").textContent = solutionsUsedCount;
+      if($("#completion-conflicts")) $("#completion-conflicts").textContent = conflictsMade;
 
       $("#pause-button").disabled = true;
       $("#hint-button").disabled = true;
@@ -1492,6 +1654,10 @@
   }
 
   function startRun() {
+    if (state.running && !state.complete && !currentRunLogged && currentElapsed() > 3000) {
+        addHistory(settings.size, currentElapsed(), 'Failed');
+    }
+
     localStorage.removeItem('nQueensSavedGame');
     completionLayer.classList.remove("visible");
     stopTimers();
@@ -1508,6 +1674,7 @@
 
     hintsUsedCount = 0;
     solutionsUsedCount = 0;
+    conflictsMade = 0;
 
     updateHintUI();
     updateSolutionUI();
@@ -1555,11 +1722,20 @@
     const backBtn = $("#back-to-result-btn");
     if(backBtn) backBtn.style.display = "none";
     
+    gameStats[settings.size].played++;
+    localStorage.setItem('nQueensStatsV3', JSON.stringify(gameStats));
+    currentRunLogged = false;
+
     homeScreen.classList.remove("active");
     visualScreen.classList.add("active");
   }
 
   function backHome() {
+    if (state.running && !state.complete && !currentRunLogged && currentElapsed() > 3000) {
+        addHistory(settings.size, currentElapsed(), 'Failed');
+        currentRunLogged = true;
+    }
+
     stopTimers();
     state.running = false;
     completionLayer.classList.remove("visible");
@@ -1769,6 +1945,21 @@
             oldCell.innerHTML = "";
           }
         }
+
+        let causedConflict = false;
+        for (let r = 0; r < settings.size; r++) {
+          if (r !== row && state.board[r] !== -1) {
+            let c = state.board[r];
+            if (c === col || Math.abs(c - col) === Math.abs(r - row)) {
+              causedConflict = true;
+              break;
+            }
+          }
+        }
+        if (causedConflict) {
+          conflictsMade++; 
+        }
+
         state.board[row] = col;
         cell.classList.add("queen-cell");
         cell.innerHTML = svgQueen;
@@ -1849,21 +2040,91 @@
       $("#settings-layer").classList.remove("visible");
     });
 
-    function updateStatsUI(sizeStr) {
-      let stats = gameStats[sizeStr];
-      $("#stat-wins").textContent = stats.wins;
-      $("#stat-time").textContent = stats.bestTimeMs === Infinity ? "--:--" : formatTime(stats.bestTimeMs);
+    let currentStatSize = 8; 
+
+    function buildStatsTabs() {
+        const container = $("#stats-size-tabs");
+        if (!container) return;
+        container.innerHTML = "";
+        for (let s = 4; s <= 12; s++) {
+            let btn = document.createElement("button");
+            btn.className = "stats-tab-btn stat-size-btn";
+            if(s === currentStatSize) btn.classList.add("is-selected");
+            btn.dataset.statSize = s;
+            btn.textContent = `${s}x${s}`;
+            btn.onclick = () => {
+                document.querySelectorAll('.stat-size-btn').forEach(b => b.classList.remove('is-selected'));
+                btn.classList.add('is-selected');
+                currentStatSize = s;
+                updateStatsUI();
+            };
+            container.appendChild(btn);
+        }
+    }
+
+    function updateStatsUI() {
+        let stats = gameStats[currentStatSize];
+        if (stats.wins > stats.played) stats.played = stats.wins; 
+
+        if ((!stats.bestTimeMs || stats.bestTimeMs === Infinity) && stats.wins > 0) {
+            let solvedGames = gameHistory.filter(h => h.size === currentStatSize && h.status === 'Solved');
+            if (solvedGames.length > 0) {
+                stats.bestTimeMs = Math.min(...solvedGames.map(h => h.time));
+                localStorage.setItem('nQueensStatsV3', JSON.stringify(gameStats));
+            }
+        }
+        
+        $("#statPlayed").textContent = stats.played || 0;
+        $("#statWon").textContent = stats.wins || 0;
+        
+        let winPct = stats.played > 0 ? Math.round((stats.wins / stats.played) * 100) : 0;
+        $("#statWinPct").textContent = winPct + '%';
+        
+        $("#statBest").textContent = (!stats.bestTimeMs || stats.bestTimeMs === Infinity || stats.wins === 0) ? "--:--" : formatTime(stats.bestTimeMs);
+
+        const historyList = $("#recentActivityList");
+        historyList.innerHTML = '';
+        
+        let filteredHistory = gameHistory.filter(h => h.size === currentStatSize).slice(0, 8);
+        
+        if (filteredHistory.length === 0) {
+            historyList.innerHTML = '<div style="text-align:center; color: #aab5d1; padding: 15px; font-size: 13px;">No recent games in this size</div>';
+        } else {
+            filteredHistory.forEach(h => {
+                let statusClass = h.status === 'Solved' ? 'st-won' : 'st-lost';
+                let icon = h.status === 'Solved' 
+                    ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>'
+                    : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+                
+                let bgBadge = h.status === 'Solved' ? 'background: rgba(76, 219, 155, 0.15); color: #4cdb9b;' : 'background: rgba(255, 107, 107, 0.15); color: #ff6b6b;';
+                let timeText = h.status === 'Solved' ? formatTime(h.time) : '--:--';
+
+                historyList.innerHTML += `
+                    <div class="ra-item">
+                        <div class="ra-left">
+                            <span class="ra-size">${h.size}x${h.size}</span>
+                            <span class="ra-badge" style="${bgBadge}">${h.status}</span>
+                        </div>
+                        <div class="ra-time" style="width: 25%;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            ${timeText}
+                        </div>
+                        <div class="ra-time" style="width: 35%; justify-content: center;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            ${formatDateTime(h.date)}
+                        </div>
+                        <div class="ra-status ${statusClass}" style="width: 15%;">${icon}</div>
+                    </div>
+                `;
+            });
+        }
     }
 
     $("#home-stats-btn").addEventListener("click", () => {
-      let currentSizeStr = settings.size.toString();
-      $("#stat-size-select").value = currentSizeStr;
-      updateStatsUI(currentSizeStr);
+      currentStatSize = settings.size; 
+      buildStatsTabs();
+      updateStatsUI();
       $("#stats-layer").classList.add("visible");
-    });
-
-    $("#stat-size-select").addEventListener("change", (e) => {
-      updateStatsUI(e.target.value);
     });
 
     $("#close-stats-btn").addEventListener("click", () => {
@@ -1893,7 +2154,6 @@
     }
     checkSavedGame(); 
 
-
     continueBtn?.addEventListener("click", () => {
       const data = JSON.parse(localStorage.getItem('nQueensSavedGame'));
       
@@ -1911,7 +2171,9 @@
         solutionsLeft = data.solutionsLeft;
         hintsUsedCount = data.hintsUsedCount;
         solutionsUsedCount = data.solutionsUsedCount;
+        conflictsMade = data.conflictsMade || 0; 
         isGamePaused = data.isGamePaused;
+        currentRunLogged = data.currentRunLogged || false;
 
         document.body.dataset.boardTheme = settings.boardTheme;
         updateSetupButtons();
@@ -1965,7 +2227,8 @@
     });
 
     confirmResetBtn?.addEventListener("click", () => {
-      localStorage.removeItem('nQueensStatsV2');
+      localStorage.removeItem('nQueensStatsV3');
+      localStorage.removeItem('nQueensHistory');
       localStorage.removeItem('nQueensSavedGame');
       location.reload(); 
     });
