@@ -29,7 +29,7 @@
         --card-top: #081915;
         --card-bottom: #04221a;
         --text-main: #e6f0ef;
-        --muted: #8da3a0;
+        --muted: #475569;
         
         --border-color: #334155;
         
@@ -40,7 +40,7 @@
         --btn-text: #031815;
         --btn-outline-border: #26f6b0;
         --btn-outline-hover: rgba(38, 246, 176, 0.15);
-        --footer-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(0, 0, 0, 0.3) 100%);
+        --footer-bg: #08141d;
         --logo-filter: drop-shadow(0 0 10px rgba(38, 246, 176, 0.3));
         
         --badge-green-text: #4ade80;
@@ -63,10 +63,10 @@
         --card-top: #ffffff;
         --card-bottom: #f8fafc;
         --text-main: #0f172a;
-        --muted: #64748b;
+        --muted: #334155;
         --border-color: #94a3b8;
         
-        --primary: #3b82f6;
+        --primary: #1d4ed8;
         --primary-gradient: linear-gradient(90deg, #3b82f6, #6366f1);
         --shadow-soft: 0 8px 25px rgba(0, 0, 0, 0.05);
         --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.12); 
@@ -447,11 +447,23 @@
 
       .btn-tutorial {
         background: transparent;
-        color: var(--primary);
-        border: 1px solid var(--btn-outline-border);
+        color: var(--primary); 
+        border: 1px solid var(--btn-outline-border); 
       }
-      .btn-tutorial:hover { background: var(--btn-outline-hover); border-color: var(--primary); }
-      .btn-tutorial:active { transform: scale(0.96); }
+      
+      .btn-tutorial:hover { 
+        background: var(--btn-outline-hover); 
+        border-color: var(--primary); 
+        color: var(--primary); 
+      }
+      .btn-tutorial:active { 
+        transform: scale(0.96); 
+      }
+
+      [data-theme="light"] .btn-tutorial {
+        color: var(--primary);
+        border: 1px solid var(--primary); 
+      }
 
       .btn-icon { width: 14px; height: 14px; }
 
@@ -459,11 +471,15 @@
         margin-top: auto; 
         padding: 30px 20px 20px 20px;
         width: 100%;
-        background: var(--footer-bg);
+        background: #050b14;
         border-top: 1px solid var(--border-color);
         text-align: center;
         box-sizing: border-box;
         transition: background 0.3s ease, border-color 0.3s ease;
+      }
+      
+      [data-theme="light"] .main-footer {
+        background: #ffffff;
       }
 
       .footer-nav {
@@ -475,10 +491,10 @@
       }
 
       .footer-nav a {
-        color: var(--muted);
+        color: #cbd5e1;
         text-decoration: none;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 600; 
         transition: color 0.2s;
       }
       .footer-nav a:hover { color: var(--primary); }
@@ -488,17 +504,30 @@
         justify-content: center;
         align-items: center;
         gap: 10px;
-        color: var(--muted);
+        color: #cbd5e1; 
         font-size: 13px;
         margin-top: 15px;
+        font-weight: 500;
       }
 
       .copyright-text a {
-        color: var(--primary);
-        text-decoration: none;
-        font-weight: bold;
+        color: #26f6b0;
+        text-decoration: underline;
+        font-weight: 900;
       }
 
+      [data-theme="light"] .footer-nav a,
+      [data-theme="light"] .copyright-text {
+        color: #334155;
+      }
+      
+      [data-theme="light"] .footer-nav a:hover {
+        color: #1d4ed8; 
+      }
+
+      [data-theme="light"] .copyright-text a {
+        color: #1d4ed8;
+      }
       .tc-overlay, .cookie-banner-premium {
         font-family: Inter, sans-serif;
       }
@@ -677,9 +706,11 @@
         .catalog-title {
           gap: 10px;
         }
-        .catalog-title h1 {
-          font-size: 1.6rem; 
-        }
+       .catalog-title h1 {
+        font-size: 1.4rem; 
+        white-space: nowrap !important; 
+      }
+      
         .title-line {
           width: 30px; 
         }
@@ -755,6 +786,7 @@
         </div>
       </header>
 
+      <main>
       <div class="catalog-title-wrapper">
         <div class="catalog-title">
           <div class="title-line"><span class="title-dot-left"></span></div>
@@ -893,7 +925,8 @@
         </div>
         </div>
       </div>
-      
+    </main>
+   
       <footer class="main-footer">
         <div class="footer-nav">
           <a href="about.html">About Us</a>
@@ -910,14 +943,12 @@
           <span>Designed and Developed by <a href="https://icpljpr.com/" target="_blank">ICPL</a></span>
         </div>
       </footer>
-
     </div>
 
     <script>
       function updateFavicon(theme) {
           const favicon = document.getElementById('favicon');
           if (favicon) {
-              // CACHE FIX: Javascript wale favicon me bhi ?v=2 laga diya
               favicon.href = theme === 'dark' ? 'favicon/favicon.dark.webp?v=2' : 'favicon/favicon.light.webp?v=2';
           }
       }
