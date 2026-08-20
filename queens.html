@@ -768,20 +768,44 @@
   }
   [data-theme="light"] .stats-section-lbl { color: var(--muted); }
 
-  .stats-tab-group {
-    display: flex; gap: 4px; overflow-x: auto; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 4px; border: 1px solid rgba(137, 166, 255, 0.1);
+ .stats-tab-group {
+    display: flex; 
+    gap: 6px; 
+    overflow-x: auto; 
+    background: rgba(0,0,0,0.2); 
+    border-radius: 12px; 
+    padding: 6px; 
+    border: 1px solid rgba(137, 166, 255, 0.1);
     scrollbar-width: none; 
+    -webkit-overflow-scrolling: touch; 
+    width: 100%;
   }
   .stats-tab-group::-webkit-scrollbar { display: none; }
   [data-theme="light"] .stats-tab-group { background: var(--surface-2); border-color: var(--line); }
   
   .stats-tab-btn {
-    flex: 1; min-width: 60px; padding: 8px 10px; font-size: 13px; font-weight: bold; background: transparent; border: none;
-    color: #aab5d1; border-radius: 8px; cursor: pointer; transition: 0.3s;
+    flex: 0 0 auto !important; 
+    white-space: nowrap !important; 
+    min-width: 65px; 
+    height: 38px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px; 
+    font-size: 13px; 
+    font-weight: bold; 
+    background: transparent; 
+    border: none;
+    color: #aab5d1; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    transition: 0.3s;
   }
   [data-theme="light"] .stats-tab-btn { color: var(--muted); }
   .stats-tab-btn.is-selected {
-    background: linear-gradient(135deg, #7c5cff, #5c42e6); color: white; box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
+    background: linear-gradient(135deg, #7c5cff, #5c42e6); 
+    color: white; 
+    box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
   }
 
   .stats-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
@@ -1122,6 +1146,17 @@
       </div>
 
       <div style="display: flex; justify-content: space-between; align-items: center; background: var(--surface-2); padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--line);">
+        <div style="text-align: left;">
+            <div style="font-weight: 600; font-size: 15px; color: var(--ink);">Show Attack Guides</div>
+            <div style="color: var(--muted); font-size: 11px; margin-top: 3px;">Highlight squares attacked by queens</div>
+        </div>
+        <label style="position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0;">
+          <input type="checkbox" id="setting-guides-toggle" checked style="opacity: 0; width: 0; height: 0;">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; background: var(--surface-2); padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--line);">
         <span style="font-weight: 600; font-size: 15px; color: var(--ink);">Enable Random Solution</span>
         <label style="position: relative; display: inline-block; width: 44px; height: 24px;">
           <input type="checkbox" id="setting-sol-toggle" checked style="opacity: 0; width: 0; height: 0;">
@@ -1148,12 +1183,15 @@
   <div class="completion-layer" id="stats-layer" role="dialog">
     <div class="stats-premium-box">
        <div class="stats-header-row">
-            <div class="stats-header-title">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#91a5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+           <div class="stats-header-title" style="display: flex; align-items: center; gap: 12px;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#91a5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0;">
                     <polygon points="2 4 6 16 18 16 22 4 16 11 12 4 8 11 2 4"></polygon>
                     <line x1="4" y1="20" x2="20" y2="20"></line>
                 </svg>
-                N-QUEENS <span>STATISTICS</span>
+                <div style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.1;">
+                    <div style="font-size: 18px; font-weight: 900; white-space: nowrap;">N-QUEENS PUZZLE</div>
+                    <div style="font-size: 13px; font-weight: 900; color: #91a5ff; margin-top: 4px; letter-spacing: 1px;">STATISTICS</div>
+                </div>
             </div>
             <button class="stats-close-btn" id="close-stats-btn">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -1198,6 +1236,22 @@
 
         <div class="stats-section-lbl" style="margin-top: 5px;">RECENT ACTIVITY</div>
         <div class="recent-activity-list" id="recentActivityList">
+        </div>
+    </div>
+  </div>
+
+  <div class="completion-layer" id="history-board-layer" role="dialog">
+    <div class="stats-premium-box" style="width: min(500px, 95vw); padding: 20px;">
+        <div class="stats-header-row">
+            <div class="stats-header-title" style="font-size: 18px;">
+                COMPLETED <span>BOARD</span>
+            </div>
+            <button class="stats-close-btn" onclick="document.getElementById('history-board-layer').classList.remove('visible')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="board-wrap" style="width: 100% !important; padding: 5px !important; margin: 0 auto; box-shadow: none; background: transparent; border: none;">
+            <div id="history-board" class="board" style="width: 100%; height: auto; aspect-ratio: 1; margin: 0 auto;"></div>
         </div>
     </div>
   </div>
@@ -1294,8 +1348,9 @@
   let hintsUsedCount = 0;
   let solutionsUsedCount = 0;
   let conflictsMade = 0; 
-  let userSettings = { hintsEnabled: true, solutionsEnabled: true };
-  
+
+  let savedNSettings = JSON.parse(localStorage.getItem('nQueensSettings'));
+  let userSettings = savedNSettings || { hintsEnabled: true, solutionsEnabled: true, visualGuidesEnabled: true };
   let gameStats = JSON.parse(localStorage.getItem('nQueensStatsV3'));
   if (!gameStats) {
       gameStats = {};
@@ -1311,8 +1366,16 @@
   let gameHistory = JSON.parse(localStorage.getItem('nQueensHistory')) || [];
   let currentRunLogged = false;
 
-  function addHistory(size, timeMs, status) {
-      let entry = { size: size, time: timeMs, status: status, date: Date.now() };
+ function addHistory(size, timeMs, status) {
+      let savedBoard = [...state.board]; 
+      
+      let entry = { 
+          size: size, 
+          time: timeMs, 
+          status: status, 
+          date: Date.now(),
+          board: savedBoard 
+      };
       gameHistory.unshift(entry);
       if (gameHistory.length > 25) gameHistory.pop();
       localStorage.setItem('nQueensHistory', JSON.stringify(gameHistory));
@@ -1467,6 +1530,8 @@
   function updateAttackedSquares() {
     boardEl.querySelectorAll('.cell').forEach(c => c.classList.remove('attacked'));
     
+    if (!userSettings.visualGuidesEnabled) return; 
+
     let queens = [];
     for (let r = 0; r < settings.size; r++) {
       if (state.board[r] !== -1) queens.push({ r: r, c: state.board[r] });
@@ -2028,18 +2093,24 @@
       playAdAndStart();
     });
 
-    $("#home-settings-btn").addEventListener("click", () => {
+  $("#home-settings-btn").addEventListener("click", () => {
       $("#setting-hint-toggle").checked = userSettings.hintsEnabled;
       $("#setting-sol-toggle").checked = userSettings.solutionsEnabled;
+      $("#setting-guides-toggle").checked = userSettings.visualGuidesEnabled;
       $("#settings-layer").classList.add("visible");
     });
     
     $("#close-settings-btn").addEventListener("click", () => {
       userSettings.hintsEnabled = $("#setting-hint-toggle").checked;
       userSettings.solutionsEnabled = $("#setting-sol-toggle").checked;
+      userSettings.visualGuidesEnabled = $("#setting-guides-toggle").checked; 
+      
+      localStorage.setItem('nQueensSettings', JSON.stringify(userSettings));
+      
+      updateAttackedSquares(); 
+      
       $("#settings-layer").classList.remove("visible");
     });
-
     let currentStatSize = 8; 
 
     function buildStatsTabs() {
@@ -2090,7 +2161,7 @@
         if (filteredHistory.length === 0) {
             historyList.innerHTML = '<div style="text-align:center; color: #aab5d1; padding: 15px; font-size: 13px;">No recent games in this size</div>';
         } else {
-            filteredHistory.forEach(h => {
+          filteredHistory.forEach(h => {
                 let statusClass = h.status === 'Solved' ? 'st-won' : 'st-lost';
                 let icon = h.status === 'Solved' 
                     ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>'
@@ -2098,6 +2169,10 @@
                 
                 let bgBadge = h.status === 'Solved' ? 'background: rgba(76, 219, 155, 0.15); color: #4cdb9b;' : 'background: rgba(255, 107, 107, 0.15); color: #ff6b6b;';
                 let timeText = h.status === 'Solved' ? formatTime(h.time) : '--:--';
+                let realIndex = gameHistory.indexOf(h);
+                let viewBtn = (h.status === 'Solved' && h.board) 
+                    ? `<button onclick="viewHistoryBoard(${realIndex})" style="background:transparent; border:none; color:var(--blue-bright); cursor:pointer; margin-left: 6px; transition:0.2s;" title="View Board"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>` 
+                    : ``;
 
                 historyList.innerHTML += `
                     <div class="ra-item">
@@ -2113,11 +2188,38 @@
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             ${formatDateTime(h.date)}
                         </div>
-                        <div class="ra-status ${statusClass}" style="width: 15%;">${icon}</div>
+                        <div class="ra-status ${statusClass}" style="width: 15%;">${icon} ${viewBtn}</div>
                     </div>
                 `;
             });
         }
+    }
+
+    window.viewHistoryBoard = function(index) {
+        let h = gameHistory[index];
+        if (!h || !h.board) return;
+
+        const boardBox = document.getElementById('history-board');
+        boardBox.innerHTML = '';
+        let sz = h.size;
+        boardBox.style.gridTemplateColumns = `repeat(${sz}, minmax(0, 1fr))`;
+
+        const boardFragment = document.createDocumentFragment();
+        for (let row = 0; row < sz; row++) {
+            for (let col = 0; col < sz; col++) {
+                const cell = document.createElement("div");
+                cell.className = `cell ${(row + col) % 2 ? "dark" : "light"}`;
+                
+                if (h.board[row] === col) {
+                    cell.innerHTML = '<span class="queen-piece">♛</span>';
+                }
+                
+                cell.style.cursor = 'default'; 
+                boardFragment.append(cell);
+            }
+        }
+        boardBox.append(boardFragment);
+        document.getElementById('history-board-layer').classList.add('visible');
     }
 
     $("#home-stats-btn").addEventListener("click", () => {
@@ -2238,6 +2340,7 @@
   bindEvents();
   updateSetupButtons();
 })();
+
 </script>
 </body>
 </html>
