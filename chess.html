@@ -681,7 +681,11 @@
     }
 
     .premium-input {
-        width: 100%; padding: 12px 16px; margin-top: 5px; border-radius: 8px; border: 2px solid #18a37b; background: rgba(0,0,0,0.5); color: #fff; font-size: 15px; font-weight: bold; box-sizing: border-box; outline: none; transition: all 0.3s ease;
+        width: 100%; 
+        padding: 12px 16px; 
+        margin-top: 5px; 
+        border-radius: 8px; 
+        border: 2px solid #18a37b; background: rgba(0,0,0,0.5); color: #fff; font-size: 15px; font-weight: bold; box-sizing: border-box; outline: none; transition: all 0.3s ease;
     }
     .premium-input:focus { border-color: #1ee0a8; box-shadow: 0 0 10px rgba(30, 224, 168, 0.3); }
     .premium-input:disabled { border-color: #557068; color: #7a9c92; cursor: not-allowed; background: rgba(0,0,0,0.3); }
@@ -1651,7 +1655,11 @@
       
       const tbl = document.createElement('div'); 
       tbl.className = 'grid'; 
-      if (window._isFlipped) tbl.classList.add('flipped');
+      
+      if (window._isFlipped) {
+          tbl.classList.add('flipped');
+          tbl.style.transform = 'rotate(180deg)'; 
+      }
       
       for(let r=0;r<8;r++) {
         for(let c=0;c<8;c++){ 
@@ -1673,6 +1681,9 @@
           span.className = 'piece'; 
           span.textContent = pieceToUnicode(state[r][c]); 
           colorPiece(span, state[r][c]); 
+
+          span.style.transform = window._isFlipped ? 'translate(-50%, -50%) rotate(180deg) translate(0px, 0px)' : 'translate(-50%, -50%) rotate(0deg) translate(0px, 0px)';
+          
           sq.appendChild(span); 
           tbl.appendChild(sq);
         }
@@ -1763,7 +1774,7 @@
       if(f) f.classList.add('last-move'); if(t) t.classList.add('last-move');
     }
 
-   function animatePiece(from, to) {
+ function animatePiece(from, to) {
       const board = document.querySelector('#board .grid');
       const isFlipped = window._isFlipped;
       
@@ -1774,28 +1785,23 @@
 
       const fromRect = fromSq.getBoundingClientRect();
       const toRect = toSq.getBoundingClientRect();
-      const deltaX = fromRect.left - toRect.left;
-      const deltaY = fromRect.top - toRect.top;
+
+      let deltaX = fromRect.left - toRect.left;
+      let deltaY = fromRect.top - toRect.top;
 
       const piece = toSq.querySelector('.piece');
       if(!piece || piece.textContent.trim() === '') return;
 
       piece.style.transition = 'none';
-      
-      if (isFlipped) {
-          piece.style.transform = `translate(-50%, -50%) rotate(180deg) translate(${-deltaX}px, ${-deltaY}px)`;
-      } else {
-          piece.style.transform = `translate(-50%, -50%) rotate(0deg) translate(${deltaX}px, ${deltaY}px)`;
-      }
+      piece.style.transform = `translate(-50%, -50%) rotate(${isFlipped ? 180 : 0}deg) translate(0px, 0px)`;
 
-      piece.getBoundingClientRect();
-
-      piece.style.transition = 'transform 0.2s ease-in-out';
-      piece.style.transform = isFlipped ? 'translate(-50%, -50%) rotate(180deg)' : 'translate(-50%, -50%) rotate(0deg)';
-
-      setTimeout(() => {
-          piece.style.transition = 'transform 220ms ease, opacity 220ms ease';
-      }, 200);
+      piece.animate([
+          { transform: `translate(-50%, -50%) rotate(${isFlipped ? 180 : 0}deg) translate(${deltaX}px, ${deltaY}px)` },
+          { transform: `translate(-50%, -50%) rotate(${isFlipped ? 180 : 0}deg) translate(0px, 0px)` }
+      ], {
+          duration: 200,
+          easing: 'ease-out'
+      });
     }
 
     function cloneBoard(b) {
@@ -2489,9 +2495,9 @@
       window._timerInterval = setInterval(timerTick, 1000);
       playChessSound('start');
 
-      const g =document.querySelector('#board .grid');
+     const g =document.querySelector('#board .grid');
         g.style.transform = '';
-        document.querySelectorAll('.piece').forEach(p => p.style.transform = 'translate(-50%, -50%) rotate(0deg)');
+        document.querySelectorAll('.piece').forEach(p => p.style.transform = 'translate(-50%, -50%) rotate(0deg) translate(0px, 0px)');
         const boardArea = document.getElementById('boardArea');
         if (boardArea) boardArea.style.flexDirection = 'column';
 
@@ -2713,22 +2719,25 @@
         if(window._isAiMode && window._turn=== aiColor) setTimeout(()=> makeAIMove(), 3000); 
       }
     }
-  
-   function attachSquareHandlers(){
+
+
+  function attachSquareHandlers(){
       document.querySelectorAll('#board .sq').forEach(sq=>{
         sq.ondragover = (e)=>{ e.preventDefault(); };
         
         sq.ondrop = (e)=>{ 
           e.preventDefault(); 
           const data = e.dataTransfer.getData('text/plain'); if(!data) return; 
-          const [sr,sc] = data.split(',').map(x=>parseInt(x,10)); 
-          const tr=parseInt(sq.dataset.r,10), tc=parseInt(sq.dataset.c,10); 
+          
+          let [sr,sc] = data.split(',').map(x=>parseInt(x,10)); 
+          let tr=parseInt(sq.dataset.r,10), tc=parseInt(sq.dataset.c,10); 
+
           const res = performPlayerMove(sr,sc,tr,tc); 
           handleInteractionEnd(res);
         };
 
         sq.onclick = ()=>{
-          const r=parseInt(sq.dataset.r,10), c=parseInt(sq.dataset.c,10);
+          let r=parseInt(sq.dataset.r,10), c=parseInt(sq.dataset.c,10);
           const p = window._boardState[r][c];
 
           if(window._selected){ 
@@ -2770,8 +2779,8 @@
         piece.draggable = true;
         piece.ondragstart = (e)=> { 
           const sq = piece.parentElement;
-          const r = parseInt(sq.dataset.r, 10);
-          const c = parseInt(sq.dataset.c, 10);
+          let r = parseInt(sq.dataset.r, 10);
+          let c = parseInt(sq.dataset.c, 10);
           const p = window._boardState[r][c];
 
           if(window._isAiMode && getColorOfPiece(p) !== window._p1Color) { 
@@ -2783,6 +2792,8 @@
         };
       });
     }
+  
+
 
     document.getElementById('undoBtn').addEventListener('click', ()=>{
       if(window._moveHistory && window._moveHistory.length > 0){
@@ -2813,7 +2824,7 @@
       }
     });
 
-   document.getElementById('flipBtn').addEventListener('click', ()=> {
+    document.getElementById('flipBtn').addEventListener('click', ()=> {
       const g = document.querySelector('#board .grid');
       const boardArea = document.getElementById('boardArea');
 
@@ -2828,7 +2839,7 @@
       }
 
       document.querySelectorAll('.piece').forEach(p => {
-        p.style.transform = window._isFlipped ? 'translate(-50%, -50%) rotate(180deg)' : 'translate(-50%, -50%) rotate(0deg)';
+        p.style.transform = window._isFlipped ? 'translate(-50%, -50%) rotate(180deg) translate(0px, 0px)' : 'translate(-50%, -50%) rotate(0deg) translate(0px, 0px)';
       });
 
       if(boardArea) {
