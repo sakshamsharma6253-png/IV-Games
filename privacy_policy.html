@@ -434,23 +434,26 @@
         
         .footer-nav { 
           display: grid !important; 
-          grid-template-columns: repeat(2, 1fr) !important; 
+          grid-template-columns: 45% 55% !important; 
           width: 100%; 
           column-gap: 0; 
           row-gap: 20px; 
           padding: 0;
         }
+
         .footer-nav a { 
           font-size: 13px !important; 
           text-align: left !important; 
           justify-content: flex-start !important; 
+          width: 90% !important; 
+          box-sizing: border-box !important;
         }
         .footer-nav a:nth-child(odd) { 
-          border-right: 1px solid #334155 !important; 
+          border-right: 1px solid #f0f2f6 !important; 
           padding-right: 15px !important; 
         }
         [data-theme="light"] .footer-nav a:nth-child(odd) { 
-          border-color: #94a3b8 !important; 
+          border-color: #121418 !important; 
         }
         .footer-nav a:nth-child(even) { 
           padding-left: 20px !important; 
