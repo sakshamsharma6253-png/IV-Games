@@ -19,7 +19,7 @@
     <meta property="og:site_name" content="ITVoice Games">
     <meta property="og:locale" content="en_US">
    
-   <link rel="preload" as="image" href="icons/ivgames-logo.webp?v=2" fetchpriority="high">
+    <link rel="preload" as="image" href="icons/ivgames-logo.webp?v=2" fetchpriority="high">
     
     <style>
       :root, [data-theme="dark"] {
@@ -379,25 +379,12 @@
         transition: transform 0.2s ease;
       }
 
-      
-      .logo-ttt { 
-        transform: scale(1.6) translate(0px, 0px);
-      }
-      .logo-sudoku { 
-        transform: scale(1.4) translate(2px, 5px); 
-      }
-      .logo-queens { 
-        transform: scale(1.39) translate(0px, 1px);
-      }
-      .logo-chess { 
-        transform: scale(1.4) translate(0px, 0px);
-      }
-      .logo-bus { 
-        transform: scale(1.4) translate(0px, 0px); 
-      }
-      .logo-ludo { 
-        transform: scale(1.6) translate(3px, 4px); 
-      }
+      .logo-ttt { transform: scale(1.6) translate(0px, 0px); }
+      .logo-sudoku { transform: scale(1.4) translate(2px, 5px); }
+      .logo-queens { transform: scale(1.39) translate(0px, 1px); }
+      .logo-chess { transform: scale(1.4) translate(0px, 0px); }
+      .logo-bus { transform: scale(1.4) translate(0px, 0px); }
+      .logo-ludo { transform: scale(1.6) translate(3px, 4px); }
 
       .card-info {
         flex: 1;
@@ -833,12 +820,12 @@
   <body>
 
     <div id="tc-popup" class="tc-overlay">
-      <div class="tc-modal">
+     <div class="tc-modal">
         <h2>Welcome to IV Games!</h2>
-        <p>Before you start playing, please read and accept our <a href="terms.html" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight: bold;">Terms & Conditions</a> and <a href="privacy_policy.html" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight: bold;">Privacy Policy</a>
+        <p>Before you start playing, please read and accept our <a href="terms.html" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight: bold;">Terms & Conditions</a> and <a href="privacy_policy.html" target="_blank" style="color: var(--primary); text-decoration: underline; font-weight: bold;">Privacy Policy</a></p>
         <button id="accept-tc-btn" class="tc-btn">I Accept & Continue</button>
       </div>
-    </div>
+    </div> 
 
     <div id="cookieConsentBanner" class="cookie-banner-premium">
       <div class="cookie-content">
@@ -1017,8 +1004,8 @@
           </div>
         </div>
       </div>
-    </div>
- </main>
+  </main>
+</div>
    
    <footer class="main-footer">
         <div class="footer-container">
@@ -1066,7 +1053,6 @@
           </div>
         </div>
       </footer>
-    </div>
 
     <script>
       function updateFavicon(theme) {

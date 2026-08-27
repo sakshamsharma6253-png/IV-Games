@@ -123,13 +123,11 @@
         padding: 0;
       }
 
-
       .logo-container a {
         display: flex;
         align-items: center;
         text-decoration: none;
       }
-
 
       .nav-buttons {
         display: flex;
@@ -139,7 +137,6 @@
         flex-wrap: wrap;
       }
       
-    
       .btn-header-outline, .btn-ghost {
         box-sizing: border-box;
         height: 38px;
@@ -151,6 +148,7 @@
         text-decoration: none;
         font-weight: 600;
         font-size: 14px;
+        white-space: nowrap;
         transition: all 0.3s ease;
         background: transparent;
         color: #26f6b0 !important; 
@@ -174,9 +172,10 @@
         text-decoration: none;
         font-weight: 600;
         font-size: 14px;
+        white-space: nowrap; 
         transition: all 0.3s ease;
         background: transparent !important;
-        color: #0d92e5 !important; 
+        color: #4facfe !important; 
         border: 1px solid #4facfe !important; 
         gap: 6px;
       }
@@ -188,18 +187,21 @@
       }
 
       [data-theme="light"] .btn-header-outline, 
-      [data-theme="light"] .btn-ghost {
+      [data-theme="light"] .btn-ghost,
+      [data-theme="light"] .btn-blue {
         background: transparent !important; 
-        border-color: #3b82f6 !important;   
-        color: #3b82f6 !important;          
+        border-color: #1d4ed8 !important;   
+        color: #1d4ed8 !important;          
+        font-weight: 700 !important;
+        border-width: 1.5px !important;
       }
       
       [data-theme="light"] .btn-header-outline:hover, 
-      [data-theme="light"] .btn-ghost:hover {
-        background: #3b82f6 !important;     
+      [data-theme="light"] .btn-ghost:hover,
+      [data-theme="light"] .btn-blue:hover {
+        background: #1d4ed8 !important;     
         color: #ffffff !important;          
-        border-color: #3b82f6 !important;
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        box-shadow: 0 4px 12px rgba(29, 78, 216, 0.4) !important;
       }
 
       .page-header-text {
@@ -274,7 +276,7 @@
         line-height: 1.6;
       }
 
-        .main-footer {
+      .main-footer {
         margin-top: auto; 
         padding: 30px 20px 20px 20px;
         width: 100%;
@@ -372,6 +374,8 @@
         stroke: #26f6b0;
       }
 
+      .footer-nav a[href="terms.html"] { white-space: nowrap !important; }
+
       [data-theme="light"] .footer-nav a svg { stroke: #334155; }
       [data-theme="light"] .footer-nav a:hover svg, [data-theme="light"] .footer-nav a.active-link svg { stroke: #1d4ed8; }
 
@@ -392,48 +396,99 @@
         font-weight: 900;
       }
 
-      [data-theme="light"] .footer-nav a,
-      [data-theme="light"] .copyright-text { color: #334155; }
+      [data-theme="light"] .footer-nav a { color: #334155; }
+      [data-theme="light"] .copyright-text { color: #0f172a; font-weight: 600; }
       [data-theme="light"] .footer-nav a:hover, [data-theme="light"] .footer-nav a.active-link { color: #1d4ed8; }
       [data-theme="light"] .copyright-text a { color: #1d4ed8; }
 
+      @media (min-width: 768px) and (max-width: 990px) {
+        
+        .main-header {
+          flex-wrap: nowrap !important; 
+        }
+        .nav-buttons {
+          flex-wrap: nowrap !important;
+          gap: 8px !important; 
+        }
+        .btn-header-outline, .btn-ghost, .btn-blue {
+          padding: 0 10px !important; 
+          font-size: 13px !important; 
+        }
+        .header-logo {
+          height: 50px !important; 
+        }
+
+        .footer-container { 
+          flex-direction: row !important; 
+          justify-content: space-between !important; 
+          align-items: center !important; 
+        }
+        .footer-brand { 
+          margin-bottom: 0 !important; 
+          text-align: left;
+          align-items: flex-start;
+        }
+        .footer-logo {
+          object-position: left center;
+          margin-left: -12px;
+        }
+        .footer-nav { 
+          column-gap: 20px !important; 
+        }
+      }
+
       @media (max-width: 767px) {
-        .wrap { padding-bottom: 40px !important; }
         .main-header {
           flex-direction: column !important; 
           justify-content: center !important;
           text-align: center;
-          gap: 20px;
+          gap: 15px;
         }
         .nav-buttons {
           justify-content: center;
           width: 100%;
         }
-        .btn-header-outline, .btn-ghost {
+        .btn-ghost, .btn-blue, .btn-header-outline {
           font-size: 13px; 
-          padding: 8px 14px;
+          padding: 8px 12px;
         }
         
-        .footer-nav {
+        .footer-nav { 
           display: grid !important; 
-          grid-template-columns: repeat(3, 1fr); 
-          gap: 15px 5px;
-          padding: 0 5px;
+          grid-template-columns: repeat(2, 1fr) !important; 
+          width: 100%; 
+          column-gap: 0; 
+          row-gap: 20px; 
+          padding: 0;
         }
-        .footer-nav a {
+        .footer-nav a { 
+          font-size: 13px !important; 
+          text-align: left !important; 
+          justify-content: flex-start !important; 
+        }
+        .footer-nav a:nth-child(odd) { 
+          border-right: 1px solid #334155 !important; 
+          padding-right: 15px !important; 
+        }
+        [data-theme="light"] .footer-nav a:nth-child(odd) { 
+          border-color: #94a3b8 !important; 
+        }
+        .footer-nav a:nth-child(even) { 
+          padding-left: 20px !important; 
+        }
+        
+        .footer-nav a[href="terms.html"] { 
           font-size: 11.5px !important; 
-          text-align: center; 
-          white-space: normal; 
-          line-height: 1.4;
+          letter-spacing: -0.2px !important; 
         }
-        .copyright-text {
+        
+        .copyright-text { 
           flex-direction: column; 
-          gap: 10px;
+          gap: 10px; 
+          align-items: center; 
+          text-align: center; 
         }
         .copyright-divider { display: none; }
-        
-        .dot-list { flex-direction: column !important; gap: 5px !important; }
-        .dot-list li { width: 100% !important; }
       }
     </style>
   </head>
@@ -448,16 +503,15 @@
         
         <div class="nav-buttons">
           <a class="btn-header-outline" href="https://www.itvoice.in/" target="_blank"> Visit Website <span style="font-size: 16px;">&#x2197;</span></a>
-           <a class="btn-ghost" href="contact.html">
+          <a class="btn-ghost" href="contact.html">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
               Contact Us
-            </a>
+          </a>
           <a class="btn-blue" href="index.html">← Back to Dashboard</a>
         </div>
       </header>
 
       <main>
-
       <div class="page-header-text">
         <h1 class="page-title">Terms and Conditions</h1>
         <div class="page-date">Last Updated: June 2026</div>
@@ -469,7 +523,7 @@
       </div>
 
       <div class="terms-card">
-        <div class="terms-title">1. About IV Games</div>1
+        <div class="terms-title">1. About IV Games</div>
         <p style="margin: 0; line-height: 1.6;">IV Games is an online browser-based gaming platform developed for entertainment purposes.<br>
         The Website allows users to access and play casual games without requiring registration.</p>
       </div>
@@ -587,7 +641,6 @@
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
               Terms & Conditions
             </a>
-            
             <a href="disclaimer.html">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>
               Disclaimer
@@ -603,12 +656,12 @@
           <div class="copyright-text">
             <span>&copy; 2026 IV Games. All rights reserved.</span>
             <span class="copyright-divider">|</span>
-            <span>Designed and Developed by <a href="https://icpljpr.com/" target="_blank">ICPL</a></span>
+            <span>Designed and Developed by <a href="https://icpljpr.com/" target="_blank" style="color: var(--heading-color); text-decoration: none; font-weight: bold; transition: 0.3s;">ICPL</a></span>
           </div>
         </div>
       </footer>
 
-   <script>
+    <script>
       function updateFavicon(theme) {
           const favicon = document.getElementById('favicon');
           if (favicon) {
@@ -618,6 +671,7 @@
 
       const htmlElement = document.documentElement;
       const metaThemeColor = document.getElementById('meta-theme-color');
+
       const savedTheme = localStorage.getItem('ivGamesTheme') || 'dark';
       htmlElement.setAttribute('data-theme', savedTheme);
       updateFavicon(savedTheme);

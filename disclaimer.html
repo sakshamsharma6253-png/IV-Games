@@ -121,7 +121,6 @@
         text-decoration: none;
       }
 
-
       .header-logo {
         height: 65px;
         width: auto;
@@ -131,7 +130,6 @@
         margin: 0;
         padding: 0;
       }
-
 
       .nav-buttons {
         display: flex;
@@ -152,6 +150,7 @@
         text-decoration: none;
         font-weight: 600;
         font-size: 14px;
+        white-space: nowrap;
         transition: all 0.3s ease;
         background: transparent;
         color: #26f6b0 !important; 
@@ -175,6 +174,7 @@
         text-decoration: none;
         font-weight: 600;
         font-size: 14px;
+        white-space: nowrap;
         transition: all 0.3s ease;
         background: transparent !important;
         color: #4facfe !important; 
@@ -374,6 +374,8 @@
         stroke: #26f6b0;
       }
 
+      .footer-nav a[href="terms.html"] { white-space: nowrap !important; }
+
       [data-theme="light"] .footer-nav a svg { stroke: #334155; }
       [data-theme="light"] .footer-nav a:hover svg, [data-theme="light"] .footer-nav a.active-link svg { stroke: #1d4ed8; }
 
@@ -394,43 +396,98 @@
         font-weight: 900;
       }
 
-      [data-theme="light"] .footer-nav a,
-      [data-theme="light"] .copyright-text { color: #334155; }
+      [data-theme="light"] .footer-nav a { color: #334155; }
+      [data-theme="light"] .copyright-text { color: #0f172a; font-weight: 600; }
       [data-theme="light"] .footer-nav a:hover, [data-theme="light"] .footer-nav a.active-link { color: #1d4ed8; }
       [data-theme="light"] .copyright-text a { color: #1d4ed8; }
 
-      @media (max-width: 767px) {
-        .wrap { padding-bottom: 40px !important; }
+      
+      @media (min-width: 768px) and (max-width: 990px) {
+        
         .main-header {
+          flex-wrap: nowrap !important; 
+        }
+        .nav-buttons {
+          flex-wrap: nowrap !important;
+          gap: 8px !important; 
+          white-space: nowrap !important;
+        }
+        .btn-header-outline, .btn-ghost, .btn-blue {
+          padding: 0 10px !important; 
+          font-size: 13px !important; 
+          white-space: nowrap !important;
+        }
+        .header-logo {
+          height: 50px !important; 
+        }
+
+        .footer-container { 
+          flex-direction: row !important; 
+          justify-content: space-between !important; 
+          align-items: center !important; 
+        }
+        .footer-brand { 
+          margin-bottom: 0 !important; 
+          text-align: left;
+          align-items: flex-start;
+        }
+        .footer-logo {
+          object-position: left center;
+          margin-left: -12px;
+        }
+        .footer-nav { 
+          column-gap: 20px !important; 
+        }
+      }
+
+      @media (max-width: 767px) {
+        header {
           flex-direction: column !important; 
           justify-content: center !important;
           text-align: center;
-          gap: 20px;
+          gap: 15px;
         }
         .nav-buttons {
           justify-content: center;
           width: 100%;
         }
-        .btn-header-outline, .btn-ghost {
+        .btn-ghost, .btn-blue {
           font-size: 13px; 
-          padding: 8px 14px;
+          padding: 8px 12px;
         }
         
-        .footer-nav {
+        .footer-nav { 
           display: grid !important; 
-          grid-template-columns: repeat(3, 1fr); 
-          gap: 15px 5px;
-          padding: 0 5px;
+          grid-template-columns: repeat(2, 1fr) !important; 
+          width: 100%; 
+          column-gap: 0; 
+          row-gap: 20px; 
+          padding: 0;
         }
-        .footer-nav a {
+        .footer-nav a { 
+          font-size: 13px !important; 
+          text-align: left !important; 
+          justify-content: flex-start !important; 
+        }
+        .footer-nav a:nth-child(odd) { 
+          border-right: 1px solid #334155 !important; 
+          padding-right: 15px !important; 
+        }
+        [data-theme="light"] .footer-nav a:nth-child(odd) { 
+          border-color: #94a3b8 !important; 
+        }
+        .footer-nav a:nth-child(even) { 
+          padding-left: 20px !important; 
+        }
+        
+        .footer-nav a[href="terms.html"] { 
           font-size: 11.5px !important; 
-          text-align: center; 
-          white-space: normal; 
-          line-height: 1.4;
+          letter-spacing: -0.2px !important; 
         }
-        .copyright-text {
+        
+        .copyright-text { 
           flex-direction: column; 
-          gap: 10px;
+          gap: 10px; 
         }
         .copyright-divider { display: none; }
       }
@@ -438,7 +495,6 @@
   </head>
   <body>
     <div class="wrap">
-      
       <header class="main-header">
          <a href="index.html" style="display: flex; align-items: center; text-decoration: none; cursor: pointer;">
            <img src="icons/ivgames-logo.webp" alt="IV Games" class="logo-dark header-logo">
@@ -454,8 +510,8 @@
           <a class="btn-blue" href="index.html">← Back to Dashboard</a>
         </div>
       </header>
-      <main>
 
+      <main>
       <div class="page-header-text">
         <h1 class="page-title">Disclaimer</h1>
         <div class="page-date">Last Updated: June 2026</div>
@@ -523,8 +579,7 @@
 
     </div>
 
-    
-     <footer class="main-footer">
+      <footer class="main-footer">
         <div class="footer-container">
           
           <div class="footer-brand">
@@ -566,12 +621,12 @@
           <div class="copyright-text">
             <span>&copy; 2026 IV Games. All rights reserved.</span>
             <span class="copyright-divider">|</span>
-            <span>Designed and Developed by <a href="https://icpljpr.com/" target="_blank">ICPL</a></span>
+             <span>Designed and Developed by <a href="https://icpljpr.com/" target="_blank">ICPL</a></span>
           </div>
         </div>
       </footer>
 
-   <script>
+    <script>
       function updateFavicon(theme) {
           const favicon = document.getElementById('favicon');
           if (favicon) {
